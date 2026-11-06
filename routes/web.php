@@ -20,6 +20,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
+Route::get('/robots.txt', function () {
+    $lines = app()->isProduction()
+        ? ['User-agent: *', 'Disallow: /admin', 'Disallow: /patient', 'Disallow: /practitioner', 'Disallow: /account',
+            'Disallow: /documents', 'Disallow: /payments', 'Disallow: /support', 'Disallow: /notifications', 'Disallow: /search/',
+            'Disallow: /*/book', '', 'Sitemap: '.url('/sitemap.xml')]
+        : ['User-agent: *', 'Disallow: /']; // never index staging
+
+    return response(implode("\n", $lines)."\n", 200, ['Content-Type' => 'text/plain']);
+})->name('robots');
+
 Route::get('/find-a-doctor', [DirectoryController::class, 'index'])->name('directory');
 Route::get('/search/suggest', [DirectoryController::class, 'suggest'])->middleware('throttle:60,1')->name('search.suggest');
 Route::get('/symptom/{condition:slug}', [DirectoryController::class, 'condition'])->name('conditions.show');

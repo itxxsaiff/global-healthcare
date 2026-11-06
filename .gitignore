@@ -28,3 +28,5 @@ Thumbs.db
 
 # Client confidential material (repo is public)
 /docs/client-requirements.docx
+
+/public/sitemap.xml

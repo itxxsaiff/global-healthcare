@@ -79,8 +79,14 @@
                 @if ($items)
                     <div class="nav-section">{{ $section }}</div>
                     @foreach ($items as $item)
-                        @php [$route, $icon, $label] = $item; $count = isset($item[3]) ? ($badges[$item[3]] ?? 0) : 0; @endphp
-                        <a href="{{ route($route) }}" class="nav-link {{ request()->routeIs(str($route)->beforeLast('.')->append('.*')->toString(), $route) && $route !== 'directory' ? 'active' : '' }}">
+                        @php
+                            [$route, $icon, $label] = $item;
+                            $count = isset($item[3]) ? ($badges[$item[3]] ?? 0) : 0;
+                            // Dashboards and single-word routes match exactly; sections match their whole group (e.g. bookings.*).
+                            $exact = ! str_contains($route, '.') || str_ends_with($route, '.dashboard');
+                            $isActive = $exact ? request()->routeIs($route) : request()->routeIs(str($route)->beforeLast('.').'.*');
+                        @endphp
+                        <a href="{{ route($route) }}" class="nav-link {{ $isActive && $route !== 'directory' ? 'active' : '' }}">
                             <x-icon :name="$icon" /> {{ $label }}
                             @if ($count)<span class="badge rounded-pill text-bg-warning">{{ $count }}</span>@endif
                         </a>

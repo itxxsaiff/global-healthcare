@@ -9,6 +9,7 @@ import './modules/word-counter';
 import './modules/search-suggest';
 import './modules/timezone';
 import './modules/file-limit';
+import './modules/pwa';
 
 window.bootstrap = { Collapse, Dropdown, Modal, Offcanvas, Toast, Tooltip };
 window.Alpine = Alpine;

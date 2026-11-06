@@ -12,6 +12,15 @@ Legend used throughout:
 
 ---
 
+## Status (2026-11-06)
+
+All modules in §11 are implemented and covered by feature tests (see README). Items that depend on the client:
+- live merchant credentials (JazzCash sandbox → production, Stripe on an eligible entity; PayFast / EasyPaisa / Safepay drivers can be added behind the same interface);
+- legal review of the draft legal pages;
+- final brand, domain and hosting.
+
+The open questions in §12 were answered with the defaults recorded in `docs/DECISIONS.md`.
+
 ## 0. Current setup (done)
 
 | Item | Value |

@@ -45,6 +45,11 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrapFive();
 
+        // Healthcare accounts: stronger passwords in production, incl. a breached-password check.
+        \Illuminate\Validation\Rules\Password::defaults(fn () => $this->app->isProduction()
+            ? \Illuminate\Validation\Rules\Password::min(10)->letters()->numbers()->uncompromised()
+            : \Illuminate\Validation\Rules\Password::min(8));
+
         View::composer('layouts.dashboard', \App\View\Composers\DashboardBadges::class);
         View::composer('auth._shared-fields', fn ($view) => $view->with(
             'countries', \App\Models\Country::query()->ordered()->get(['id', 'name', 'iso2'])

@@ -210,6 +210,32 @@
                 <div class="mt-4">{{ $results->onEachSide(1)->links() }}</div>
             @endif
 
+            @if ($spec && isset($fixed['specialty']))
+                @php
+                    $label = mb_strtolower($spec->practitioner_label);
+                    $faqs = [
+                        ["How does an online consultation with a {$label} work?", "Choose a {$label} and a time that suits you. Times are shown in your own time zone. Send a request; once the {$label} accepts (and payment is complete where needed), you'll receive joining details for a video or audio call."],
+                        ["Can I choose a female or male {$label}?", "Yes. Use the gender filter to see only female or only male practitioners. You can also filter by the language you'd like to speak."],
+                        ["Are the {$label}s verified?", "Every practitioner uploads their ID, degree and licence, and our team checks them before the profile goes live."],
+                        ["Is this suitable for emergencies?", "No. Online consultations are for non-emergency care. In an emergency, contact your local emergency number or go to the nearest hospital."],
+                    ];
+                @endphp
+                <section class="mt-5 pt-4 border-top">
+                    <h2 class="h4 mb-3">Common questions</h2>
+                    <div class="accordion" id="faq">
+                        @foreach ($faqs as $i => [$q, $a])
+                            <div class="accordion-item">
+                                <h3 class="accordion-header"><button class="accordion-button {{ $i ? 'collapsed' : '' }} fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq{{ $i }}" style="font-family: inherit">{{ $q }}</button></h3>
+                                <div id="faq{{ $i }}" class="accordion-collapse collapse {{ $i ? '' : 'show' }}" data-bs-parent="#faq"><div class="accordion-body text-soft">{{ $a }}</div></div>
+                            </div>
+                        @endforeach
+                    </div>
+                </section>
+                @push('schema')
+                <script type="application/ld+json">{!! json_encode(['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => collect($faqs)->map(fn ($f) => ['@type' => 'Question', 'name' => $f[0], 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f[1]]])->all()], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+                @endpush
+            @endif
+
             @if ($spec && isset($fixed['specialty']) && ! $cityM)
                 @php $topCities = \App\Models\City::query()->whereHas('country', fn ($q) => $q->where('iso2', 'PK'))->orderBy('id')->limit(8)->get(); @endphp
                 <div class="mt-5 pt-4 border-top">

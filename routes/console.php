@@ -27,3 +27,4 @@ Schedule::call(function () {
 })->hourly()->name('practitioners:visibility')->withoutOverlapping();
 
 Schedule::command('queue:prune-failed --hours=720')->daily();
+Schedule::command('app:sitemap')->dailyAt('03:00');
