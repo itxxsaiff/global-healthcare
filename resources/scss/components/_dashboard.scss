@@ -54,3 +54,26 @@
     .done { color: $forest; border-color: $sage-deep; background: #F5F9F6; }
     .current { color: #fff; background: $forest; border-color: $forest; }
 }
+
+// FullCalendar, tuned to the palette
+#fc {
+    --fc-border-color: #{$line};
+    --fc-today-bg-color: #{rgba($honey, .08)};
+    --fc-button-bg-color: #fff;
+    --fc-button-border-color: #{$line-strong};
+    --fc-button-text-color: #{$ink};
+    --fc-button-hover-bg-color: #{$paper-deep};
+    --fc-button-hover-border-color: #{$line-strong};
+    --fc-button-active-bg-color: #{$forest};
+    --fc-button-active-border-color: #{$forest};
+    --fc-event-bg-color: #{$forest};
+    --fc-event-border-color: #{$forest};
+    --fc-now-indicator-color: #{$clay};
+    font-size: .875rem;
+    .fc-toolbar-title { font-family: $font-serif; font-size: 1.35rem; }
+    .fc-button { text-transform: capitalize; font-weight: 600; box-shadow: none !important; }
+    .fc-button-active { color: #fff !important; }
+    .fc-status-requested { --fc-event-bg-color: #{$honey}; --fc-event-border-color: #{$honey}; background: $honey; border-color: $honey; }
+    .fc-status-awaiting_payment { background: $clay; border-color: $clay; }
+    .fc-status-completed { background: $ink-muted; border-color: $ink-muted; }
+}

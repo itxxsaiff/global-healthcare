@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Public\ArticleController;
+use App\Http\Controllers\Public\BookingController;
 use App\Http\Controllers\Public\DirectoryController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\PageController;
@@ -22,6 +24,9 @@ Route::get('/find-a-doctor', [DirectoryController::class, 'index'])->name('direc
 Route::get('/search/suggest', [DirectoryController::class, 'suggest'])->middleware('throttle:60,1')->name('search.suggest');
 Route::get('/symptom/{condition:slug}', [DirectoryController::class, 'condition'])->name('conditions.show');
 Route::get('/doctor/{slug}', [PractitionerController::class, 'show'])->name('practitioners.show');
+Route::get('/doctor/{slug}/book', [BookingController::class, 'create'])->name('booking.create');
+Route::post('/doctor/{slug}/book', [BookingController::class, 'store'])
+    ->middleware(['auth', 'verified', 'role:patient', 'throttle:booking-requests'])->name('booking.store');
 
 Route::get('/ask-a-doctor', [QuestionController::class, 'index'])->name('questions.index');
 Route::get('/ask-a-doctor/{question:slug}', [QuestionController::class, 'show'])->name('questions.show');
@@ -46,7 +51,20 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/account', [AccountController::class, 'edit'])->name('account.edit');
+    Route::get('/documents/{document}', [\App\Http\Controllers\DocumentController::class, 'show'])
+        ->middleware('throttle:60,1')->name('documents.show');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Payments: gateway return URLs and the local test gateway
+|--------------------------------------------------------------------------
+*/
+
+Route::match(['get', 'post'], '/payments/{payment:uuid}/return/{gateway}', [PaymentController::class, 'return'])
+    ->middleware('throttle:30,1')->name('payments.return');
+Route::get('/payments/{payment:uuid}/test', [PaymentController::class, 'fakeShow'])->name('payments.fake.show');
+Route::post('/payments/{payment:uuid}/test', [PaymentController::class, 'fakeComplete'])->name('payments.fake.complete');
 
 /*
 |--------------------------------------------------------------------------

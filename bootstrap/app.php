@@ -48,7 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         // Gateway return URLs may POST back from the provider's domain.
-        $middleware->validateCsrfTokens(except: ['payments/*/return']);
+        $middleware->validateCsrfTokens(except: ['payments/*/return/*']);
 
         $middleware->redirectGuestsTo(fn () => route('login'));
         $middleware->redirectUsersTo(fn () => route('dashboard'));

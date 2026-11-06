@@ -8,6 +8,7 @@ import './modules/header';
 import './modules/word-counter';
 import './modules/search-suggest';
 import './modules/timezone';
+import './modules/file-limit';
 
 window.bootstrap = { Collapse, Dropdown, Modal, Offcanvas, Toast, Tooltip };
 window.Alpine = Alpine;

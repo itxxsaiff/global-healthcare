@@ -33,6 +33,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             ],
         ])->validateWithBag('updateProfileInformation');
 
+        $nameChanged = $input['name'] !== $user->name;
+
         if ($input['email'] !== $user->email &&
             $user instanceof MustVerifyEmail) {
             $this->updateVerifiedUser($user, $input);
@@ -42,6 +44,12 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'email' => $input['email'],
                 'timezone' => $input['timezone'],
             ])->save();
+        }
+
+        // The practitioner's name is a verified detail (must match the licence).
+        if ($nameChanged && $user->isPractitioner() && $user->practitionerProfile) {
+            app(\App\Services\Verification\VerificationService::class)
+                ->requireReverification($user->practitionerProfile, 'name');
         }
     }
 

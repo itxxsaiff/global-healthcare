@@ -33,7 +33,9 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
+            // Verification documents live here. Never served directly; only via
+            // the authorised DocumentController (owner or admin, audit-logged).
+            'serve' => false,
             'throw' => false,
             'report' => false,
         ],
