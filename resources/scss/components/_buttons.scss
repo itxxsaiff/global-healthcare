@@ -1,0 +1,52 @@
+.btn { letter-spacing: .005em; display: inline-flex; align-items: center; justify-content: center; gap: .5rem; }
+
+.btn-primary {
+    --bs-btn-hover-bg: #{$forest-dark};
+    --bs-btn-hover-border-color: #{$forest-dark};
+    --bs-btn-active-bg: #{$forest-ink};
+}
+
+.btn-clay {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #{$clay};
+    --bs-btn-border-color: #{$clay};
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #{darken($clay, 7%)};
+    --bs-btn-hover-border-color: #{darken($clay, 7%)};
+    --bs-btn-active-bg: #{darken($clay, 12%)};
+    --bs-btn-active-color: #fff;
+}
+
+.btn-paper {
+    --bs-btn-color: #{$ink};
+    --bs-btn-bg: #fff;
+    --bs-btn-border-color: #{$line-strong};
+    --bs-btn-hover-color: #{$ink};
+    --bs-btn-hover-bg: #{$paper-deep};
+    --bs-btn-hover-border-color: #{$line-strong};
+    --bs-btn-active-bg: #{$sand};
+}
+
+.btn-cream {
+    --bs-btn-color: #{$forest-ink};
+    --bs-btn-bg: #{$paper};
+    --bs-btn-border-color: #{$paper};
+    --bs-btn-hover-color: #{$forest-ink};
+    --bs-btn-hover-bg: #fff;
+    --bs-btn-hover-border-color: #fff;
+}
+
+.btn-link-arrow {
+    font-weight: 600; color: $forest; display: inline-flex; align-items: center; gap: .35rem;
+    .icon { transition: transform .2s ease; }
+    &:hover .icon { transform: translateX(3px); }
+}
+
+.btn-whatsapp {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #1F8A55;
+    --bs-btn-border-color: #1F8A55;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #187047;
+    --bs-btn-hover-border-color: #187047;
+}

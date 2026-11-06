@@ -1,0 +1,44 @@
+.form-control, .form-select { box-shadow: none; }
+.form-control-lg, .form-select-lg { border-radius: .75rem; }
+.form-label { font-size: .925rem; color: $ink; }
+.form-hint { font-size: .825rem; color: $ink-muted; margin-top: .3rem; }
+.invalid-feedback { font-weight: 500; }
+
+// Segmented control (radio buttons styled as a pill group)
+.segmented {
+    display: inline-flex; padding: 4px; background: $paper-deep; border: 1px solid $line; border-radius: .75rem; gap: 2px;
+    input { position: absolute; opacity: 0; pointer-events: none; }
+    label {
+        padding: .45rem .95rem; border-radius: .55rem; font-weight: 600; font-size: .9rem; color: $ink-soft; cursor: pointer; user-select: none;
+        transition: background .15s ease, color .15s ease;
+    }
+    input:checked + label { background: #fff; color: $ink; box-shadow: $shadow-sm; }
+    input:focus-visible + label { outline: 2px solid $forest; outline-offset: 1px; }
+}
+
+// Selectable cards (role chooser, plans)
+.choice-card {
+    position: relative; display: block; cursor: pointer;
+    background: #fff; border: 1.5px solid $line; border-radius: $radius-lg; padding: 1.25rem;
+    transition: border-color .15s ease, box-shadow .15s ease;
+    &:hover { border-color: $line-strong; }
+    input { position: absolute; opacity: 0; }
+    &:has(input:checked) { border-color: $forest; box-shadow: 0 0 0 3px rgba($forest, .12); }
+}
+
+.check-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .5rem;
+    .form-check { background: #fff; border: 1px solid $line; border-radius: .6rem; padding: .55rem .75rem .55rem 2.2rem; margin: 0;
+        &:has(input:checked) { border-color: $forest; background: #F5F9F6; }
+    }
+}
+
+.word-counter { font-size: .8rem; font-weight: 600; color: $ink-muted;
+    &.is-over { color: $danger; }
+    &.is-ok { color: $success; }
+}
+
+.upload-box {
+    border: 1.5px dashed $line-strong; border-radius: $radius; background: #FDFCFA; padding: 1.25rem; text-align: center;
+    &:hover { border-color: $forest; }
+}

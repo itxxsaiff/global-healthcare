@@ -1,0 +1,82 @@
+html { scroll-behavior: smooth; }
+
+body {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01";
+    color-scheme: light;
+}
+
+h1, h2, h3, .display-1, .display-2, .display-3, .display-4, .display-5, .display-6, .font-serif {
+    font-family: $font-serif;
+    font-optical-sizing: auto;
+    letter-spacing: -0.015em;
+    font-variation-settings: "SOFT" 50, "WONK" 0;
+}
+
+h4, h5, h6 { font-family: $font-sans; font-weight: 700; letter-spacing: -0.005em; }
+
+.text-ink { color: $ink !important; }
+.text-soft { color: $ink-soft !important; }
+.text-muted, .text-body-secondary { color: $ink-muted !important; }
+.text-clay { color: $clay !important; }
+.text-forest { color: $forest !important; }
+.bg-paper { background: $paper !important; }
+.bg-paper-deep { background: $paper-deep !important; }
+.bg-sage { background: $sage !important; }
+.bg-sand { background: $sand !important; }
+.bg-forest { background: $forest-ink !important; color: $paper; }
+.border-line { border-color: $line !important; }
+
+.eyebrow {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: $clay;
+}
+
+.section { padding-block: clamp(3.5rem, 7vw, 6rem); }
+.section-tight { padding-block: clamp(2.5rem, 5vw, 4rem); }
+.section-title { font-size: clamp(1.75rem, 3.2vw, 2.6rem); margin-bottom: .75rem; }
+.section-lead { color: $ink-soft; font-size: 1.1rem; max-width: 38rem; }
+
+.container-narrow { max-width: 760px; }
+
+// The hand-drawn underline. Used sparingly on one word per page.
+.scribble {
+    position: relative; white-space: nowrap; display: inline-block;
+    svg {
+        position: absolute; left: -2%; bottom: -.18em; width: 104%; height: .42em;
+        color: $clay; pointer-events: none;
+    }
+}
+
+a { transition: color .15s ease; }
+a:focus-visible, button:focus-visible { outline: 2px solid $forest; outline-offset: 2px; }
+
+::selection { background: $clay-soft; color: $ink; }
+
+.icon { width: 1.15em; height: 1.15em; flex-shrink: 0; vertical-align: -0.18em; }
+.icon-sm { width: 1em; height: 1em; }
+.icon-lg { width: 1.5em; height: 1.5em; }
+
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+.skip-link {
+    position: absolute; left: -999px; top: .5rem; z-index: 2000; background: $ink; color: $paper; padding: .5rem 1rem; border-radius: .5rem;
+    &:focus { left: .5rem; }
+}
+
+[x-cloak] { display: none !important; }
+
+.prose {
+    font-size: 1.075rem; line-height: 1.75; color: $ink;
+    h2 { font-size: 1.6rem; margin: 2.2rem 0 .8rem; }
+    h3 { font-size: 1.3rem; margin: 1.8rem 0 .6rem; font-family: $font-serif; }
+    p, ul, ol { margin-bottom: 1.15rem; }
+    li { margin-bottom: .35rem; }
+    a { text-decoration: underline; text-underline-offset: 3px; }
+    blockquote { border-left: 3px solid $clay; padding-left: 1rem; color: $ink-soft; font-style: italic; }
+    img { max-width: 100%; height: auto; border-radius: $radius; }
+    .lead { font-size: 1.2rem; color: $ink-soft; }
+}

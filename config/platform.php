@@ -11,6 +11,14 @@
 
 return [
 
+    // The 14 top-level specialties from the client document (URL slugs, e.g. /dermatologists).
+    'specialty_slugs' => [
+        'dermatologists', 'endocrinologists', 'gastroenterologists', 'psychiatrists', 'urologists',
+        'clinical-psychologists-counselors', 'general-physicians', 'gynecologists-obstetricians',
+        'pediatricians', 'neurologists', 'general-surgeons', 'dietitians-clinical-nutritionists',
+        'sexologists', 'speech-occupational-therapists',
+    ],
+
     // Booking windows
     'request_response_hours' => (int) env('BOOKING_RESPONSE_HOURS', 24),
     'payment_window_hours' => (int) env('BOOKING_PAYMENT_HOURS', 12),

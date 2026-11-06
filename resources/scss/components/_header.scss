@@ -1,0 +1,34 @@
+.site-header {
+    position: sticky; top: 0; z-index: 1030;
+    background: rgba($paper, .92);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease;
+    &.is-scrolled { border-bottom-color: $line; }
+
+    .navbar { padding-block: .85rem; }
+    .nav-link { font-weight: 500; padding-inline: .85rem !important; }
+    .nav-link.active { color: $ink; }
+}
+
+.brand {
+    display: inline-flex; align-items: center; gap: .6rem; color: $ink; text-decoration: none;
+    font-family: $font-serif; font-weight: 600; font-size: 1.3rem; letter-spacing: -0.02em;
+    &:hover { color: $ink; }
+    .brand-mark { width: 34px; height: 34px; flex-shrink: 0; }
+    small { display: block; font-family: $font-sans; font-size: .68rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: $ink-muted; line-height: 1; margin-top: 2px; }
+}
+
+.offcanvas-nav {
+    background: $paper;
+    .nav-link { font-size: 1.15rem; padding: .75rem 0 !important; border-bottom: 1px solid $line; color: $ink; }
+}
+
+.site-footer {
+    background: $forest-ink; color: rgba($paper, .78);
+    a { color: rgba($paper, .78); &:hover { color: #fff; } }
+    h6 { color: #fff; font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 1rem; }
+    .brand { color: $paper; small { color: rgba($paper, .55); } }
+    .footer-note { border-top: 1px solid rgba($paper, .12); font-size: .875rem; }
+    .emergency-note { background: rgba($clay, .16); border: 1px solid rgba($clay, .35); color: $paper; border-radius: $radius; }
+}

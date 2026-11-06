@@ -1,0 +1,2 @@
+{{-- Hand-drawn underline, applied to a single word. --}}
+<span class="scribble">{{ $slot }}<svg viewBox="0 0 200 18" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12c30-7 62-9 96-7 30 2 60 4 100-3" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M8 16c38-5 80-6 120-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity=".55"/></svg></span>

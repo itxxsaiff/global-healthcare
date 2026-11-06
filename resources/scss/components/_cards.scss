@@ -1,0 +1,112 @@
+.card { box-shadow: $shadow-sm; }
+.card-soft { background: #fff; border: 1px solid $line; border-radius: $radius; }
+.card-hover { transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    &:hover { border-color: $line-strong; box-shadow: $shadow; transform: translateY(-2px); }
+}
+
+// ── Avatar (photo or monogram) ───────────────────────────────
+.avatar {
+    --size: 72px;
+    width: var(--size); height: var(--size); flex-shrink: 0;
+    border-radius: 18px; overflow: hidden; position: relative;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: $font-serif; font-weight: 600; font-size: calc(var(--size) * .36); letter-spacing: -0.02em;
+    img { width: 100%; height: 100%; object-fit: cover; }
+    &.avatar-sm { --size: 40px; border-radius: 12px; }
+    &.avatar-md { --size: 56px; border-radius: 14px; }
+    &.avatar-lg { --size: 120px; border-radius: 26px; }
+    &.avatar-xl { --size: 168px; border-radius: 32px; }
+    &.avatar-round { border-radius: 50%; }
+
+    &.tone-0 { background: $sage; color: $forest-dark; }
+    &.tone-1 { background: $clay-soft; color: darken($clay, 18%); }
+    &.tone-2 { background: $sand; color: #7A5B2E; }
+    &.tone-3 { background: #E2E8EF; color: #2F4A66; }
+    &.tone-4 { background: #EDE3EC; color: #6A3F63; }
+    &.tone-5 { background: #E8EBDD; color: #55603A; }
+}
+
+// ── Practitioner card ────────────────────────────────────────
+.practitioner-card {
+    background: #fff; border: 1px solid $line; border-radius: $radius-lg;
+    padding: 1.35rem; height: 100%;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: border-color .2s ease, box-shadow .2s ease;
+    &:hover { border-color: $line-strong; box-shadow: $shadow; }
+
+    .pc-name { font-family: $font-serif; font-size: 1.25rem; font-weight: 600; margin: 0; line-height: 1.2;
+        a { color: $ink; &::after { content: ''; position: absolute; inset: 0; } }
+    }
+    .pc-head { position: relative; display: flex; gap: 1rem; align-items: flex-start; }
+    .pc-role { color: $forest; font-weight: 600; font-size: .925rem; }
+    .pc-meta { color: $ink-muted; font-size: .875rem; display: flex; flex-wrap: wrap; gap: .25rem .9rem;
+        span { display: inline-flex; align-items: center; gap: .3rem; }
+    }
+    .pc-headline { color: $ink-soft; font-size: .95rem; margin: 0; }
+    .pc-foot { margin-top: auto; padding-top: 1rem; border-top: 1px dashed $line; display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+    .pc-fee { font-weight: 700; color: $ink; line-height: 1.1;
+        small { display: block; font-weight: 500; color: $ink-muted; font-size: .8rem; }
+    }
+}
+
+.verified-tick { color: $forest; display: inline-flex; vertical-align: -2px; }
+
+.chip {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .3rem .7rem; border-radius: 50rem;
+    background: $paper-deep; color: $ink-soft; border: 1px solid $line;
+    font-size: .825rem; font-weight: 500; text-decoration: none; white-space: nowrap;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+    &:hover { background: $sage; border-color: $sage-deep; color: $ink; }
+    &.chip-lg { padding: .55rem 1rem; font-size: .95rem; background: #fff; }
+    &.chip-active, &.active { background: $forest; border-color: $forest; color: #fff; }
+}
+
+.rating {
+    display: inline-flex; align-items: center; gap: .3rem; font-weight: 600; font-size: .9rem; color: $ink;
+    .stars { display: inline-flex; color: $honey; gap: 1px; }
+    .stars .icon { width: 1em; height: 1em; }
+    .stars .off { color: $line-strong; }
+    small { color: $ink-muted; font-weight: 500; }
+}
+
+// ── Status pills ─────────────────────────────────────────────
+.status {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .25rem .65rem; border-radius: 50rem; font-size: .78rem; font-weight: 600; white-space: nowrap;
+    &::before { content: ''; width: .45rem; height: .45rem; border-radius: 50%; background: currentColor; }
+    &.tone-success { background: #E2F0E7; color: $success; }
+    &.tone-warning { background: #F8EED9; color: $warning; }
+    &.tone-danger  { background: #F6E1DC; color: $danger; }
+    &.tone-info    { background: #E1EBF3; color: $info; }
+    &.tone-neutral { background: $paper-deep; color: $ink-muted; }
+}
+
+// ── Specialty tiles ──────────────────────────────────────────
+.specialty-tile {
+    display: flex; gap: .9rem; align-items: flex-start; height: 100%;
+    background: #fff; border: 1px solid $line; border-radius: $radius;
+    padding: 1.1rem 1.15rem; color: $ink; text-decoration: none;
+    transition: border-color .2s ease, background .2s ease;
+    .tile-icon { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: $sage; color: $forest; flex-shrink: 0; }
+    strong { display: block; font-weight: 650; line-height: 1.25; }
+    small { color: $ink-muted; }
+    &:hover { border-color: $forest; background: #FCFBF8; color: $ink;
+        .tile-icon { background: $forest; color: #fff; }
+    }
+}
+
+// ── Stat tiles (dashboards) ──────────────────────────────────
+.stat {
+    background: #fff; border: 1px solid $line; border-radius: $radius; padding: 1.1rem 1.25rem; height: 100%;
+    .stat-label { color: $ink-muted; font-size: .85rem; font-weight: 600; }
+    .stat-value { font-family: $font-serif; font-size: 2rem; font-weight: 600; line-height: 1.1; margin-top: .25rem; }
+    .stat-note { font-size: .8rem; color: $ink-muted; }
+}
+
+.empty-state {
+    text-align: center; padding: 3rem 1.5rem; border: 1px dashed $line-strong; border-radius: $radius-lg; background: #FDFCFA;
+    .empty-icon { width: 56px; height: 56px; border-radius: 16px; background: $sage; color: $forest; display: inline-grid; place-items: center; margin-bottom: 1rem; }
+    h3 { font-size: 1.3rem; }
+    p { color: $ink-muted; max-width: 28rem; margin-inline: auto; }
+}

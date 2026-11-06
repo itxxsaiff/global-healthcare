@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -43,6 +44,11 @@ class AppServiceProvider extends ServiceProvider
         Model::shouldBeStrict(! $this->app->isProduction());
 
         Paginator::useBootstrapFive();
+
+        View::composer('layouts.dashboard', \App\View\Composers\DashboardBadges::class);
+        View::composer('auth._shared-fields', fn ($view) => $view->with(
+            'countries', \App\Models\Country::query()->ordered()->get(['id', 'name', 'iso2'])
+        ));
 
         if ($this->app->isProduction()) {
             URL::forceScheme('https');

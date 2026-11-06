@@ -1,0 +1,94 @@
+// Feed tokens into Bootstrap before it compiles.
+$primary:   $forest;
+$secondary: $ink-soft;
+$success:   $success;
+$warning:   $warning;
+$danger:    $danger;
+$info:      $info;
+$light:     $paper-deep;
+$dark:      $forest-ink;
+
+$body-bg:             $paper;
+$body-color:          $ink;
+$body-secondary-color:$ink-muted;
+$border-color:        $line;
+$link-color:          $forest;
+$link-decoration:     none;
+$link-hover-color:    $forest-dark;
+
+$font-family-sans-serif: $font-sans;
+$font-size-base:         1rem;
+$line-height-base:       1.6;
+$headings-font-family:   $font-serif;
+$headings-font-weight:   600;
+$headings-line-height:   1.15;
+$headings-color:         $ink;
+$lead-font-size:         1.175rem;
+$lead-font-weight:       400;
+
+$border-radius:     $radius-sm;
+$border-radius-sm:  .375rem;
+$border-radius-lg:  $radius;
+$border-radius-xl:  $radius-lg;
+$border-radius-pill: 50rem;
+
+$box-shadow:    $shadow;
+$box-shadow-sm: $shadow-sm;
+
+$btn-padding-y:    .625rem;
+$btn-padding-x:    1.15rem;
+$btn-font-weight:  600;
+$btn-border-radius: .625rem;
+$btn-border-radius-lg: .75rem;
+$btn-padding-y-lg: .8rem;
+$btn-padding-x-lg: 1.5rem;
+$btn-focus-width:  .2rem;
+
+$input-bg:            #fff;
+$input-border-color:  $line-strong;
+$input-padding-y:     .65rem;
+$input-padding-x:     .9rem;
+$input-border-radius: .625rem;
+$input-focus-border-color: $forest;
+$input-focus-box-shadow:   0 0 0 .2rem rgba($forest, .15);
+$input-placeholder-color:  $ink-muted;
+$form-label-font-weight:   600;
+$form-label-margin-bottom: .35rem;
+$form-check-input-checked-bg-color: $forest;
+$form-check-input-checked-border-color: $forest;
+$form-text-color: $ink-muted;
+
+$card-border-color: $line;
+$card-border-radius: $radius;
+$card-cap-bg: transparent;
+$card-spacer-y: 1.25rem;
+$card-spacer-x: 1.25rem;
+
+$dropdown-border-color: $line;
+$dropdown-link-active-bg: $sage;
+$dropdown-link-active-color: $ink;
+$dropdown-box-shadow: $shadow;
+
+$nav-link-color: $ink-soft;
+$nav-link-hover-color: $ink;
+$nav-tabs-link-active-color: $ink;
+
+$badge-font-weight: 600;
+$badge-border-radius: 50rem;
+
+$table-cell-padding-y: .8rem;
+$table-cell-padding-x: .9rem;
+$table-border-color: $line;
+$table-striped-bg: $paper;
+
+$pagination-color: $ink-soft;
+$pagination-active-bg: $forest;
+$pagination-active-border-color: $forest;
+$pagination-border-color: $line;
+$pagination-border-radius: .5rem;
+
+$modal-content-border-radius: $radius-lg;
+$modal-content-border-color: $line;
+$alert-border-radius: $radius;
+$enable-shadows: false;
+$enable-negative-margins: true;

@@ -1,0 +1,35 @@
+.directory-head { padding-block: 2.25rem 1.5rem; border-bottom: 1px solid $line; background: $paper-deep;
+    h1 { font-size: clamp(1.8rem, 3.6vw, 2.8rem); }
+}
+
+.filter-panel {
+    background: #fff; border: 1px solid $line; border-radius: $radius-lg; padding: 1.25rem;
+    position: sticky; top: 92px;
+    .filter-group { padding-block: 1rem; border-bottom: 1px solid $line;
+        &:first-child { padding-top: 0; }
+        &:last-child { border-bottom: 0; padding-bottom: 0; }
+    }
+    .filter-title { font-weight: 700; font-size: .875rem; margin-bottom: .6rem; display: flex; justify-content: space-between; }
+    .form-check { margin-bottom: .3rem; font-size: .925rem; }
+    .scroll-list { max-height: 210px; overflow-y: auto; padding-right: .25rem; }
+}
+
+.active-filters .chip { background: $sage; border-color: $sage-deep; color: $forest-ink; }
+
+.profile-hero { background: $paper-deep; border-bottom: 1px solid $line; padding-block: 2.5rem; }
+.profile-aside { position: sticky; top: 92px; }
+
+.slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: .45rem;
+    button { border: 1px solid $line-strong; background: #fff; border-radius: .55rem; padding: .5rem .25rem; font-weight: 600; font-size: .875rem; color: $ink;
+        &:hover { border-color: $forest; color: $forest; }
+        &.selected { background: $forest; border-color: $forest; color: #fff; }
+    }
+}
+.day-strip { display: flex; gap: .45rem; overflow-x: auto; padding-bottom: .4rem; scrollbar-width: thin;
+    button { flex: 0 0 auto; width: 64px; border: 1px solid $line; background: #fff; border-radius: .7rem; padding: .5rem .25rem; text-align: center; line-height: 1.15; color: $ink;
+        small { display: block; font-size: .7rem; text-transform: uppercase; color: $ink-muted; font-weight: 700; letter-spacing: .04em; }
+        strong { font-size: 1.15rem; font-family: $font-serif; }
+        &.selected { background: $forest; border-color: $forest; color: #fff; small { color: rgba(#fff, .75); } }
+        &:disabled { opacity: .4; }
+    }
+}

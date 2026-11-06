@@ -21,7 +21,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     public function update(User $user, array $input): void
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'min:3', 'max:120'],
+            'timezone' => ['required', 'timezone:all'],
 
             'email' => [
                 'required',
@@ -39,6 +40,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $user->forceFill([
                 'name' => $input['name'],
                 'email' => $input['email'],
+                'timezone' => $input['timezone'],
             ])->save();
         }
     }
@@ -53,6 +55,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         $user->forceFill([
             'name' => $input['name'],
             'email' => $input['email'],
+            'timezone' => $input['timezone'],
             'email_verified_at' => null,
         ])->save();
 

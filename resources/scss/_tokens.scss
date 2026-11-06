@@ -1,0 +1,42 @@
+// ─────────────────────────────────────────────────────────────
+// Design tokens. Warm, natural, calm. No neon, no glow.
+// paper  → page background (warm off-white)
+// ink    → text (green-tinted near-black)
+// forest → primary actions, trust
+// clay   → small accents, hand-drawn marks, highlights
+// sage / sand → soft section backgrounds
+// ─────────────────────────────────────────────────────────────
+
+$paper:      #FAF7F2;
+$paper-deep: #F3EEE5;
+$sand:       #EFE6D8;
+$sage:       #E3ECE5;
+$sage-deep:  #CFDDD3;
+$line:       #E6DED1;
+$line-strong:#D5CBBB;
+
+$ink:        #1E2723;
+$ink-soft:   #4D5A53;
+$ink-muted:  #7A857E;
+
+$forest:     #1F5C4A;
+$forest-dark:#174636;
+$forest-ink: #0F2E24;
+$clay:       #C4623A;
+$clay-soft:  #F4E2D8;
+$honey:      #D9A441;
+
+$success:    #2F7A55;
+$warning:    #B7791F;
+$danger:     #B4442F;
+$info:       #2F6690;
+
+$font-sans:  'Figtree Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+$font-serif: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+
+$radius-sm: .5rem;
+$radius:    .875rem;
+$radius-lg: 1.25rem;
+
+$shadow-sm: 0 1px 2px rgba(30, 39, 35, .05);
+$shadow:    0 1px 2px rgba(30, 39, 35, .04), 0 8px 24px -12px rgba(30, 39, 35, .18);

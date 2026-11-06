@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Cache;
 
 class Specialty extends Model
 {
@@ -16,12 +15,6 @@ class Specialty extends Model
     protected function casts(): array
     {
         return ['is_active' => 'boolean'];
-    }
-
-    protected static function booted(): void
-    {
-        static::saved(fn () => Cache::forget('specialties.tree'));
-        static::deleted(fn () => Cache::forget('specialties.tree'));
     }
 
     public function parent(): BelongsTo
@@ -49,10 +42,13 @@ class Specialty extends Model
         $query->whereNull('parent_id')->where('is_active', true)->orderBy('sort');
     }
 
-    /** Cached top-level specialties with their children, used across forms and nav. */
+    /**
+     * Top-level specialties with their children, used across forms and nav.
+     * Memoised per request (Laravel 13 refuses to unserialize models from cache by default).
+     */
     public static function tree()
     {
-        return Cache::rememberForever('specialties.tree', fn () => self::topLevel()
+        return once(fn () => self::topLevel()
             ->with(['children' => fn ($q) => $q->where('is_active', true)])
             ->get());
     }
