@@ -40,3 +40,11 @@ Route::controller(\App\Http\Controllers\Practitioner\MembershipController::class
     Route::post('/plans/{plan:code}', 'choose')->middleware('throttle:10,1')->name('choose');
     Route::get('/billing', 'portal')->name('portal');
 });
+
+Route::get('/questions', [\App\Http\Controllers\Practitioner\AnswerController::class, 'index'])->name('questions.index');
+Route::post('/questions/{question:slug}/answer', [\App\Http\Controllers\Practitioner\AnswerController::class, 'store'])->middleware('throttle:20,1')->name('answers.store');
+
+Route::resource('articles', \App\Http\Controllers\Practitioner\ArticleController::class)
+    ->only(['index', 'create', 'store', 'edit', 'update'])
+    ->scoped(['article' => 'slug'])
+    ->middlewareFor(['store', 'update'], 'throttle:uploads');

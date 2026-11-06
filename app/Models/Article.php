@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ArticleStatus;
 use App\Enums\ArticleType;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Article extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'specialty_id', 'type', 'title', 'slug', 'excerpt', 'body', 'word_count',

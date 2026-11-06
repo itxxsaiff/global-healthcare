@@ -42,3 +42,26 @@
     border: 1.5px dashed $line-strong; border-radius: $radius; background: #FDFCFA; padding: 1.25rem; text-align: center;
     &:hover { border-color: $forest; }
 }
+
+// Quill editor, restyled to the palette
+.editor-shell {
+    border: 1px solid $line-strong; border-radius: $radius; background: #fff; overflow: hidden;
+    .ql-toolbar.ql-snow { border: 0; border-bottom: 1px solid $line; background: $paper; font-family: $font-sans; }
+    .ql-container.ql-snow { border: 0; font-family: $font-sans; font-size: 1.05rem; }
+    .ql-editor { min-height: 420px; line-height: 1.75; padding: 1.25rem 1.5rem; color: $ink;
+        h2 { font-family: $font-serif; font-size: 1.5rem; margin: 1.2rem 0 .5rem; }
+        h3 { font-family: $font-serif; font-size: 1.2rem; }
+        &.ql-blank::before { color: $ink-muted; font-style: normal; left: 1.5rem; }
+    }
+    .ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button.ql-active .ql-stroke { stroke: $forest; }
+}
+
+.star-input {
+    display: inline-flex; flex-direction: row-reverse; gap: .25rem;
+    input { position: absolute; opacity: 0; }
+    label { cursor: pointer; color: $line-strong; transition: color .1s ease;
+        svg { width: 2.25rem; height: 2.25rem; }
+    }
+    label:hover, label:hover ~ label, input:checked ~ label { color: $honey; }
+    input:focus-visible + label { outline: 2px solid $forest; border-radius: 4px; }
+}
