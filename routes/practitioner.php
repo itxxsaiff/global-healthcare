@@ -48,3 +48,5 @@ Route::resource('articles', \App\Http\Controllers\Practitioner\ArticleController
     ->only(['index', 'create', 'store', 'edit', 'update'])
     ->scoped(['article' => 'slug'])
     ->middlewareFor(['store', 'update'], 'throttle:uploads');
+
+Route::get('/earnings', \App\Http\Controllers\Practitioner\EarningsController::class)->name('earnings.index');

@@ -26,6 +26,11 @@ class Plan extends Model
         ];
     }
 
+    public function memberships(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Membership::class);
+    }
+
     public function scopeActive(Builder $query): void
     {
         $query->where('is_active', true)->orderBy('sort');

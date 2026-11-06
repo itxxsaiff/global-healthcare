@@ -83,8 +83,8 @@ class CommissionService
         $paidOut = LedgerEntry::query()->where('practitioner_profile_id', $profile->id)
             ->where('type', LedgerType::Payout)->groupBy('currency')
             ->selectRaw('currency, SUM(amount_minor) s')->pluck('s', 'currency');
-        $refunds = LedgerEntry::query()->where('practitioner_profile_id', $profile->id)
-            ->where('type', LedgerType::RefundReversal)->join('bookings', 'bookings.id', '=', 'ledger_entries.booking_id')
+        $refunds = LedgerEntry::query()->where('ledger_entries.practitioner_profile_id', $profile->id)
+            ->where('ledger_entries.type', LedgerType::RefundReversal)->join('bookings', 'bookings.id', '=', 'ledger_entries.booking_id')
             ->groupBy('ledger_entries.currency')
             ->selectRaw('ledger_entries.currency, SUM(bookings.practitioner_earning_minor) s')->pluck('s', 'currency');
 

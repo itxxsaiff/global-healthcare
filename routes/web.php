@@ -51,6 +51,19 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/account', [AccountController::class, 'edit'])->name('account.edit');
+    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{id}', [\App\Http\Controllers\NotificationController::class, 'open'])->name('notifications.open');
+    Route::post('/notifications/read', [\App\Http\Controllers\NotificationController::class, 'readAll'])->name('notifications.read');
+
+    Route::middleware('role:patient,practitioner')->controller(\App\Http\Controllers\TicketController::class)->prefix('support')->name('tickets.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/new', 'create')->name('create');
+        Route::post('/', 'store')->middleware('throttle:tickets')->name('store');
+        Route::get('/{ticket:reference}', 'show')->name('show');
+        Route::post('/{ticket:reference}/reply', 'reply')->middleware('throttle:tickets')->name('reply');
+    });
+    Route::get('/support/attachments/{message}', [\App\Http\Controllers\TicketController::class, 'attachment'])->name('tickets.attachment');
+
     Route::get('/documents/{document}', [\App\Http\Controllers\DocumentController::class, 'show'])
         ->middleware('throttle:60,1')->name('documents.show');
 });

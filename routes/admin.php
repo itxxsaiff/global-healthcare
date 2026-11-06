@@ -33,3 +33,38 @@ Route::patch('/articles/{article:id}', [\App\Http\Controllers\Admin\ArticleContr
 
 Route::get('/tags', [\App\Http\Controllers\Admin\TagController::class, 'index'])->name('tags.index');
 Route::patch('/tags/{tag}', [\App\Http\Controllers\Admin\TagController::class, 'update'])->name('tags.update');
+
+Route::get('/tickets', [\App\Http\Controllers\Admin\TicketController::class, 'index'])->name('tickets.index');
+Route::get('/tickets/{ticket:reference}', [\App\Http\Controllers\Admin\TicketController::class, 'show'])->name('tickets.show');
+Route::post('/tickets/{ticket:reference}/reply', [\App\Http\Controllers\Admin\TicketController::class, 'reply'])->name('tickets.reply');
+
+Route::get('/bookings', [\App\Http\Controllers\Admin\BookingController::class, 'index'])->name('bookings.index');
+Route::get('/bookings/{booking:reference}', [\App\Http\Controllers\Admin\BookingController::class, 'show'])->name('bookings.show');
+Route::post('/bookings/{booking:reference}/refunded', [\App\Http\Controllers\Admin\BookingController::class, 'refunded'])->name('bookings.refunded');
+Route::post('/bookings/{booking:reference}/cancel', [\App\Http\Controllers\Admin\BookingController::class, 'cancel'])->name('bookings.cancel');
+
+Route::get('/wallet', [\App\Http\Controllers\Admin\WalletController::class, 'index'])->name('wallet.index');
+Route::post('/wallet/payouts', [\App\Http\Controllers\Admin\WalletController::class, 'storePayout'])->name('wallet.payouts.store');
+Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');
+
+Route::get('/plans', [\App\Http\Controllers\Admin\PlanController::class, 'index'])->name('plans.index');
+Route::put('/plans/{plan}', [\App\Http\Controllers\Admin\PlanController::class, 'update'])->name('plans.update');
+
+Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+Route::post('/users/{user}/toggle', [\App\Http\Controllers\Admin\UserController::class, 'toggle'])->name('users.toggle');
+
+Route::controller(\App\Http\Controllers\Admin\TaxonomyController::class)->prefix('taxonomy')->name('taxonomy.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/specialties/{specialty:id}/subs', 'storeSub')->name('subs.store');
+    Route::post('/specialties/{specialty:id}/toggle', 'toggleSub')->name('subs.toggle');
+    Route::post('/conditions', 'storeCondition')->name('conditions.store');
+    Route::post('/conditions/{condition:id}/toggle', 'toggleCondition')->name('conditions.toggle');
+});
+
+Route::controller(\App\Http\Controllers\Admin\SettingsController::class)->group(function () {
+    Route::get('/settings', 'edit')->name('settings.edit');
+    Route::put('/settings', 'update')->name('settings.update');
+    Route::get('/pages', 'pages')->name('pages.index');
+    Route::put('/pages/{page}', 'updatePage')->name('pages.update');
+    Route::get('/audit', 'audit')->name('audit.index');
+});
