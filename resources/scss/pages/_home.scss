@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────
 .hero-dark {
     position: relative; overflow: hidden; color: #fff; isolation: isolate;
-    margin-top: calc(-1 * var(--header-h));
+    margin-top: calc(-1 * var(--header-h) - 1px); // header height + its 1px border
     padding-top: calc(var(--header-h) + clamp(2rem, 5vw, 3.5rem));
     padding-bottom: clamp(7rem, 12vw, 10rem);
     background:
@@ -15,15 +15,6 @@
     h1 { color: #fff; font-size: clamp(2.35rem, 4.8vw, 3.85rem); line-height: 1.06; margin-bottom: 1.25rem; }
     h1 .accent { color: $mint; }
     .hero-lead { color: rgba(#fff, .74); font-size: clamp(1.02rem, 1.4vw, 1.15rem); max-width: 33rem; margin-bottom: 2rem; }
-
-    .hero-badge {
-        display: inline-flex; align-items: center; gap: .55rem; margin-bottom: 1.5rem;
-        padding: .38rem .9rem .38rem .4rem; border-radius: 99px; font-size: .85rem; font-weight: 600;
-        background: rgba(#fff, .07); border: 1px solid rgba(#fff, .14); color: rgba(#fff, .9);
-        .dot { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: rgba($mint, .18); color: $mint;
-            .icon { width: 14px; height: 14px; }
-        }
-    }
 
     .hero-stats {
         display: flex; flex-wrap: wrap; gap: 1.25rem 0; margin-top: 2.5rem;
@@ -76,10 +67,6 @@
         .label { font-size: .74rem; color: $ink-muted; font-weight: 600; }
         .value { font-size: .92rem; font-weight: 750; line-height: 1.2; }
     }
-    .fc-next { left: -10px; bottom: 105px; padding: .8rem 1rem; display: flex; align-items: center; gap: .8rem; animation-delay: -2s;
-        .bell { color: $forest; margin-left: .6rem; }
-    }
-    .fc-safe { right: -18px; bottom: 34px; padding: .8rem 1rem; display: flex; align-items: center; gap: .75rem; animation-delay: -4s; }
     .fc-live { right: -26px; top: 18px; width: 196px; padding: .55rem; background: rgba(#fff, .12); border: 1px solid rgba(#fff, .22); backdrop-filter: blur(10px); color: #fff;
         .live-tag { position: absolute; top: -13px; left: 12px; display: inline-flex; align-items: center; gap: .35rem; padding: .22rem .6rem; border-radius: 99px; background: $mint; color: $forest-ink; font-size: .72rem; font-weight: 750;
             &::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: $clay; }

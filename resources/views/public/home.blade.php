@@ -11,7 +11,6 @@
     <div class="container position-relative" style="z-index:2">
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
-                <span class="hero-badge"><span class="dot"><x-icon name="globe" /></span> Global telehealth network</span>
                 <h1>Trusted doctors, <br class="d-none d-xl-block"><span class="accent">one video call</span> away.</h1>
                 <p class="hero-lead">Online consultations with licence-checked specialists from Pakistan to the UK. Choose by symptom, gender and language, then book a time that suits you.</p>
                 <div class="d-flex flex-wrap gap-3">
@@ -42,15 +41,6 @@
                         <div class="controls">
                             <span><x-icon name="mic" /></span><span><x-icon name="video" /></span><span class="end"><x-icon name="phone-off" /></span>
                         </div>
-                    </div>
-                    <div class="float-card fc-next">
-                        <span class="icon-tile sm tone-teal"><x-icon name="calendar-check" /></span>
-                        <div><div class="label">Next consultation</div><div class="value">Today, 4:00 PM</div></div>
-                        <x-icon name="bell" class="bell" />
-                    </div>
-                    <div class="float-card fc-safe">
-                        <span class="icon-tile sm tone-teal"><x-icon name="heart-pulse" /></span>
-                        <div><div class="value">Online care</div><div class="label">Anytime, anywhere</div></div>
                     </div>
                 </div>
             </div>
