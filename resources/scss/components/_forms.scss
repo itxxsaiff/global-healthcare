@@ -29,7 +29,7 @@
 .check-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .5rem;
     .form-check { background: #fff; border: 1px solid $line; border-radius: .6rem; padding: .55rem .75rem .55rem 2.2rem; margin: 0;
-        &:has(input:checked) { border-color: $forest; background: #F5F9F6; }
+        &:has(input:checked) { border-color: $forest; background: $sage; }
     }
 }
 
@@ -39,7 +39,7 @@
 }
 
 .upload-box {
-    border: 1.5px dashed $line-strong; border-radius: $radius; background: #FDFCFA; padding: 1.25rem; text-align: center;
+    border: 1.5px dashed $line-strong; border-radius: $radius; background: #fff; padding: 1.25rem; text-align: center;
     &:hover { border-color: $forest; }
 }
 
@@ -49,7 +49,7 @@
     .ql-toolbar.ql-snow { border: 0; border-bottom: 1px solid $line; background: $paper; font-family: $font-sans; }
     .ql-container.ql-snow { border: 0; font-family: $font-sans; font-size: 1.05rem; }
     .ql-editor { min-height: 420px; line-height: 1.75; padding: 1.25rem 1.5rem; color: $ink;
-        h2 { font-family: $font-serif; font-size: 1.5rem; margin: 1.2rem 0 .5rem; }
+        h2 { font-family: $font-display; font-size: 1.5rem; margin: 1.2rem 0 .5rem; }
         h3 { font-family: $font-serif; font-size: 1.2rem; }
         &.ql-blank::before { color: $ink-muted; font-style: normal; left: 1.5rem; }
     }

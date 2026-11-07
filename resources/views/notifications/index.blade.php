@@ -8,7 +8,7 @@
 </div>
 @forelse ($notifications as $n)
     <a href="{{ route('notifications.open', $n->id) }}" class="card-soft card-hover p-3 mb-2 d-flex gap-3 align-items-center text-reset text-decoration-none {{ $n->read_at ? 'opacity-75' : '' }}">
-        <span class="d-grid rounded-3 flex-shrink-0" style="width:40px;height:40px;place-items:center;background:#E3ECE5;color:#1F5C4A"><x-icon :name="$n->data['icon'] ?? 'bell'" /></span>
+        <span class="d-grid rounded-3 flex-shrink-0" style="width:40px;height:40px;place-items:center;background:#E3F4EF;color:#0E8474"><x-icon :name="$n->data['icon'] ?? 'bell'" /></span>
         <div class="flex-grow-1">
             <div class="{{ $n->read_at ? '' : 'fw-semibold' }}">{{ $n->data['title'] ?? 'Update' }}</div>
             <div class="small text-muted">{{ $n->created_at->diffForHumans() }}</div>

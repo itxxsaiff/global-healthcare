@@ -1,13 +1,12 @@
 @extends('layouts.dashboard')
 @section('title', 'My dashboard')
 @section('content')
-<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
-    <div>
-        <h1 class="dash-title">Hi {{ $user->firstName() }}</h1>
-        <p class="text-muted mb-0">Your appointments and anything that needs your attention.</p>
-    </div>
-    <a href="{{ route('directory') }}" class="btn btn-primary"><x-icon name="search" /> Find a practitioner</a>
-</div>
+<x-dash-hero :title="$user->name">
+    Your appointments, and anything that needs your attention.
+    <x-slot:actions>
+        <a href="{{ route('directory') }}" class="btn btn-primary"><x-icon name="search" /> Find a doctor</a>
+    </x-slot:actions>
+</x-dash-hero>
 
 @foreach ($needsPayment as $b)
     <div class="alert alert-warning d-flex flex-wrap gap-3 align-items-center justify-content-between">
@@ -19,13 +18,13 @@
 <div class="row g-4">
     <div class="col-xl-7">
         <div class="card-soft p-4 h-100">
-            <h2 class="h5 mb-3">Upcoming</h2>
+            <div class="card-title-row"><h2>Upcoming appointments</h2>@if (Route::has('patient.bookings.index'))<a href="{{ route('patient.bookings.index') }}">All bookings</a>@endif</div>
             @forelse ($upcoming as $b)
-                <div class="d-flex gap-3 align-items-center py-3 border-bottom">
+                <div class="list-row">
                     <x-avatar :profile="$b->practitioner" size="md" />
-                    <div class="flex-grow-1">
-                        <div class="fw-semibold">{{ $b->practitioner->displayName() }}</div>
-                        <div class="small text-muted">{{ $b->practitioner->primarySpecialty?->practitioner_label }} · {{ $b->startsAtFor($user->timezone)->format('D j M, g:i A') }}</div>
+                    <div class="flex-grow-1 min-w-0">
+                        <div class="lr-title">{{ $b->practitioner->displayName() }}</div>
+                        <div class="lr-sub">{{ $b->practitioner->primarySpecialty?->practitioner_label }} · {{ $b->startsAtFor($user->timezone)->format('D j M, g:i A') }}</div>
                     </div>
                     <x-status :status="$b->status" />
                 </div>
@@ -38,7 +37,7 @@
     </div>
     <div class="col-xl-5">
         <div class="card-soft p-4 mb-4">
-            <h2 class="h5 mb-2">Not sure who to see?</h2>
+            <div class="d-flex align-items-center gap-3 mb-2"><span class="icon-tile sm tone-teal"><x-icon name="heart-pulse" /></span><h2 class="h5 mb-0">Not sure who to see?</h2></div>
             <p class="small text-muted">Start with a symptom and we'll suggest the right kind of specialist.</p>
             <div class="d-flex flex-wrap gap-2">
                 @foreach (\App\Models\Condition::query()->active()->where('is_featured', true)->limit(8)->get() as $c)
@@ -48,7 +47,7 @@
         </div>
         @if ($toReview->isNotEmpty())
             <div class="card-soft p-4">
-                <h2 class="h5 mb-2">How did it go?</h2>
+                <div class="d-flex align-items-center gap-3 mb-2"><span class="icon-tile sm tone-amber"><x-icon name="star" /></span><h2 class="h5 mb-0">How did it go?</h2></div>
                 <p class="small text-muted">Your review helps other patients choose with confidence.</p>
                 @foreach ($toReview as $b)
                     <div class="d-flex justify-content-between align-items-center py-2 border-top">

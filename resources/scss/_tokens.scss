@@ -1,42 +1,75 @@
 // ─────────────────────────────────────────────────────────────
-// Design tokens. Warm, natural, calm. No neon, no glow.
-// paper  → page background (warm off-white)
-// ink    → text (green-tinted near-black)
-// forest → primary actions, trust
-// clay   → small accents, hand-drawn marks, highlights
-// sage / sand → soft section backgrounds
+// Design tokens. Clean, clinical-but-warm teal. No purple, no neon.
+// paper   → page background (cool off-white)
+// ink     → text (deep teal-black)
+// forest  → primary teal (actions, links, trust)
+// deep    → dark teal surfaces (hero, footer, banners)
+// mint    → accent on dark surfaces
+// clay    → small warm accent (alerts, end-call, highlights)
+// sage    → soft mint washes
+// (Variable names kept from v1 so every view keeps working.)
 // ─────────────────────────────────────────────────────────────
 
-$paper:      #FAF7F2;
-$paper-deep: #F3EEE5;
-$sand:       #EFE6D8;
-$sage:       #E3ECE5;
-$sage-deep:  #CFDDD3;
-$line:       #E6DED1;
-$line-strong:#D5CBBB;
+$paper:      #F5F9F8;
+$paper-deep: #ECF3F1;
+$sand:       #F4F1EA;
+$sage:       #E3F4EF;
+$sage-deep:  #C4E8DD;
+$line:       #E2EBE9;
+$line-strong:#CCDAD7;
 
-$ink:        #1E2723;
-$ink-soft:   #4D5A53;
-$ink-muted:  #7A857E;
+$ink:        #0F2A2A;
+$ink-soft:   #47605D;
+$ink-muted:  #758A87;
 
-$forest:     #1F5C4A;
-$forest-dark:#174636;
-$forest-ink: #0F2E24;
-$clay:       #C4623A;
-$clay-soft:  #F4E2D8;
-$honey:      #D9A441;
+$forest:     #0E8474;
+$forest-dark:#0B6B5F;
+$forest-ink: #062F2B;
+$deep:       #073A35;
+$deep-2:     #0B4A43;
+$mint:       #8DE5D0;
+$mint-bright:#5FD6BA;
 
-$success:    #2F7A55;
+$clay:       #E2654A;
+$clay-soft:  #FCE7E1;
+$honey:      #F2B23A;
+
+$success:    #1F8A5B;
 $warning:    #B7791F;
-$danger:     #B4442F;
-$info:       #2F6690;
+$danger:     #C2412D;
+$info:       #2F6FA8;
 
-$font-sans:  'Figtree Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-$font-serif: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+$font-sans:    'Figtree Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+$font-display: 'Plus Jakarta Sans Variable', 'Figtree Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+$font-serif:   $font-display; // legacy alias: .font-serif now means "display font"
 
-$radius-sm: .5rem;
-$radius:    .875rem;
-$radius-lg: 1.25rem;
+$radius-sm: .625rem;
+$radius:    1rem;
+$radius-lg: 1.5rem;
 
-$shadow-sm: 0 1px 2px rgba(30, 39, 35, .05);
-$shadow:    0 1px 2px rgba(30, 39, 35, .04), 0 8px 24px -12px rgba(30, 39, 35, .18);
+$shadow-sm: 0 1px 2px rgba(15, 42, 42, .05);
+$shadow:    0 1px 2px rgba(15, 42, 42, .04), 0 12px 32px -16px rgba(15, 42, 42, .2);
+$shadow-lg: 0 2px 6px rgba(6, 47, 43, .06), 0 32px 64px -28px rgba(6, 47, 43, .38);
+
+// Small tinted icon tones used for specialties and stat tiles.
+$tones: (
+    'teal':  (#E1F5F0, #0E8474),
+    'coral': (#FDE9E4, #D4553A),
+    'amber': (#FDF2DC, #B7791F),
+    'sky':   (#E3F0FB, #2F6FA8),
+    'rose':  (#FCE8EF, #C2477A),
+    'leaf':  (#E7F4E2, #3C8A37),
+    'cyan':  (#DEF3F7, #1D8399),
+);
+
+@mixin nice-scrollbar($thumb: rgba($ink, .18), $hover-only: false) {
+    scrollbar-width: thin;
+    scrollbar-color: if($hover-only, transparent, $thumb) transparent;
+    &::-webkit-scrollbar { width: 6px; height: 6px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: if($hover-only, transparent, $thumb); border-radius: 99px; }
+    @if $hover-only {
+        &:hover { scrollbar-color: $thumb transparent; }
+        &:hover::-webkit-scrollbar-thumb { background: $thumb; }
+    }
+}

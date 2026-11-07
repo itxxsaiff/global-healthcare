@@ -6,19 +6,17 @@
     $total = count($checklist);
 @endphp
 @section('content')
-<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
-    <div>
-        <h1 class="dash-title">Hello, {{ auth()->user()->firstName() }}</h1>
-        <p class="text-muted mb-0">
-            @if ($profile->is_public)
-                Your profile is live. <a href="{{ route('practitioners.show', $profile) }}" target="_blank">View public profile <x-icon name="external" size="sm" /></a>
-            @else
-                Your profile isn't public yet. Here's what's left.
-            @endif
-        </p>
-    </div>
-    <x-status :status="$status" />
-</div>
+<x-dash-hero :title="auth()->user()->name">
+    @if ($profile->is_public)
+        Your profile is live and patients can book you. <a href="{{ route('practitioners.show', $profile) }}" target="_blank" class="fw-semibold">View public profile <x-icon name="external" size="sm" /></a>
+    @else
+        Your profile isn't public yet. Here's what's left before patients can find you.
+    @endif
+    <x-slot:actions>
+        <x-status :status="$status" />
+        @if (Route::has('practitioner.availability.edit'))<a href="{{ route('practitioner.availability.edit') }}" class="btn btn-paper btn-sm"><x-icon name="clock" /> Manage schedule</a>@endif
+    </x-slot:actions>
+</x-dash-hero>
 
 @if (! $profile->is_public)
     <div class="card-soft p-4 mb-4">
@@ -64,42 +62,44 @@
 @endif
 
 <div class="row g-3 mb-4">
-    <div class="col-6 col-xl-3"><div class="stat"><div class="stat-label">Requests to answer</div><div class="stat-value">{{ $requests->count() }}</div></div></div>
-    <div class="col-6 col-xl-3"><div class="stat"><div class="stat-label">Upcoming sessions</div><div class="stat-value">{{ $upcoming->count() }}</div></div></div>
-    <div class="col-6 col-xl-3"><div class="stat"><div class="stat-label">Completed sessions</div><div class="stat-value">{{ $stats['completed'] }}</div></div></div>
-    <div class="col-6 col-xl-3"><div class="stat"><div class="stat-label">Rating</div><div class="stat-value">{{ $profile->reviews_count ? number_format($profile->rating_avg, 1) : '—' }}</div><div class="stat-note">{{ $profile->reviews_count }} reviews</div></div></div>
+    <div class="col-6 col-xxl-3"><x-stat icon="inbox" tone="amber" label="Requests to answer" :value="$requests->count()" :href="Route::has('practitioner.bookings.index') ? route('practitioner.bookings.index') : null" /></div>
+    <div class="col-6 col-xxl-3"><x-stat icon="calendar" tone="teal" label="Upcoming sessions" :value="$upcoming->count()" /></div>
+    <div class="col-6 col-xxl-3"><x-stat icon="check-circle" tone="sky" label="Completed sessions" :value="$stats['completed']" /></div>
+    <div class="col-6 col-xxl-3"><x-stat icon="star" tone="coral" label="Rating" :value="$profile->reviews_count ? number_format($profile->rating_avg, 1) : '—'" :note="$profile->reviews_count.' '.\Illuminate\Support\Str::plural('review', $profile->reviews_count)" /></div>
 </div>
 
 <div class="row g-4">
     <div class="col-xl-6">
         <div class="card-soft p-4 h-100">
-            <h2 class="h5 mb-3">New booking requests</h2>
+            <div class="card-title-row"><h2>New booking requests</h2>@if (Route::has('practitioner.bookings.index'))<a href="{{ route('practitioner.bookings.index') }}">All bookings</a>@endif</div>
             @forelse ($requests as $b)
-                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
-                    <div>
-                        <div class="fw-semibold">{{ $b->patient->name }}</div>
-                        <div class="small text-muted">{{ $b->startsAtFor($profile->timezone)->format('D j M, g:i A') }} · reply by {{ $b->respond_by?->setTimezone($profile->timezone)->format('D g:i A') }}</div>
+                <div class="list-row">
+                    <x-avatar :name="$b->patient->name" size="sm" round />
+                    <div class="flex-grow-1 min-w-0">
+                        <div class="lr-title">{{ $b->patient->name }}</div>
+                        <div class="lr-sub">{{ $b->startsAtFor($profile->timezone)->format('D j M, g:i A') }} · reply by {{ $b->respond_by?->setTimezone($profile->timezone)->format('D g:i A') }}</div>
                     </div>
                     @if (Route::has('practitioner.bookings.show'))<a href="{{ route('practitioner.bookings.show', $b) }}" class="btn btn-sm btn-primary">Review</a>@endif
                 </div>
             @empty
-                <p class="text-muted mb-0">No new requests right now.</p>
+                <x-empty icon="inbox" title="No new requests" text="New booking requests appear here. You'll also get an email for each one." class="border-0 py-4" />
             @endforelse
         </div>
     </div>
     <div class="col-xl-6">
         <div class="card-soft p-4 h-100">
-            <h2 class="h5 mb-3">Coming up</h2>
+            <div class="card-title-row"><h2>Coming up</h2></div>
             @forelse ($upcoming as $b)
-                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
-                    <div>
-                        <div class="fw-semibold">{{ $b->patient->name }}</div>
-                        <div class="small text-muted">{{ $b->startsAtFor($profile->timezone)->format('D j M, g:i A') }}</div>
+                <div class="list-row">
+                    <x-avatar :name="$b->patient->name" size="sm" round />
+                    <div class="flex-grow-1 min-w-0">
+                        <div class="lr-title">{{ $b->patient->name }}</div>
+                        <div class="lr-sub">{{ $b->startsAtFor($profile->timezone)->format('D j M, g:i A') }}</div>
                     </div>
                     <x-status :status="$b->status" />
                 </div>
             @empty
-                <p class="text-muted mb-0">Nothing scheduled yet.</p>
+                <x-empty icon="calendar" title="Nothing scheduled yet" text="Confirmed sessions will show here with the patient's local time converted for you." class="border-0 py-4" />
             @endforelse
         </div>
     </div>

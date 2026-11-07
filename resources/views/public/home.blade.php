@@ -1,172 +1,212 @@
 @extends('layouts.app')
+@section('header_overlay', '1')
 @section('description', 'Talk to a verified doctor, psychologist, dietitian or therapist online. Search by specialty or symptom, choose a male or female practitioner, and pick your language.')
+@php
+    $tones = ['teal', 'coral', 'sky', 'amber', 'rose', 'leaf', 'cyan'];
+@endphp
 
 @section('content')
 {{-- ───────────── Hero ───────────── --}}
-<section class="hero">
-    <div class="container">
+<section class="hero-dark">
+    <div class="container position-relative" style="z-index:2">
         <div class="row align-items-center g-5">
-            <div class="col-lg-7">
-                <span class="eyebrow mb-3"><x-icon name="badge-check" size="sm" /> Every practitioner licence-checked</span>
-                <h1 class="mb-4">Talk to a doctor who actually <x-scribble>listens</x-scribble>.</h1>
-                <p class="hero-lead mb-4">Online consultations with verified specialists from Pakistan to the UK. Search by what you're feeling, choose who you're comfortable with, and speak in your own language.</p>
-
-                <form action="{{ route('directory') }}" method="GET" class="search-card" role="search">
-                    <div class="row g-2 align-items-stretch">
-                        <div class="col-12 position-relative" x-data="searchSuggest('{{ route('search.suggest') }}')" @click.outside="open = false">
-                            <div class="search-input">
-                                <x-icon name="search" />
-                                <input type="search" name="q" class="form-control form-control-lg border-0 bg-paper" placeholder="Try “acne”, “anxiety” or “gynecologist”"
-                                       x-model="q" @input="onInput" @keydown.arrow-down.prevent="move(1)" @keydown.arrow-up.prevent="move(-1)" @keydown.enter="choose($event)" @focus="open = flat.length > 0"
-                                       autocomplete="off" aria-label="Search by symptom, specialty or name">
-                            </div>
-                            <div class="suggest-menu" x-show="open" x-cloak x-transition.opacity>
-                                <template x-for="group in groups" :key="group.label">
-                                    <div>
-                                        <div class="suggest-group" x-text="group.label"></div>
-                                        <template x-for="item in group.items" :key="item.url">
-                                            <a :href="item.url" :class="{ 'is-active': isActive(item) }"><span x-text="item.label"></span><small x-text="item.hint"></small></a>
-                                        </template>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
-                        <div class="col-sm-5">
-                            <div class="segmented w-100 h-100" role="radiogroup" aria-label="Practitioner gender">
-                                <input type="radio" name="gender" id="hg-any" value="" checked><label for="hg-any" class="flex-fill text-center">Any</label>
-                                <input type="radio" name="gender" id="hg-female" value="female"><label for="hg-female" class="flex-fill text-center">Female</label>
-                                <input type="radio" name="gender" id="hg-male" value="male"><label for="hg-male" class="flex-fill text-center">Male</label>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <select name="languages[]" class="form-select h-100" aria-label="Preferred language">
-                                <option value="">Any language</option>
-                                @foreach ($languages as $lang)
-                                    <option value="{{ $lang->code }}">{{ $lang->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-sm-3 d-grid">
-                            <button class="btn btn-primary btn-lg">Search</button>
-                        </div>
-                    </div>
-                </form>
-
-                <div class="d-flex flex-wrap align-items-center gap-2 mt-4">
-                    <span class="text-muted small fw-semibold me-1">People often search:</span>
-                    @foreach ($symptoms->take(6) as $symptom)
-                        <a href="{{ route('conditions.show', $symptom) }}" class="chip">{{ $symptom->name }}</a>
-                    @endforeach
+            <div class="col-lg-6">
+                <span class="hero-badge"><span class="dot"><x-icon name="globe" /></span> Global telehealth network</span>
+                <h1>Trusted doctors, <br class="d-none d-xl-block"><span class="accent">one video call</span> away.</h1>
+                <p class="hero-lead">Online consultations with licence-checked specialists from Pakistan to the UK. Choose by symptom, gender and language, then book a time that suits you.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{{ route('directory') }}" class="btn btn-mint btn-lg">Find a doctor <x-icon name="arrow-right" class="icon-arrow" /></a>
+                    <a href="{{ route('register.practitioner') }}" class="btn btn-ghost-light btn-lg">Join as practitioner</a>
+                </div>
+                <div class="hero-stats">
+                    <div><x-icon name="users" /><span><strong>{{ $doctorCount }}+</strong><small>Verified practitioners</small></span></div>
+                    <div><x-icon name="globe" /><span><strong>{{ $countryCount }}</strong><small>Countries served</small></span></div>
+                    <div><x-icon name="shield-check" /><span><strong>100%</strong><small>Licence-checked</small></span></div>
                 </div>
             </div>
 
-            <div class="col-lg-5">
-                <div class="hero-collage" aria-hidden="true">
-                    <div class="note">Female doctor, speaks Urdu, evening slots. ✓</div>
-                    @foreach ($featured->take(3) as $i => $p)
-                        <div class="collage-card c{{ $i + 1 }}">
-                            <div class="d-flex gap-3 align-items-center">
-                                <x-avatar :profile="$p" size="md" />
-                                <div class="min-w-0">
-                                    <div class="name">{{ $p->displayName() }}</div>
-                                    <div class="small text-forest fw-semibold">{{ $p->primarySpecialty?->practitioner_label }}</div>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-3 small">
-                                <x-rating :value="$p->rating_avg" :count="$p->reviews_count" :show-stars="false" />
-                                <span class="text-muted"><x-icon name="languages" size="sm" /> {{ $p->languages->pluck('name')->take(2)->implode(' · ') }}</span>
-                            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="hero-visual" aria-hidden="true">
+                    <div class="globe"></div>
+                    <div class="orbit"></div>
+                    <div class="halo"></div>
+                    <span class="pin p1" style="left: 120px; top: 70px"><x-icon name="map-pin" /></span>
+                    <span class="pin p2" style="left: 250px; top: 20px"><x-icon name="map-pin" /></span>
+                    <span class="pin p3" style="left: 60px; top: 200px"><x-icon name="map-pin" /></span>
+
+                    <div class="hero-photo"><img src="/images/hero-doctor.webp" alt="" width="720" height="860" fetchpriority="high"></div>
+
+                    <div class="float-card fc-live">
+                        <span class="live-tag">Live consultation</span>
+                        <img src="/images/call-patient.webp" alt="" width="360" height="250" loading="lazy">
+                        <div class="controls">
+                            <span><x-icon name="mic" /></span><span><x-icon name="video" /></span><span class="end"><x-icon name="phone-off" /></span>
                         </div>
-                    @endforeach
+                    </div>
+                    <div class="float-card fc-next">
+                        <span class="icon-tile sm tone-teal"><x-icon name="calendar-check" /></span>
+                        <div><div class="label">Next consultation</div><div class="value">Today, 4:00 PM</div></div>
+                        <x-icon name="bell" class="bell" />
+                    </div>
+                    <div class="float-card fc-safe">
+                        <span class="icon-tile sm tone-teal"><x-icon name="heart-pulse" /></span>
+                        <div><div class="value">Online care</div><div class="label">Anytime, anywhere</div></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <svg class="hero-wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 84C380 72 800 30 1100 14 1260 6 1360 8 1440 14V120H0Z" fill="currentColor"/></svg>
 </section>
 
-{{-- ───────────── Trust strip ───────────── --}}
-<section class="trust-strip py-3">
+{{-- ───────────── Search ───────────── --}}
+<section class="hero-search">
     <div class="container">
-        <div class="row g-3 justify-content-between">
-            <div class="col-6 col-lg-auto item"><x-icon name="shield-check" /> ID, degree & licence verified</div>
-            <div class="col-6 col-lg-auto item"><x-icon name="users" /> Choose male or female practitioners</div>
-            <div class="col-6 col-lg-auto item"><x-icon name="clock" /> Times shown in your time zone</div>
-            <div class="col-6 col-lg-auto item"><x-icon name="lock" /> Private & confidential</div>
+        <form action="{{ route('directory') }}" method="GET" class="search-bar" role="search">
+            <div class="row g-2 align-items-stretch">
+                <div class="col-lg-4 position-relative" x-data="searchSuggest('{{ route('search.suggest') }}')" @click.outside="open = false">
+                    <div class="field">
+                        <x-icon name="search" />
+                        <input type="search" name="q" class="form-control" placeholder="Symptom, specialty or doctor’s name"
+                               x-model="q" @input="onInput" @keydown.arrow-down.prevent="move(1)" @keydown.arrow-up.prevent="move(-1)" @keydown.enter="choose($event)" @focus="open = flat.length > 0"
+                               autocomplete="off" aria-label="Search by symptom, specialty or name">
+                    </div>
+                    <div class="suggest-menu" x-show="open" x-cloak x-transition.opacity>
+                        <template x-for="group in groups" :key="group.label">
+                            <div>
+                                <div class="suggest-group" x-text="group.label"></div>
+                                <template x-for="item in group.items" :key="item.url">
+                                    <a :href="item.url" :class="{ 'is-active': isActive(item) }"><span x-text="item.label"></span><small x-text="item.hint"></small></a>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg">
+                    <div class="field">
+                        <x-icon name="stethoscope" />
+                        <select name="specialty" class="form-select" aria-label="Specialty">
+                            <option value="">All specialties</option>
+                            @foreach ($specialties as $s)
+                                <option value="{{ $s->slug }}">{{ $s->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg">
+                    <div class="field">
+                        <x-icon name="user" />
+                        <select name="gender" class="form-select" aria-label="Practitioner gender">
+                            <option value="">Male or female</option>
+                            <option value="female">Female practitioner</option>
+                            <option value="male">Male practitioner</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg">
+                    <div class="field">
+                        <x-icon name="languages" />
+                        <select name="languages[]" class="form-select" aria-label="Preferred language">
+                            <option value="">Any language</option>
+                            @foreach ($languages as $lang)
+                                <option value="{{ $lang->code }}">{{ $lang->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-auto">
+                    <button class="btn btn-primary btn-search px-4">Search doctors <x-icon name="arrow-right" class="icon-arrow" /></button>
+                </div>
+            </div>
+        </form>
+        <div class="popular-row">
+            <span>Popular:</span>
+            @foreach ($symptoms->take(7) as $symptom)
+                <a href="{{ route('conditions.show', $symptom) }}" class="chip">{{ $symptom->name }}</a>
+            @endforeach
         </div>
     </div>
 </section>
 
 {{-- ───────────── Specialties ───────────── --}}
-<section class="section">
+<section class="section pb-4">
     <div class="container">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+        <div class="section-head">
             <div>
-                <span class="eyebrow mb-2">Browse by specialty</span>
-                <h2 class="section-title mb-0">Who would you like to see?</h2>
+                <span class="eyebrow">Browse by specialty</span>
+                <h2 class="section-title">Who would you like to see?</h2>
             </div>
             <a href="{{ route('directory') }}" class="btn-link-arrow">All practitioners <x-icon name="arrow-right" /></a>
         </div>
-        <div class="row g-3">
-            @foreach ($specialties as $s)
-                <div class="col-sm-6 col-lg-4 col-xl-3">
-                    <a href="{{ route('specialties.show', $s) }}" class="specialty-tile">
-                        <span class="tile-icon"><x-icon :name="$s->icon ?? 'stethoscope'" /></span>
-                        <span>
-                            <strong>{{ $s->name }}</strong>
-                            <small>{{ ($n = $specialtyCounts[$s->id] ?? 0) ? $n.' '.\Illuminate\Support\Str::plural('practitioner', $n) : 'Joining soon' }}</small>
-                        </span>
+        <div class="spec-grid">
+            @foreach ($specialties->take(7) as $i => $s)
+                    <a href="{{ route('specialties.show', $s) }}" class="spec-tile">
+                        <span class="icon-tile tone-{{ $tones[$i % count($tones)] }}"><x-icon :name="$s->icon ?? 'stethoscope'" /></span>
+                        <strong>{{ $s->name }}</strong>
+                        <small>{{ ($n = $specialtyCounts[$s->id] ?? 0) ? $n.' '.\Illuminate\Support\Str::plural('practitioner', $n) : 'Joining soon' }}</small>
                     </a>
-                </div>
             @endforeach
+                <a href="{{ route('directory') }}" class="spec-tile spec-all">
+                    <span class="icon-tile" style="background:#fff"><x-icon name="list" /></span>
+                    <strong>View all {{ $specialties->count() }} <x-icon name="arrow-right" size="sm" /></strong>
+                    <small>specialties</small>
+                </a>
         </div>
         <p class="small text-muted mt-3 mb-0"><x-icon name="info" size="sm" /> We only list non-emergency outpatient specialties. For emergencies, please go to your nearest hospital.</p>
     </div>
 </section>
 
-{{-- ───────────── Symptom search band ───────────── --}}
-<section class="pb-5">
+{{-- ───────────── Plans + How it works ───────────── --}}
+<section class="section-tight">
     <div class="container">
-        <div class="symptom-band">
-            <div class="row g-4 align-items-center">
-                <div class="col-lg-4">
-                    <span class="eyebrow mb-2">Not sure who to see?</span>
-                    <h2 class="section-title">Start with what you're feeling.</h2>
-                    <p class="text-soft mb-0">Pick a symptom and we'll show you the specialists who treat it. No medical vocabulary needed.</p>
-                </div>
-                <div class="col-lg-8">
-                    <div class="d-flex flex-wrap gap-2">
-                        @foreach ($symptoms as $symptom)
-                            <a href="{{ route('conditions.show', $symptom) }}" class="chip chip-lg">{{ $symptom->name }} <x-icon name="arrow-right" size="sm" class="text-muted" /></a>
-                        @endforeach
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="plans-banner d-flex flex-column">
+                    <span class="crown"><x-icon name="crown" /></span>
+                    <span class="eyebrow text-mint mb-2">For practitioners</span>
+                    <h2 class="mb-2" style="max-width: 15rem">Practitioner subscription plans</h2>
+                    <p class="mb-4" style="max-width: 22rem">Get verified once, set your own fees and hours, and reach patients across Pakistan, the Gulf, the UK and North America.</p>
+                    <div class="mt-auto">
+                        <div class="plan-line"><span>Pakistan · Starter</span><strong>Free + 20% per booking</strong></div>
+                        <div class="plan-line"><span>Pakistan · Pro</span><strong>Rs 5,000 / month</strong></div>
+                        <div class="plan-line mb-3"><span>International</span><strong>from $30 / month</strong></div>
+                        <a href="{{ route('for-practitioners') }}#plans" class="btn btn-cream">View plans <x-icon name="arrow-right" class="icon-arrow" /></a>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-
-{{-- ───────────── How it works ───────────── --}}
-<section class="section bg-paper-deep border-top border-bottom">
-    <div class="container">
-        <div class="text-center mb-5">
-            <span class="eyebrow mb-2">How it works</span>
-            <h2 class="section-title">From search to session in three steps</h2>
-        </div>
-        <div class="row g-4 g-lg-5">
-            <div class="col-md-4 step">
-                <div class="step-num">01</div>
-                <h3>Find your person</h3>
-                <p>Filter by specialty, symptom, gender, language and fee. Read real reviews from patients who've had a consultation.</p>
-            </div>
-            <div class="col-md-4 step">
-                <div class="step-num">02</div>
-                <h3>Pick a time that suits you</h3>
-                <p>Slots appear in your local time, wherever you are. Send a request and the practitioner confirms it, usually within a few hours.</p>
-            </div>
-            <div class="col-md-4 step">
-                <div class="step-num">03</div>
-                <h3>Talk from home</h3>
-                <p>Where payment is needed, pay securely online. Then join your session from wherever you are. Follow-ups are just as easy.</p>
+            <div class="col-lg-7">
+                <div class="how-card">
+                    <span class="eyebrow">How it works</span>
+                    <h2 class="section-title mb-0" style="font-size: clamp(1.4rem, 2.2vw, 1.75rem)">From search to session in four steps</h2>
+                    <div class="how-steps">
+                        <div class="how-step">
+                            <span class="icon-tile tone-teal"><x-icon name="search" /></span>
+                            <h3><span class="num">1</span> Find your doctor</h3>
+                            <p>Filter by symptom, gender, language and fee.</p>
+                        </div>
+                        <div class="how-step">
+                            <span class="icon-tile tone-sky"><x-icon name="calendar" /></span>
+                            <h3><span class="num">2</span> Request a time</h3>
+                            <p>Slots are shown in your own time zone.</p>
+                        </div>
+                        <div class="how-step">
+                            <span class="icon-tile tone-amber"><x-icon name="shield-check" /></span>
+                            <h3><span class="num">3</span> Confirm & pay</h3>
+                            <p>The doctor accepts, you pay securely online.</p>
+                        </div>
+                        <div class="how-step">
+                            <span class="icon-tile tone-coral"><x-icon name="video" /></span>
+                            <h3><span class="num">4</span> Talk from home</h3>
+                            <p>Join your video or audio session anywhere.</p>
+                        </div>
+                    </div>
+                    <div class="how-trust">
+                        <div><x-icon name="shield-check" /> ID, degree & licence verified</div>
+                        <div><x-icon name="users" /> Choose a male or female practitioner</div>
+                        <div><x-icon name="clock" /> Times shown in your time zone</div>
+                        <div><x-icon name="lock" /> Private & confidential</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -176,12 +216,12 @@
 @if ($featured->isNotEmpty())
 <section class="section">
     <div class="container">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+        <div class="section-head">
             <div>
-                <span class="eyebrow mb-2">Featured practitioners</span>
-                <h2 class="section-title mb-0">Verified, well-reviewed, and taking patients</h2>
+                <span class="eyebrow">Featured practitioners</span>
+                <h2 class="section-title">Verified, well-reviewed and taking patients</h2>
             </div>
-            <a href="{{ route('directory') }}" class="btn-link-arrow">See all {{ $doctorCount }} <x-icon name="arrow-right" /></a>
+            <a href="{{ route('directory') }}" class="btn btn-outline-forest">See all {{ $doctorCount }} <x-icon name="arrow-right" class="icon-arrow" /></a>
         </div>
         <div class="row g-4">
             @foreach ($featured as $profile)
@@ -192,25 +232,53 @@
 </section>
 @endif
 
+{{-- ───────────── Symptom search band ───────────── --}}
+<section class="pb-5">
+    <div class="container">
+        <div class="symptom-band">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-4">
+                    <span class="eyebrow">Not sure who to see?</span>
+                    <h2 class="section-title mt-2">Start with what you're feeling.</h2>
+                    <p class="text-soft mb-0">Pick a symptom and we'll show you the specialists who treat it. No medical vocabulary needed.</p>
+                </div>
+                <div class="col-lg-8">
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach ($symptoms as $symptom)
+                            <a href="{{ route('conditions.show', $symptom) }}" class="chip chip-lg">{{ $symptom->name }} <x-icon name="arrow-right" size="sm" class="text-forest" /></a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 {{-- ───────────── Ask a doctor ───────────── --}}
 @if ($questions->isNotEmpty())
-<section class="section pt-0">
+<section class="section pt-4">
     <div class="container">
         <div class="row g-5">
             <div class="col-lg-4">
-                <span class="eyebrow mb-2">Ask a doctor</span>
-                <h2 class="section-title">Free answers from real specialists</h2>
+                <span class="eyebrow">Ask a doctor</span>
+                <h2 class="section-title mt-2">Free answers from real specialists</h2>
                 <p class="text-soft">Post a health question anonymously and verified practitioners answer publicly, so the next person with the same worry finds it too.</p>
-                <a href="{{ route('questions.index') }}" class="btn btn-paper mt-2">Browse questions</a>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="{{ route('questions.index') }}" class="btn btn-primary">Browse questions</a>
+                    @if (Route::has('patient.questions.create'))<a href="{{ route('patient.questions.create') }}" class="btn btn-outline-forest">Ask yours</a>@endif
+                </div>
             </div>
             <div class="col-lg-8">
-                @foreach ($questions as $q)
+                @foreach ($questions as $i => $q)
                     <a href="{{ route('questions.show', $q) }}" class="qa-item">
-                        <div class="small text-muted mb-1">{{ $q->specialty?->name }} · {{ $q->published_at->diffForHumans() }}</div>
-                        <h3>{{ $q->title }}</h3>
-                        <p class="line-clamp-2">{{ \Illuminate\Support\Str::limit($q->body, 180) }}</p>
-                        <div class="small mt-2 fw-semibold {{ $q->answers_count ? 'text-forest' : 'text-muted' }}">
-                            <x-icon name="message-circle" size="sm" /> {{ $q->answers_count ? $q->answers_count.' doctor '.\Illuminate\Support\Str::plural('answer', $q->answers_count) : 'Awaiting an answer' }}
+                        <span class="icon-tile sm tone-{{ $tones[$i % count($tones)] }}"><x-icon name="message-circle" /></span>
+                        <div class="min-w-0">
+                            <div class="small text-muted mb-1">{{ $q->specialty?->name }} · {{ $q->published_at->diffForHumans() }}</div>
+                            <h3>{{ $q->title }}</h3>
+                            <p class="line-clamp-2">{{ \Illuminate\Support\Str::limit($q->body, 180) }}</p>
+                            <div class="small mt-2 fw-semibold {{ $q->answers_count ? 'text-forest' : 'text-muted' }}">
+                                {{ $q->answers_count ? $q->answers_count.' doctor '.\Illuminate\Support\Str::plural('answer', $q->answers_count) : 'Awaiting an answer' }}
+                            </div>
                         </div>
                     </a>
                 @endforeach
@@ -220,42 +288,21 @@
 </section>
 @endif
 
-{{-- ───────────── For practitioners ───────────── --}}
+{{-- ───────────── Closing call to action ───────────── --}}
 <section class="pb-5 mb-lg-4">
     <div class="container">
-        <div class="join-band">
-            <div class="row g-4 align-items-center">
-                <div class="col-lg-5">
-                    <span class="eyebrow mb-2" style="color:#E9B79E">For practitioners</span>
-                    <h2 class="section-title">Grow your online practice, on your terms.</h2>
-                    <p class="mb-4">Get verified once, set your own fees and hours, and reach patients across Pakistan, the Gulf, the UK and North America.</p>
-                    <a href="{{ route('register.practitioner') }}" class="btn btn-cream btn-lg">Apply to join</a>
-                </div>
+        <div class="cta-band">
+            <span class="cta-rings"></span>
+            <div class="row g-4 align-items-center position-relative">
                 <div class="col-lg-7">
-                    <div class="row g-3">
-                        <div class="col-sm-6">
-                            <div class="plan-mini">
-                                <div class="small text-uppercase fw-bold mb-2" style="letter-spacing:.08em">Pakistan · Starter</div>
-                                <strong>Free</strong>
-                                <p class="small mb-0 mt-1">List for free. We take 20% only on consultations booked and paid through us.</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="plan-mini">
-                                <div class="small text-uppercase fw-bold mb-2" style="letter-spacing:.08em">Pakistan · Pro</div>
-                                <strong>Rs 5,000<span class="fs-6 fw-normal">/mo</span></strong>
-                                <p class="small mb-0 mt-1">0% commission, deal directly with patients, LinkedIn on your profile.</p>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="plan-mini d-sm-flex justify-content-between align-items-center gap-3">
-                                <div>
-                                    <div class="small text-uppercase fw-bold mb-1" style="letter-spacing:.08em">International</div>
-                                    <strong>$30<span class="fs-6 fw-normal">/mo</span></strong> <span class="small">· $150 for 6 months · $280 a year</span>
-                                </div>
-                                <p class="small mb-0 mt-2 mt-sm-0" style="max-width:16rem">0% commission and direct client dealing, billed automatically.</p>
-                            </div>
-                        </div>
+                    <span class="eyebrow text-mint">Ready when you are</span>
+                    <h2 class="section-title mt-2">Feeling unwell, or just need advice? Talk to someone today.</h2>
+                    <p class="mb-0" style="max-width: 34rem">Pick a verified specialist, choose a time in your own time zone, and speak from home in the language you're most comfortable with.</p>
+                </div>
+                <div class="col-lg-5">
+                    <div class="d-flex flex-wrap gap-3 justify-content-lg-end">
+                        <a href="{{ route('directory') }}" class="btn btn-mint btn-lg">Find a doctor <x-icon name="arrow-right" class="icon-arrow" /></a>
+                        <a href="{{ route('questions.index') }}" class="btn btn-ghost-light btn-lg">Ask a free question</a>
                     </div>
                 </div>
             </div>

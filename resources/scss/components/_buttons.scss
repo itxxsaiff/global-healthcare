@@ -1,9 +1,50 @@
-.btn { letter-spacing: .005em; display: inline-flex; align-items: center; justify-content: center; gap: .5rem; }
+.btn { letter-spacing: .005em; display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    transition: background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease, transform .15s ease;
+    .icon-arrow { transition: transform .2s ease; }
+    &:hover .icon-arrow { transform: translateX(3px); }
+}
 
 .btn-primary {
     --bs-btn-hover-bg: #{$forest-dark};
     --bs-btn-hover-border-color: #{$forest-dark};
     --bs-btn-active-bg: #{$forest-ink};
+    box-shadow: 0 8px 20px -12px rgba($forest, .9);
+}
+
+// Light mint button for dark surfaces (hero, banners).
+.btn-mint {
+    --bs-btn-color: #{$forest-ink};
+    --bs-btn-bg: #{$mint};
+    --bs-btn-border-color: #{$mint};
+    --bs-btn-hover-color: #{$forest-ink};
+    --bs-btn-hover-bg: #{lighten($mint, 6%)};
+    --bs-btn-hover-border-color: #{lighten($mint, 6%)};
+    --bs-btn-active-bg: #{$mint-bright};
+    --bs-btn-active-color: #{$forest-ink};
+}
+
+// Outline button for dark surfaces.
+.btn-ghost-light {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: transparent;
+    --bs-btn-border-color: rgba(255, 255, 255, .45);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: rgba(255, 255, 255, .08);
+    --bs-btn-hover-border-color: rgba(255, 255, 255, .8);
+    --bs-btn-active-bg: rgba(255, 255, 255, .14);
+    --bs-btn-active-color: #fff;
+}
+
+// Outline teal button for light surfaces.
+.btn-outline-forest {
+    --bs-btn-color: #{$forest-ink};
+    --bs-btn-bg: #fff;
+    --bs-btn-border-color: #{$line-strong};
+    --bs-btn-hover-color: #{$forest};
+    --bs-btn-hover-bg: #fff;
+    --bs-btn-hover-border-color: #{$forest};
+    --bs-btn-active-bg: #{$sage};
+    --bs-btn-active-color: #{$forest-ink};
 }
 
 .btn-clay {
@@ -22,22 +63,33 @@
     --bs-btn-bg: #fff;
     --bs-btn-border-color: #{$line-strong};
     --bs-btn-hover-color: #{$ink};
-    --bs-btn-hover-bg: #{$paper-deep};
-    --bs-btn-hover-border-color: #{$line-strong};
-    --bs-btn-active-bg: #{$sand};
+    --bs-btn-hover-bg: #{$paper};
+    --bs-btn-hover-border-color: #{darken($line-strong, 6%)};
+    --bs-btn-active-bg: #{$paper-deep};
 }
 
 .btn-cream {
     --bs-btn-color: #{$forest-ink};
-    --bs-btn-bg: #{$paper};
-    --bs-btn-border-color: #{$paper};
+    --bs-btn-bg: #fff;
+    --bs-btn-border-color: #fff;
     --bs-btn-hover-color: #{$forest-ink};
-    --bs-btn-hover-bg: #fff;
-    --bs-btn-hover-border-color: #fff;
+    --bs-btn-hover-bg: #{$sage};
+    --bs-btn-hover-border-color: #{$sage};
+}
+
+// Round icon-only button (topbar bell, menu, etc.)
+.btn-icon {
+    width: 40px; height: 40px; padding: 0; border-radius: 12px; position: relative;
+    display: inline-grid; place-items: center;
+    background: #fff; border: 1px solid $line; color: $ink-soft;
+    &:hover { background: $paper; color: $forest; border-color: $line-strong; }
+    .icon { width: 19px; height: 19px; }
+    .dot { position: absolute; top: 8px; right: 9px; width: 8px; height: 8px; border-radius: 50%; background: $clay; box-shadow: 0 0 0 2px #fff; }
+    .count { position: absolute; top: -6px; right: -6px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 99px; background: $clay; color: #fff; font-size: .68rem; font-weight: 700; line-height: 19px; text-align: center; box-shadow: 0 0 0 2px #fff; }
 }
 
 .btn-link-arrow {
-    font-weight: 600; color: $forest; display: inline-flex; align-items: center; gap: .35rem;
+    font-weight: 650; color: $forest; display: inline-flex; align-items: center; gap: .35rem;
     .icon { transition: transform .2s ease; }
     &:hover .icon { transform: translateX(3px); }
 }

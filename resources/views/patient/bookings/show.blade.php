@@ -32,7 +32,7 @@
         @if ($s === \App\Enums\BookingStatus::Requested)
             <div class="alert alert-info d-flex gap-2"><x-icon name="clock" class="mt-1" /><div>Waiting for {{ $doc->user->firstName() }} to accept. They have until {{ $booking->respond_by?->setTimezone($tz)->format('D j M, g:i A') }}. Nothing is charged until then.</div></div>
         @elseif ($booking->needsPayment())
-            <div class="card-soft p-4 mb-4 border-2" style="border-color:#C4623A !important">
+            <div class="card-soft p-4 mb-4 border-2" style="border-color:#E2654A !important">
                 <h2 class="h4 mb-1">Complete payment to confirm</h2>
                 <p class="text-muted">{{ $doc->user->firstName() }} has accepted. Please pay by <strong class="text-ink">{{ $booking->payment_due_at->setTimezone($tz)->format('D j M, g:i A') }}</strong> or the slot will be released.</p>
                 <form method="POST" action="{{ route('patient.bookings.pay', $booking) }}">

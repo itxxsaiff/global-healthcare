@@ -1,7 +1,11 @@
-.card { box-shadow: $shadow-sm; }
-.card-soft { background: #fff; border: 1px solid $line; border-radius: $radius; }
+.card { box-shadow: $shadow-sm; border-radius: $radius; }
+.card-soft { background: #fff; border: 1px solid $line; border-radius: $radius-lg; box-shadow: $shadow-sm; }
 .card-hover { transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
     &:hover { border-color: $line-strong; box-shadow: $shadow; transform: translateY(-2px); }
+}
+.card-title-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem;
+    h2, h3 { margin: 0; font-size: 1.1rem; }
+    a { font-size: .875rem; font-weight: 650; }
 }
 
 // ── Avatar (photo or monogram) ───────────────────────────────
@@ -10,62 +14,76 @@
     width: var(--size); height: var(--size); flex-shrink: 0;
     border-radius: 18px; overflow: hidden; position: relative;
     display: inline-flex; align-items: center; justify-content: center;
-    font-family: $font-serif; font-weight: 600; font-size: calc(var(--size) * .36); letter-spacing: -0.02em;
+    font-family: $font-display; font-weight: 700; font-size: calc(var(--size) * .34); letter-spacing: -0.02em;
     img { width: 100%; height: 100%; object-fit: cover; }
+    &.avatar-xs { --size: 32px; border-radius: 50%; font-size: .75rem; }
     &.avatar-sm { --size: 40px; border-radius: 12px; }
-    &.avatar-md { --size: 56px; border-radius: 14px; }
-    &.avatar-lg { --size: 120px; border-radius: 26px; }
-    &.avatar-xl { --size: 168px; border-radius: 32px; }
+    &.avatar-md { --size: 56px; border-radius: 16px; }
+    &.avatar-card { --size: 88px; border-radius: 20px; }
+    &.avatar-lg { --size: 120px; border-radius: 28px; }
+    &.avatar-xl { --size: 168px; border-radius: 34px; }
     &.avatar-round { border-radius: 50%; }
 
-    &.tone-0 { background: $sage; color: $forest-dark; }
-    &.tone-1 { background: $clay-soft; color: darken($clay, 18%); }
-    &.tone-2 { background: $sand; color: #7A5B2E; }
-    &.tone-3 { background: #E2E8EF; color: #2F4A66; }
-    &.tone-4 { background: #EDE3EC; color: #6A3F63; }
-    &.tone-5 { background: #E8EBDD; color: #55603A; }
+    &.tone-0 { background: #DDF3EC; color: $forest-dark; }
+    &.tone-1 { background: #FDE9E4; color: #B5492F; }
+    &.tone-2 { background: #FBF0D9; color: #8A5B12; }
+    &.tone-3 { background: #E3EEF9; color: #2B5E8E; }
+    &.tone-4 { background: #FBE7EE; color: #A23C66; }
+    &.tone-5 { background: #E5F2DF; color: #3D6E33; }
 }
 
 // ── Practitioner card ────────────────────────────────────────
 .practitioner-card {
-    background: #fff; border: 1px solid $line; border-radius: $radius-lg;
-    padding: 1.35rem; height: 100%;
-    display: flex; flex-direction: column; gap: 1rem;
-    transition: border-color .2s ease, box-shadow .2s ease;
-    &:hover { border-color: $line-strong; box-shadow: $shadow; }
+    position: relative; background: #fff; border: 1px solid $line; border-radius: 22px;
+    padding: 1.25rem; height: 100%;
+    display: flex; flex-direction: column; gap: .9rem;
+    box-shadow: 0 1px 2px rgba($ink, .04), 0 14px 30px -26px rgba($ink, .4);
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    &:hover { border-color: $sage-deep; box-shadow: 0 2px 4px rgba($ink, .04), 0 24px 44px -26px rgba($forest-ink, .45); transform: translateY(-2px); }
 
-    .pc-name { font-family: $font-serif; font-size: 1.25rem; font-weight: 600; margin: 0; line-height: 1.2;
-        a { color: $ink; &::after { content: ''; position: absolute; inset: 0; } }
+    .pc-head { display: flex; gap: 1rem; align-items: flex-start; }
+    .pc-name { font-family: $font-display; font-size: 1.08rem; font-weight: 750; margin: 0 0 .1rem; line-height: 1.25; letter-spacing: -0.015em;
+        a { color: $ink; &::after { content: ''; position: absolute; inset: 0; border-radius: inherit; } }
     }
-    .pc-head { position: relative; display: flex; gap: 1rem; align-items: flex-start; }
-    .pc-role { color: $forest; font-weight: 600; font-size: .925rem; }
-    .pc-meta { color: $ink-muted; font-size: .875rem; display: flex; flex-wrap: wrap; gap: .25rem .9rem;
+    .pc-role { color: $ink-soft; font-size: .875rem; font-weight: 500;
+        strong { color: $forest; font-weight: 650; }
+    }
+    .pc-meta { color: $ink-muted; font-size: .84rem; display: flex; flex-wrap: wrap; gap: .2rem .85rem; margin-top: .35rem;
         span { display: inline-flex; align-items: center; gap: .3rem; }
     }
-    .pc-headline { color: $ink-soft; font-size: .95rem; margin: 0; }
-    .pc-foot { margin-top: auto; padding-top: 1rem; border-top: 1px dashed $line; display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
-    .pc-fee { font-weight: 700; color: $ink; line-height: 1.1;
-        small { display: block; font-weight: 500; color: $ink-muted; font-size: .8rem; }
+    .pc-headline { color: $ink-soft; font-size: .9rem; margin: 0; }
+    .pc-tags { display: flex; flex-wrap: wrap; gap: .35rem;
+        span { padding: .25rem .65rem; border-radius: 99px; background: $paper; border: 1px solid $line; color: $ink-soft; font-size: .78rem; font-weight: 550; }
     }
+    .pc-foot { margin-top: auto; padding: .7rem .7rem .7rem .8rem; border-radius: 16px; background: $paper; display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+    .pc-fee { display: flex; align-items: center; gap: .6rem; line-height: 1.2;
+        .icon-tile { width: 34px; height: 34px; border-radius: 10px; background: #fff; border: 1px solid $line; }
+        small { display: block; color: $ink-muted; font-size: .74rem; font-weight: 550; white-space: nowrap; }
+        strong + small { display: inline; }
+        strong { font-size: .95rem; color: $ink; font-weight: 750; }
+    }
+    .btn { position: relative; z-index: 1; white-space: nowrap; }
 }
 
-.verified-tick { color: $forest; display: inline-flex; vertical-align: -2px; }
+.verified-tick { color: $forest; display: inline-flex; vertical-align: -2px; margin-left: .15rem;
+    .icon { width: 1.05em; height: 1.05em; }
+}
 
 .chip {
     display: inline-flex; align-items: center; gap: .35rem;
-    padding: .3rem .7rem; border-radius: 50rem;
-    background: $paper-deep; color: $ink-soft; border: 1px solid $line;
-    font-size: .825rem; font-weight: 500; text-decoration: none; white-space: nowrap;
+    padding: .35rem .8rem; border-radius: 50rem;
+    background: #fff; color: $ink-soft; border: 1px solid $line;
+    font-size: .84rem; font-weight: 550; text-decoration: none; white-space: nowrap;
     transition: background .15s ease, border-color .15s ease, color .15s ease;
-    &:hover { background: $sage; border-color: $sage-deep; color: $ink; }
-    &.chip-lg { padding: .55rem 1rem; font-size: .95rem; background: #fff; }
+    &:hover { background: $sage; border-color: $sage-deep; color: $forest-ink; }
+    &.chip-lg { padding: .6rem 1.05rem; font-size: .95rem; }
     &.chip-active, &.active { background: $forest; border-color: $forest; color: #fff; }
 }
 
 .rating {
-    display: inline-flex; align-items: center; gap: .3rem; font-weight: 600; font-size: .9rem; color: $ink;
+    display: inline-flex; align-items: center; gap: .3rem; font-weight: 700; font-size: .875rem; color: $ink;
     .stars { display: inline-flex; color: $honey; gap: 1px; }
-    .stars .icon { width: 1em; height: 1em; }
+    .stars .icon { width: .95em; height: .95em; }
     .stars .off { color: $line-strong; }
     small { color: $ink-muted; font-weight: 500; }
 }
@@ -73,16 +91,32 @@
 // ── Status pills ─────────────────────────────────────────────
 .status {
     display: inline-flex; align-items: center; gap: .4rem;
-    padding: .25rem .65rem; border-radius: 50rem; font-size: .78rem; font-weight: 600; white-space: nowrap;
-    &::before { content: ''; width: .45rem; height: .45rem; border-radius: 50%; background: currentColor; }
-    &.tone-success { background: #E2F0E7; color: $success; }
-    &.tone-warning { background: #F8EED9; color: $warning; }
-    &.tone-danger  { background: #F6E1DC; color: $danger; }
-    &.tone-info    { background: #E1EBF3; color: $info; }
+    padding: .28rem .7rem; border-radius: 50rem; font-size: .76rem; font-weight: 650; white-space: nowrap;
+    &::before { content: ''; width: .42rem; height: .42rem; border-radius: 50%; background: currentColor; }
+    &.tone-success { background: #E0F3E9; color: $success; }
+    &.tone-warning { background: #FBF0DA; color: $warning; }
+    &.tone-danger  { background: #FBE4DF; color: $danger; }
+    &.tone-info    { background: #E3EEF9; color: $info; }
     &.tone-neutral { background: $paper-deep; color: $ink-muted; }
 }
 
 // ── Specialty tiles ──────────────────────────────────────────
+.spec-tile {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: .7rem;
+    height: 100%; padding: 1.35rem .75rem 1.15rem;
+    background: #fff; border: 1px solid $line; border-radius: 20px; color: $ink; text-decoration: none;
+    box-shadow: 0 12px 28px -26px rgba($ink, .5);
+    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+    .icon-tile { width: 54px; height: 54px; border-radius: 50%; .icon { width: 1.45em; height: 1.45em; } }
+    strong { font-weight: 650; font-size: .92rem; line-height: 1.25; }
+    small { color: $ink-muted; font-size: .76rem; margin-top: -.45rem; }
+    &:hover { border-color: $sage-deep; transform: translateY(-3px); box-shadow: 0 20px 36px -26px rgba($forest-ink, .5); color: $ink; }
+    &.spec-all { background: $sage; border-color: $sage-deep; color: $forest-ink;
+        strong { display: inline-flex; align-items: center; gap: .35rem; }
+    }
+}
+
+// Older list-style tile (still used on a couple of pages).
 .specialty-tile {
     display: flex; gap: .9rem; align-items: flex-start; height: 100%;
     background: #fff; border: 1px solid $line; border-radius: $radius;
@@ -91,22 +125,24 @@
     .tile-icon { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: $sage; color: $forest; flex-shrink: 0; }
     strong { display: block; font-weight: 650; line-height: 1.25; }
     small { color: $ink-muted; }
-    &:hover { border-color: $forest; background: #FCFBF8; color: $ink;
-        .tile-icon { background: $forest; color: #fff; }
-    }
+    &:hover { border-color: $forest; color: $ink; .tile-icon { background: $forest; color: #fff; } }
 }
 
 // ── Stat tiles (dashboards) ──────────────────────────────────
 .stat {
-    background: #fff; border: 1px solid $line; border-radius: $radius; padding: 1.1rem 1.25rem; height: 100%;
-    .stat-label { color: $ink-muted; font-size: .85rem; font-weight: 600; }
-    .stat-value { font-family: $font-serif; font-size: 2rem; font-weight: 600; line-height: 1.1; margin-top: .25rem; }
-    .stat-note { font-size: .8rem; color: $ink-muted; }
+    background: #fff; border: 1px solid $line; border-radius: 20px; padding: 1.15rem 1.2rem; height: 100%;
+    display: flex; align-items: center; gap: 1rem;
+    box-shadow: 0 12px 28px -26px rgba($ink, .45);
+    .icon-tile { width: 50px; height: 50px; border-radius: 16px; .icon { width: 1.35em; height: 1.35em; } }
+    .stat-body { min-width: 0; }
+    .stat-label { color: $ink-muted; font-size: .82rem; font-weight: 600; }
+    .stat-value { font-family: $font-display; font-size: 1.65rem; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; color: $ink; }
+    .stat-note { font-size: .78rem; color: $ink-muted; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 
 .empty-state {
-    text-align: center; padding: 3rem 1.5rem; border: 1px dashed $line-strong; border-radius: $radius-lg; background: #FDFCFA;
-    .empty-icon { width: 56px; height: 56px; border-radius: 16px; background: $sage; color: $forest; display: inline-grid; place-items: center; margin-bottom: 1rem; }
-    h3 { font-size: 1.3rem; }
+    text-align: center; padding: 2.75rem 1.5rem; border: 1px dashed $line-strong; border-radius: $radius-lg; background: #fff;
+    .empty-icon { width: 60px; height: 60px; border-radius: 50%; background: $sage; color: $forest; display: inline-grid; place-items: center; margin-bottom: 1rem; box-shadow: 0 0 0 8px rgba($sage, .5); }
+    h3 { font-size: 1.15rem; font-weight: 750; }
     p { color: $ink-muted; max-width: 28rem; margin-inline: auto; }
 }

@@ -1,34 +1,81 @@
-.directory-head { padding-block: 2.25rem 1.5rem; border-bottom: 1px solid $line; background: $paper-deep;
-    h1 { font-size: clamp(1.8rem, 3.6vw, 2.8rem); }
+// ── Directory header: soft mint wash, title, photo pair, search bar ──
+.directory-head {
+    position: relative; overflow: hidden; isolation: isolate;
+    padding-block: clamp(1.75rem, 4vw, 2.75rem) clamp(4.5rem, 7vw, 5.5rem);
+    background:
+        radial-gradient(700px 320px at 85% 0%, rgba($mint, .45), transparent 70%),
+        linear-gradient(180deg, #EAF6F2 0%, $paper 100%);
+    h1 { font-size: clamp(1.9rem, 3.8vw, 3rem); margin-bottom: .5rem;
+        .accent { color: $forest; }
+    }
+    .lead-text { color: $ink-soft; max-width: 40rem; font-size: 1.05rem; }
+    .head-globe { position: absolute; right: -60px; top: -40px; width: 520px; height: 420px; z-index: -1; opacity: .7;
+        background-image: radial-gradient(rgba($forest, .22) 1.2px, transparent 1.5px); background-size: 13px 13px;
+        -webkit-mask-image: radial-gradient(ellipse at 50% 45%, #000 25%, transparent 68%);
+        mask-image: radial-gradient(ellipse at 50% 45%, #000 25%, transparent 68%);
+    }
+    .head-photos { position: absolute; right: clamp(1rem, 6vw, 7rem); bottom: 0; display: flex; align-items: flex-end; gap: 0; z-index: -1;
+        .ph { width: 170px; height: 210px; border-radius: 90px 90px 0 0; overflow: hidden; background: linear-gradient(180deg, #DDF1EB, #BFE3D8);
+            img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+        }
+        .ph + .ph { width: 150px; height: 186px; margin-left: -18px; box-shadow: -8px 0 0 $paper; }
+    }
 }
 
+.directory-search { position: relative; z-index: 5; margin-top: -3rem; }
+
 .filter-panel {
-    background: #fff; border: 1px solid $line; border-radius: $radius-lg; padding: 1.25rem;
-    position: sticky; top: 92px;
+    background: #fff; border: 1px solid $line; border-radius: 22px; padding: 1.25rem;
+    position: sticky; top: calc(var(--header-h) + 16px);
+    box-shadow: 0 16px 36px -32px rgba($ink, .5);
+    max-height: calc(100vh - var(--header-h) - 32px); overflow-y: auto;
+    @include nice-scrollbar(rgba($forest, .25), true);
+    .filter-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: .9rem; border-bottom: 1px solid $line;
+        strong { display: inline-flex; align-items: center; gap: .5rem; font-family: $font-display; font-size: 1.02rem; .icon { color: $forest; } }
+        a { font-size: .82rem; font-weight: 650; }
+    }
     .filter-group { padding-block: 1rem; border-bottom: 1px solid $line;
-        &:first-child { padding-top: 0; }
         &:last-child { border-bottom: 0; padding-bottom: 0; }
     }
-    .filter-title { font-weight: 700; font-size: .875rem; margin-bottom: .6rem; display: flex; justify-content: space-between; }
-    .form-check { margin-bottom: .3rem; font-size: .925rem; }
-    .scroll-list { max-height: 210px; overflow-y: auto; padding-right: .25rem; }
+    .filter-title { font-weight: 700; font-size: .86rem; margin-bottom: .6rem; display: flex; justify-content: space-between; color: $ink; }
+    .form-check { margin-bottom: .35rem; font-size: .92rem; color: $ink-soft; }
+    .scroll-list { max-height: 210px; overflow-y: auto; padding-right: .25rem; @include nice-scrollbar(rgba($forest, .25)); }
+}
+
+.results-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .75rem; margin-bottom: 1.25rem;
+    .count { font-family: $font-display; font-size: 1.2rem; font-weight: 750; margin: 0; color: $ink;
+        strong { color: $forest; }
+    }
+    .form-select { border-radius: 99px; padding-left: 1rem; min-width: 190px; }
 }
 
 .active-filters .chip { background: $sage; border-color: $sage-deep; color: $forest-ink; }
 
-.profile-hero { background: $paper-deep; border-bottom: 1px solid $line; padding-block: 2.5rem; }
-.profile-aside { position: sticky; top: 92px; }
+.pagination { gap: .35rem;
+    .page-link { border-radius: 12px !important; min-width: 40px; text-align: center; font-weight: 600; }
+    .page-item.active .page-link { box-shadow: 0 8px 18px -10px rgba($forest, .8); }
+}
+
+// ── Practitioner profile ─────────────────────────────────────
+.profile-hero {
+    padding-block: 2.5rem; border-bottom: 1px solid $line;
+    background:
+        radial-gradient(600px 260px at 90% 0%, rgba($mint, .35), transparent 70%),
+        linear-gradient(180deg, #EAF6F2 0%, $paper 100%);
+    .avatar { box-shadow: 0 0 0 6px #fff, 0 20px 40px -20px rgba($forest-ink, .45); }
+}
+.profile-aside { position: sticky; top: calc(var(--header-h) + 16px); }
 
 .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: .45rem;
-    button { border: 1px solid $line-strong; background: #fff; border-radius: .55rem; padding: .5rem .25rem; font-weight: 600; font-size: .875rem; color: $ink;
+    button { border: 1px solid $line-strong; background: #fff; border-radius: .7rem; padding: .55rem .25rem; font-weight: 650; font-size: .875rem; color: $ink;
         &:hover { border-color: $forest; color: $forest; }
         &.selected { background: $forest; border-color: $forest; color: #fff; }
     }
 }
-.day-strip { display: flex; gap: .45rem; overflow-x: auto; padding-bottom: .4rem; scrollbar-width: thin;
-    button { flex: 0 0 auto; width: 64px; border: 1px solid $line; background: #fff; border-radius: .7rem; padding: .5rem .25rem; text-align: center; line-height: 1.15; color: $ink;
+.day-strip { display: flex; gap: .45rem; overflow-x: auto; padding-bottom: .4rem; @include nice-scrollbar(rgba($forest, .25));
+    button { flex: 0 0 auto; width: 64px; border: 1px solid $line; background: #fff; border-radius: .9rem; padding: .55rem .25rem; text-align: center; line-height: 1.15; color: $ink;
         small { display: block; font-size: .7rem; text-transform: uppercase; color: $ink-muted; font-weight: 700; letter-spacing: .04em; }
-        strong { font-size: 1.15rem; font-family: $font-serif; }
+        strong { font-size: 1.15rem; font-family: $font-display; font-weight: 750; }
         &.selected { background: $forest; border-color: $forest; color: #fff; small { color: rgba(#fff, .75); } }
         &:disabled { opacity: .4; }
     }

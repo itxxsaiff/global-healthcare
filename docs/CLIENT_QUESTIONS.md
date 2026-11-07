@@ -5,6 +5,7 @@ We've started building. These answers help us finish the platform correctly. Whe
 ## Payments & plans
 
 1. **Payment gateway.** Which Pakistani gateway do you already have (or are applying for) a merchant account with: PayFast, Safepay, JazzCash or EasyPaisa? *Suggestion: launch with one, add others later.*
+   **Update 2026-11-07:** merchant setup is in progress and **Safepay** is the likely choice. The Safepay driver will be built against its sandbox once the merchant account is approved. Until then the site runs on the Fake test gateway.
 2. **Stripe.** Stripe doesn't accept Pakistan-registered businesses. Do you have a company or bank account in the UAE, UK, US or another Stripe country? If not, we'll suggest an alternative for USD subscriptions.
 3. **Plan 2 prices.** What are the 6-month and 1-year prices for Plan 2 (PKR 5,000/month)?
 4. **Plan 2 expiry.** When a Plan 2 doctor doesn't renew, should their profile be **hidden**, or **moved to Plan 1 (free + 20%)**?

@@ -21,7 +21,7 @@
 
 {{-- PWA --}}
 <link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#1F5C4A">
+<meta name="theme-color" content="#0E8474">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">

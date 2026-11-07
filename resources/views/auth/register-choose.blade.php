@@ -6,7 +6,7 @@
 
     <div class="d-grid gap-3">
         <a href="{{ route('register.patient') }}" class="choice-card text-decoration-none text-reset d-flex gap-3 align-items-center">
-            <span class="tile-icon d-grid rounded-3 flex-shrink-0" style="width:52px;height:52px;place-items:center;background:#E3ECE5;color:#1F5C4A"><x-icon name="heart" size="lg" /></span>
+            <span class="tile-icon d-grid rounded-3 flex-shrink-0" style="width:52px;height:52px;place-items:center;background:#E3F4EF;color:#0E8474"><x-icon name="heart" size="lg" /></span>
             <span class="flex-grow-1">
                 <strong class="d-block fs-5">I'm looking for care</strong>
                 <span class="text-muted">Book online consultations, ask questions and leave reviews.</span>
@@ -14,7 +14,7 @@
             <x-icon name="chevron-right" class="text-muted" />
         </a>
         <a href="{{ route('register.practitioner') }}" class="choice-card text-decoration-none text-reset d-flex gap-3 align-items-center">
-            <span class="tile-icon d-grid rounded-3 flex-shrink-0" style="width:52px;height:52px;place-items:center;background:#F4E2D8;color:#9A4426"><x-icon name="stethoscope" size="lg" /></span>
+            <span class="tile-icon d-grid rounded-3 flex-shrink-0" style="width:52px;height:52px;place-items:center;background:#FCE7E1;color:#9A4426"><x-icon name="stethoscope" size="lg" /></span>
             <span class="flex-grow-1">
                 <strong class="d-block fs-5">I'm a practitioner</strong>
                 <span class="text-muted">Doctors, psychologists, dietitians and therapists. List your practice after verification.</span>

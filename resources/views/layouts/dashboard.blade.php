@@ -69,11 +69,14 @@
     @include('partials.head')
     <meta name="robots" content="noindex, nofollow">
 </head>
-<body x-data="{ nav: false }">
+<body class="dash-body" x-data="{ nav: false }">
 <div class="dash-shell">
     <aside class="dash-sidebar" :class="{ 'open': nav }" aria-label="Dashboard navigation">
-        <x-logo :tagline="false" :href="route('home')" />
-        <nav class="flex-grow-1">
+        <div class="sidebar-brand">
+            <x-logo :tagline="false" :href="route('home')" />
+            <button class="btn btn-icon d-lg-none" @click="nav = false" aria-label="Close navigation"><x-icon name="x" /></button>
+        </div>
+        <nav class="sidebar-nav">
             @foreach ($menus as $section => $items)
                 @php $items = array_filter($items, fn ($i) => Route::has($i[0])); @endphp
                 @if ($items)
@@ -86,51 +89,79 @@
                             $exact = ! str_contains($route, '.') || str_ends_with($route, '.dashboard');
                             $isActive = $exact ? request()->routeIs($route) : request()->routeIs(str($route)->beforeLast('.').'.*');
                         @endphp
-                        <a href="{{ route($route) }}" class="nav-link {{ $isActive && $route !== 'directory' ? 'active' : '' }}">
+                        <a href="{{ route($route) }}" class="nav-link {{ $isActive && $route !== 'directory' ? 'active' : '' }}" @if ($isActive && $route !== 'directory') aria-current="page" @endif>
                             <x-icon :name="$icon" /> {{ $label }}
-                            @if ($count)<span class="badge rounded-pill text-bg-warning">{{ $count }}</span>@endif
+                            @if ($count)<span class="badge rounded-pill">{{ $count }}</span>@endif
                         </a>
                     @endforeach
                 @endif
             @endforeach
         </nav>
-        <div class="border-top pt-3 mt-3 d-flex align-items-center gap-2">
-            <x-avatar :name="$user->name" :src="$user->practitionerProfile?->headshotUrl()" size="sm" round />
-            <div class="small lh-sm min-w-0 flex-grow-1">
-                <div class="fw-semibold text-truncate">{{ $user->name }}</div>
-                <div class="text-muted text-capitalize">{{ $user->role->value }}</div>
-            </div>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button class="btn btn-sm btn-link text-muted p-1" title="Log out" aria-label="Log out"><x-icon name="log-out" /></button>
-            </form>
+        <div class="sidebar-foot">
+            @php $helpRoute = $user->isAdmin() ? null : (Route::has('tickets.create') ? route('tickets.create') : null); @endphp
+            @if ($helpRoute)
+                <div class="help-card">
+                    <strong>Need a hand?</strong>
+                    <p>Our support team usually replies within a few hours.</p>
+                    <a href="{{ $helpRoute }}" class="btn btn-mint">Contact support</a>
+                </div>
+            @else
+                <a href="{{ route('home') }}" class="btn btn-outline-forest w-100"><x-icon name="globe" /> View live site</a>
+            @endif
         </div>
     </aside>
     <div class="position-fixed top-0 start-0 w-100 h-100 bg-dark opacity-25 d-lg-none" style="z-index:1040" x-show="nav" x-cloak @click="nav = false"></div>
 
     <div class="dash-main">
-        <div class="dash-topbar">
-            <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-paper btn-sm d-lg-none" @click="nav = true" aria-label="Open navigation"><x-icon name="menu" /></button>
-                <nav aria-label="breadcrumb" class="d-none d-md-block">
-                    <ol class="breadcrumb mb-0 small">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        @hasSection('crumb')<li class="breadcrumb-item active" aria-current="page">@yield('crumb')</li>@endif
-                    </ol>
-                </nav>
+        <header class="dash-topbar">
+            <div class="d-flex align-items-center gap-3 min-w-0">
+                <button class="btn btn-icon d-lg-none" @click="nav = true" aria-label="Open navigation"><x-icon name="menu" /></button>
+                <div class="topbar-title">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                            @hasSection('crumb')<li class="breadcrumb-item active" aria-current="page">@yield('crumb')</li>@endif
+                        </ol>
+                    </nav>
+                    <div class="page-name">@hasSection('crumb')@yield('crumb')@else Overview @endif</div>
+                </div>
             </div>
-            <div class="d-flex align-items-center gap-2">
+            <div class="topbar-actions">
                 @if (Route::has('notifications.index'))
-                    <a href="{{ route('notifications.index') }}" class="btn btn-paper btn-sm position-relative" aria-label="Notifications">
+                    @php $unread = $user->unreadNotifications()->count(); @endphp
+                    <a href="{{ route('notifications.index') }}" class="btn btn-icon" aria-label="Notifications{{ $unread ? ' ('.$unread.' unread)' : '' }}" title="Notifications">
                         <x-icon name="bell" />
-                        @if ($unread = $user->unreadNotifications()->count())
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ $unread }}</span>
-                        @endif
+                        @if ($unread)<span class="count">{{ $unread > 9 ? '9+' : $unread }}</span>@endif
                     </a>
                 @endif
-                <a href="{{ route('home') }}" class="btn btn-paper btn-sm d-none d-sm-inline-flex"><x-icon name="globe" /> View site</a>
+                <span class="topbar-divider d-none d-sm-block"></span>
+                <div class="dropdown">
+                    <button class="user-menu" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account menu">
+                        <x-avatar :name="$user->name" :src="$user->practitionerProfile?->headshotUrl()" size="sm" round />
+                        <span class="who d-none d-sm-block"><strong>{{ $user->name }}</strong><small>{{ $user->role->value }}</small></span>
+                        <x-icon name="chevron-down" class="d-none d-sm-block" />
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <div class="dropdown-header">
+                            <div class="fw-semibold text-ink text-truncate">{{ $user->name }}</div>
+                            <div class="small text-muted text-truncate">{{ $user->email }}</div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('home') }}"><x-icon name="globe" /> View site</a>
+                        @if ($user->practitionerProfile?->is_public)
+                            <a class="dropdown-item" href="{{ route('practitioners.show', $user->practitionerProfile) }}"><x-icon name="user" /> My public profile</a>
+                        @endif
+                        @if (Route::has('account.edit'))<a class="dropdown-item" href="{{ route('account.edit') }}"><x-icon name="sliders" /> Account & security</a>@endif
+                        @if (Route::has('notifications.index'))<a class="dropdown-item" href="{{ route('notifications.index') }}"><x-icon name="bell" /> Notifications</a>@endif
+                        <div class="dropdown-divider"></div>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="dropdown-item text-danger"><x-icon name="log-out" /> Log out</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
+        </header>
         <main class="dash-content" id="main">
             <x-flash />
             @yield('content')

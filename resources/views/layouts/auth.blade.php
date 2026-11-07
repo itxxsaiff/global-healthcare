@@ -17,14 +17,15 @@
         <p class="small text-muted mb-0">Protected by encryption. We never share your health information.</p>
     </div>
     <aside class="auth-side">
+        <div class="auth-photo" aria-hidden="true"><img src="/images/hero-doctor.webp" alt="" width="720" height="860"></div>
         <div>
-            <span class="eyebrow" style="color:#E9B79E">@yield('side_eyebrow', 'Why people choose us')</span>
+            <span class="eyebrow">@yield('side_eyebrow', 'Why people choose us')</span>
         </div>
         <div>
             @hasSection('side')
                 @yield('side')
             @else
-                <blockquote class="mb-4">"I'd put off seeing someone for months. Being able to choose a female doctor who speaks Urdu, from my own sofa, made all the difference."</blockquote>
+                <blockquote class="mb-4" style="max-width: 30rem">"I'd put off seeing someone for months. Being able to choose a female doctor who speaks Urdu, from my own sofa, made all the difference."</blockquote>
                 <p class="mb-0">A patient from Lahore, after a dermatology consultation</p>
             @endif
         </div>

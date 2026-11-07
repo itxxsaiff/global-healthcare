@@ -26,9 +26,16 @@
 
 @section('content')
 <header class="directory-head">
+    <span class="head-globe" aria-hidden="true"></span>
+    @unless ($cond || $cityM)
+        <div class="head-photos d-none d-xl-flex" aria-hidden="true">
+            <span class="ph"><img src="/images/doctor-male.webp" alt="" width="520" height="620"></span>
+            <span class="ph"><img src="/images/hero-doctor.webp" alt="" width="720" height="860"></span>
+        </div>
+    @endunless
     <div class="container">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb small mb-2">
+            <ol class="breadcrumb small mb-3">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                 @if ($spec && isset($fixed['specialty']))
                     <li class="breadcrumb-item"><a href="{{ route('directory') }}">Find a doctor</a></li>
@@ -41,27 +48,79 @@
                 <li class="breadcrumb-item active" aria-current="page">{{ $cityM?->name ?? ($cond?->name ?? ($spec && isset($fixed['specialty']) ? $spec->name : 'Find a doctor')) }}</li>
             </ol>
         </nav>
-        <h1 class="mb-2">{{ $heading }}</h1>
-        @if ($intro)<p class="text-soft mb-0" style="max-width: 44rem">{{ $intro }}</p>@endif
+        <div style="max-width: 46rem">
+            <span class="pill-badge mb-3"><span class="pill-icon"><x-icon name="badge-check" /></span> Every practitioner licence-checked</span>
+            @if ($heading === 'Find a practitioner')
+                <h1>Find <span class="accent">verified</span> doctors</h1>
+            @else
+                <h1>{{ $heading }}</h1>
+            @endif
+            @if ($intro)<p class="lead-text mb-0">{{ $intro }}</p>@endif
 
-        @if ($cond && $cond->specialties->isNotEmpty())
-            <div class="d-flex flex-wrap gap-2 mt-3">
-                <span class="small text-muted fw-semibold align-self-center">Usually treated by:</span>
-                @foreach ($cond->specialties as $s)
-                    <a href="{{ route('specialties.show', $s) }}" class="chip">{{ $s->name }}</a>
-                @endforeach
-            </div>
-        @elseif ($spec && $spec->children->isNotEmpty())
-            <div class="d-flex flex-wrap gap-2 mt-3">
-                @foreach ($spec->children as $child)
-                    <a href="{{ request()->fullUrlWithQuery(['sub' => $filters['sub']?->id === $child->id ? null : $child->slug, 'page' => null]) }}" class="chip {{ $filters['sub']?->id === $child->id ? 'active' : '' }}">{{ $child->name }}</a>
-                @endforeach
-            </div>
-        @endif
+            @if ($cond && $cond->specialties->isNotEmpty())
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <span class="small text-muted fw-semibold align-self-center">Usually treated by:</span>
+                    @foreach ($cond->specialties as $s)
+                        <a href="{{ route('specialties.show', $s) }}" class="chip">{{ $s->name }}</a>
+                    @endforeach
+                </div>
+            @elseif ($spec && $spec->children->isNotEmpty())
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    @foreach ($spec->children as $child)
+                        <a href="{{ request()->fullUrlWithQuery(['sub' => $filters['sub']?->id === $child->id ? null : $child->slug, 'page' => null]) }}" class="chip {{ $filters['sub']?->id === $child->id ? 'active' : '' }}">{{ $child->name }}</a>
+                    @endforeach
+                </div>
+            @endif
+        </div>
     </div>
 </header>
 
-<div class="container py-4 py-lg-5">
+<section class="directory-search">
+    <div class="container">
+        <form method="GET" action="{{ url()->current() }}" class="search-bar" role="search">
+            @include('public.partials.hidden-query', ['except' => ['q', 'specialty', 'country', 'city']])
+            <div class="row g-2">
+                <div class="col-lg">
+                    <div class="field">
+                        <x-icon name="search" />
+                        <input type="search" name="q" value="{{ $filters['q'] }}" class="form-control" placeholder="Search by name, condition or keyword…" aria-label="Search practitioners">
+                    </div>
+                </div>
+                @unless (isset($fixed['specialty']))
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="field">
+                            <x-icon name="stethoscope" />
+                            <select name="specialty" class="form-select" aria-label="Specialty">
+                                <option value="">All specialties</option>
+                                @foreach ($specialties as $s)
+                                    <option value="{{ $s->slug }}" @selected($filters['specialty']?->id === $s->id)>{{ $s->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                @endunless
+                @unless ($cityM)
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="field">
+                            <x-icon name="map-pin" />
+                            <select name="country" class="form-select" aria-label="Practitioner's country">
+                                <option value="">Any country</option>
+                                @foreach ($countries as $c)
+                                    <option value="{{ strtolower($c->iso2) }}" @selected($filters['country']?->id === $c->id)>{{ $c->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                @endunless
+                <div class="col-lg-auto">
+                    <button class="btn btn-primary btn-search px-4">Search doctors <x-icon name="arrow-right" class="icon-arrow" /></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<div class="container py-4 pb-lg-5">
     <div class="row g-4">
         {{-- Filters --}}
         <div class="col-lg-3">
@@ -69,22 +128,12 @@
                 <x-icon name="sliders" /> Filters
             </button>
             <form method="GET" action="{{ url()->current() }}" id="filters" class="filter-panel collapse d-lg-block" x-data @change="$el.requestSubmit()">
-                <div class="filter-group">
-                    <label class="filter-title" for="f-q">Search</label>
-                    <input id="f-q" type="search" name="q" value="{{ $filters['q'] }}" class="form-control" placeholder="Name, symptom…" @change.stop>
+                <div class="filter-head">
+                    <strong><x-icon name="sliders" /> Filter doctors</strong>
+                    @if ($hasFilters)<a href="{{ url()->current() }}">Clear all</a>@endif
                 </div>
-
-                @unless (isset($fixed['specialty']))
-                    <div class="filter-group">
-                        <label class="filter-title" for="f-spec">Specialty</label>
-                        <select id="f-spec" name="specialty" class="form-select">
-                            <option value="">All specialties</option>
-                            @foreach ($specialties as $s)
-                                <option value="{{ $s->slug }}" @selected($filters['specialty']?->id === $s->id)>{{ $s->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                @endunless
+                @if ($filters['q'] !== '')<input type="hidden" name="q" value="{{ $filters['q'] }}">@endif
+                @if (! isset($fixed['specialty']) && $filters['specialty'])<input type="hidden" name="specialty" value="{{ $filters['specialty']->slug }}">@endif
                 @if ($filters['sub'])<input type="hidden" name="sub" value="{{ $filters['sub']->slug }}">@endif
 
                 @unless ($cond)
@@ -120,23 +169,18 @@
                 </div>
 
                 @unless ($cityM)
-                    <div class="filter-group">
-                        <label class="filter-title" for="f-country">Practitioner's country</label>
-                        <select id="f-country" name="country" class="form-select">
-                            <option value="">Anywhere</option>
-                            @foreach ($countries as $c)
-                                <option value="{{ strtolower($c->iso2) }}" @selected($filters['country']?->id === $c->id)>{{ $c->name }}</option>
-                            @endforeach
-                        </select>
-                        @if ($cities->isNotEmpty())
-                            <select name="city" class="form-select mt-2" aria-label="City">
+                    @if ($filters['country'])<input type="hidden" name="country" value="{{ strtolower($filters['country']->iso2) }}">@endif
+                    @if ($cities->isNotEmpty())
+                        <div class="filter-group">
+                            <label class="filter-title" for="f-city">City in {{ $filters['country']?->name }}</label>
+                            <select id="f-city" name="city" class="form-select">
                                 <option value="">All cities</option>
                                 @foreach ($cities as $c)
                                     <option value="{{ $c->slug }}" @selected($filters['city']?->id === $c->id)>{{ $c->name }}</option>
                                 @endforeach
                             </select>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                 @endunless
 
                 <div class="filter-group">
@@ -170,7 +214,7 @@
 
                 <input type="hidden" name="sort" value="{{ $filters['sort'] }}">
                 <div class="filter-group d-flex gap-2">
-                    <button class="btn btn-primary flex-fill">Apply</button>
+                    <button class="btn btn-primary flex-fill">Apply filters</button>
                     <a href="{{ url()->current() }}" class="btn btn-paper">Reset</a>
                 </div>
             </form>
@@ -178,17 +222,11 @@
 
         {{-- Results --}}
         <div class="col-lg-9">
-            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-                <p class="mb-0 text-soft"><strong class="text-ink">{{ $results->total() }}</strong> {{ \Illuminate\Support\Str::plural('practitioner', $results->total()) }} found</p>
+            <div class="results-head">
+                <p class="count"><strong>{{ number_format($results->total()) }}</strong> {{ \Illuminate\Support\Str::plural('doctor', $results->total()) }} found</p>
                 <form method="GET" action="{{ url()->current() }}" class="d-flex align-items-center gap-2">
-                    @foreach (request()->except(['sort', 'page']) as $key => $value)
-                        @if (is_array($value))
-                            @foreach ($value as $v)<input type="hidden" name="{{ $key }}[]" value="{{ $v }}">@endforeach
-                        @else
-                            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                        @endif
-                    @endforeach
-                    <label for="sort" class="small text-muted text-nowrap">Sort by</label>
+                    @include('public.partials.hidden-query', ['except' => ['sort']])
+                    <label for="sort" class="small text-muted text-nowrap fw-semibold">Sort by</label>
                     <select id="sort" name="sort" class="form-select form-select-sm" onchange="this.form.submit()">
                         @foreach ($sorts as $key => $label)
                             <option value="{{ $key }}" @selected($filters['sort'] === $key)>{{ $label }}</option>
@@ -204,7 +242,7 @@
             @else
                 <div class="row g-4">
                     @foreach ($results as $profile)
-                        <div class="col-md-6 col-xxl-4"><x-practitioner-card :profile="$profile" /></div>
+                        <div class="col-md-6"><x-practitioner-card :profile="$profile" /></div>
                     @endforeach
                 </div>
                 <div class="mt-4">{{ $results->onEachSide(1)->links() }}</div>

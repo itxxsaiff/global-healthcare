@@ -3,10 +3,10 @@
 @section('side_eyebrow', 'How listing works')
 @section('side')
     <ol class="list-unstyled d-grid gap-4 mb-0">
-        <li class="d-flex gap-3"><span class="font-serif fs-2 fst-italic" style="color:#E9B79E">1</span><div><strong class="text-white d-block">Create your account</strong>Basic details now. Your full profile comes next.</div></li>
-        <li class="d-flex gap-3"><span class="font-serif fs-2 fst-italic" style="color:#E9B79E">2</span><div><strong class="text-white d-block">Complete your profile & upload documents</strong>ID, degree and licence. Stored privately and seen only by our verification team.</div></li>
-        <li class="d-flex gap-3"><span class="font-serif fs-2 fst-italic" style="color:#E9B79E">3</span><div><strong class="text-white d-block">We verify you</strong>Usually within 1–2 working days.</div></li>
-        <li class="d-flex gap-3"><span class="font-serif fs-2 fst-italic" style="color:#E9B79E">4</span><div><strong class="text-white d-block">Pick a plan and go live</strong>Free with 20% commission, or a flat monthly subscription.</div></li>
+        <li class="d-flex gap-3"><span class="icon-tile sm round flex-shrink-0 fw-bold" style="background:rgba(141,229,208,.15);color:#8DE5D0">1</span><div><strong class="text-white d-block">Create your account</strong>Basic details now. Your full profile comes next.</div></li>
+        <li class="d-flex gap-3"><span class="icon-tile sm round flex-shrink-0 fw-bold" style="background:rgba(141,229,208,.15);color:#8DE5D0">2</span><div><strong class="text-white d-block">Complete your profile & upload documents</strong>ID, degree and licence. Stored privately and seen only by our verification team.</div></li>
+        <li class="d-flex gap-3"><span class="icon-tile sm round flex-shrink-0 fw-bold" style="background:rgba(141,229,208,.15);color:#8DE5D0">3</span><div><strong class="text-white d-block">We verify you</strong>Usually within 1–2 working days.</div></li>
+        <li class="d-flex gap-3"><span class="icon-tile sm round flex-shrink-0 fw-bold" style="background:rgba(141,229,208,.15);color:#8DE5D0">4</span><div><strong class="text-white d-block">Pick a plan and go live</strong>Free with 20% commission, or a flat monthly subscription.</div></li>
     </ol>
 @endsection
 @section('content')

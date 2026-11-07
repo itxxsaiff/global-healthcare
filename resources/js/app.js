@@ -1,4 +1,4 @@
-import '@fontsource-variable/fraunces';
+import '@fontsource-variable/plus-jakarta-sans';
 import '@fontsource-variable/figtree';
 
 import { Collapse, Dropdown, Modal, Offcanvas, Toast, Tooltip } from 'bootstrap';

@@ -24,6 +24,7 @@ use App\Services\Membership\VisibilityService;
 use App\Support\Money;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -105,6 +106,14 @@ class DemoSeeder extends Seeder
                 'verified_by' => $admin->id,
                 'is_featured' => $i < 8,
             ])->save();
+
+            // Demo headshots (royalty-free stock photos, see database/seeders/photos/README.md).
+            $photo = database_path('seeders/photos/'.Str::slug($name).'.webp');
+            if (is_file($photo)) {
+                $path = 'headshots/demo/'.Str::slug($name).'.webp';
+                Storage::disk('public')->put($path, file_get_contents($photo), ['visibility' => 'public']);
+                $profile->forceFill(['headshot_path' => $path])->save();
+            }
 
             $profile->subSpecialties()->sync(Specialty::whereIn('slug', $subs)->pluck('id'));
             $profile->conditions()->sync(Condition::whereIn('slug', $conds)->pluck('id'));

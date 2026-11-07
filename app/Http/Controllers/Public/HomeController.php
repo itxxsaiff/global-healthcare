@@ -28,6 +28,7 @@ class HomeController extends Controller
                 'symptoms' => Condition::query()->active()->where('is_featured', true)->orderBy('name')->get(['id', 'name', 'slug']),
                 'questions' => Question::query()->published()->with('specialty:id,name')->latest('published_at')->limit(4)->get(),
                 'doctorCount' => PractitionerProfile::query()->public()->count(),
+                'countryCount' => \App\Models\Country::query()->count(),
             ];
         })();
 

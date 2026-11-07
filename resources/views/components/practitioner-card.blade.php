@@ -4,14 +4,20 @@
 @endphp
 <article class="practitioner-card">
     <div class="pc-head">
-        <x-avatar :profile="$profile" />
-        <div class="min-w-0">
+        <x-avatar :profile="$profile" size="card" />
+        <div class="min-w-0 flex-grow-1">
             <h3 class="pc-name">
                 <a href="{{ route('practitioners.show', $profile) }}">{{ $profile->displayName() }}</a>
                 <span class="verified-tick" data-bs-toggle="tooltip" title="Identity & licence verified"><x-icon name="badge-check" /></span>
             </h3>
-            <div class="pc-role">{{ $specialty?->practitioner_label }}@if($profile->years_experience) · {{ $profile->years_experience }} yrs exp.@endif</div>
+            <div class="pc-role"><strong>{{ $specialty?->practitioner_label }}</strong>@if($profile->years_experience) · {{ $profile->years_experience }} yrs exp.@endif</div>
             <div class="mt-1"><x-rating :value="$profile->rating_avg" :count="$profile->reviews_count" /></div>
+            <div class="pc-meta">
+                @if ($profile->locationLabel())<span><x-icon name="map-pin" size="sm" /> {{ $profile->locationLabel() }}</span>@endif
+                @if ($profile->relationLoaded('languages') && $profile->languages->isNotEmpty())
+                    <span><x-icon name="languages" size="sm" /> {{ $profile->languages->pluck('name')->take(3)->implode(', ') }}</span>
+                @endif
+            </div>
         </div>
     </div>
 
@@ -19,26 +25,19 @@
         <p class="pc-headline line-clamp-2">{{ $profile->headline }}</p>
     @endif
 
-    <div class="pc-meta">
-        @if ($profile->locationLabel())<span><x-icon name="map-pin" size="sm" /> {{ $profile->locationLabel() }}</span>@endif
-        @if ($profile->relationLoaded('languages') && $profile->languages->isNotEmpty())
-            <span><x-icon name="languages" size="sm" /> {{ $profile->languages->pluck('name')->implode(', ') }}</span>
-        @endif
-    </div>
-
     @if ($profile->relationLoaded('conditions') && $profile->conditions->isNotEmpty())
-        <div class="d-flex flex-wrap gap-1">
+        <div class="pc-tags">
             @foreach ($profile->conditions->take(3) as $condition)
-                <span class="chip">{{ $condition->name }}</span>
+                <span>{{ $condition->name }}</span>
             @endforeach
         </div>
     @endif
 
     <div class="pc-foot">
         <div class="pc-fee">
-            {{ $profile->feeLabel() }}
-            <small>per {{ $profile->session_minutes }}-min session</small>
+            <span class="icon-tile text-forest"><x-icon name="video" size="sm" /></span>
+            <span><small>Video consultation</small><strong>{{ $profile->feeLabel() }}</strong> <small class="d-inline">/ {{ $profile->session_minutes }} min</small></span>
         </div>
-        <a href="{{ route('practitioners.show', $profile) }}#book" class="btn btn-primary btn-sm position-relative" style="z-index:1">Book</a>
+        <a href="{{ route('practitioners.show', $profile) }}#book" class="btn btn-primary btn-sm">Book consultation</a>
     </div>
 </article>

@@ -28,7 +28,7 @@ blockquote {
 }
 
 a {
-    color: #1E2723;
+    color: #0F2A2A;
 }
 
 a img {
@@ -38,7 +38,7 @@ a img {
 /* Typography */
 
 h1 {
-    color: #1E2723;
+    color: #0F2A2A;
     font-size: 18px;
     font-weight: bold;
     margin-top: 0;
@@ -80,7 +80,7 @@ img {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
-    background-color: #FAF7F2;
+    background-color: #F5F9F8;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -103,7 +103,7 @@ img {
 }
 
 .header a {
-    color: #1E2723;
+    color: #0F2A2A;
     font-family: Georgia, 'Times New Roman', serif;
     font-size: 21px;
     font-weight: 600;
@@ -127,9 +127,9 @@ img {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
-    background-color: #FAF7F2;
-    border-bottom: 1px solid #FAF7F2;
-    border-top: 1px solid #FAF7F2;
+    background-color: #F5F9F8;
+    border-bottom: 1px solid #F5F9F8;
+    border-top: 1px solid #F5F9F8;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -241,11 +241,11 @@ img {
 
 .button-blue,
 .button-primary {
-    background-color: #1F5C4A;
-    border-bottom: 10px solid #1F5C4A;
-    border-left: 20px solid #1F5C4A;
-    border-right: 20px solid #1F5C4A;
-    border-top: 10px solid #1F5C4A;
+    background-color: #0E8474;
+    border-bottom: 10px solid #0E8474;
+    border-left: 20px solid #0E8474;
+    border-right: 20px solid #0E8474;
+    border-top: 10px solid #0E8474;
     border-radius: 10px;
 }
 
@@ -270,12 +270,12 @@ img {
 /* Panels */
 
 .panel {
-    border-left: #1E2723 solid 4px;
+    border-left: #0F2A2A solid 4px;
     margin: 21px 0;
 }
 
 .panel-content {
-    background-color: #FAF7F2;
+    background-color: #F5F9F8;
     color: #52525b;
     padding: 16px;
 }
@@ -301,5 +301,5 @@ img {
 
 /* Brand touches */
 h1 { font-family: Georgia, 'Times New Roman', serif; font-weight: 600; }
-a { color: #1F5C4A; }
-.inner-body { border: 1px solid #E6DED1; border-radius: 14px; }
+a { color: #0E8474; }
+.inner-body { border: 1px solid #E2EBE9; border-radius: 14px; }
