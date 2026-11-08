@@ -20,7 +20,7 @@
                     <div class="col-5"><label class="small text-muted">Commission %</label><input type="number" step="0.5" min="0" max="50" name="commission_percent" value="{{ $plan->commission_bps / 100 }}" class="form-control"></div>
                 </div>
                 <div class="form-check form-switch mb-3"><input class="form-check-input" type="checkbox" name="is_active" value="1" id="active-{{ $plan->id }}" @checked($plan->is_active)><label class="form-check-label small" for="active-{{ $plan->id }}">Available to buy</label></div>
-                <button class="btn btn-sm btn-primary">Save</button>
+                <button class="btn btn-sm btn-primary"><i class="ri-save-3-line"></i> Save</button>
             </form>
         </div>
     @endforeach

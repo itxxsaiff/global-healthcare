@@ -159,3 +159,67 @@
     .fc-status-awaiting_payment { background: $clay; border-color: $clay; }
     .fc-status-completed { background: $ink-muted; border-color: $ink-muted; }
 }
+
+// ── Remix icons inside buttons ───────────────────────────────
+[class^="ri-"], [class*=" ri-"] { line-height: 1; }
+.btn [class^="ri-"], .btn [class*=" ri-"] { font-size: 1.1em; }
+
+// ── Icon-only action buttons (tables, cards) ─────────────────
+.btn-act {
+    --act-fg: #{$forest}; --act-bg: #{$sage};
+    width: 34px; height: 34px; padding: 0; flex-shrink: 0;
+    display: inline-grid; place-items: center;
+    border-radius: 10px; border: 1px solid transparent;
+    background: var(--act-bg); color: var(--act-fg);
+    font-size: 1.05rem; text-decoration: none; cursor: pointer;
+    transition: background-color .15s ease, color .15s ease, transform .15s ease, box-shadow .15s ease;
+    &:hover, &:focus-visible { background: var(--act-fg); color: #fff; transform: translateY(-1px); box-shadow: 0 8px 16px -10px var(--act-fg); }
+    &.act-view    { --act-fg: #{$forest};  --act-bg: #{$sage}; }
+    &.act-edit    { --act-fg: #{$info};    --act-bg: #E3EEF9; }
+    &.act-success { --act-fg: #{$success}; --act-bg: #E0F3E9; }
+    &.act-warning { --act-fg: #{$warning}; --act-bg: #FBF0DA; }
+    &.act-danger  { --act-fg: #{$danger};  --act-bg: #FBE4DF; }
+    &.act-neutral { --act-fg: #{$ink-soft}; --act-bg: #{$paper-deep}; }
+}
+.actions { display: inline-flex; align-items: center; justify-content: flex-end; gap: .4rem; white-space: nowrap;
+    form { display: inline-flex; margin: 0; }
+}
+
+// ── Tables as cards ──────────────────────────────────────────
+.table-card {
+    background: #fff; border: 1px solid $line; border-radius: 20px; overflow: hidden;
+    box-shadow: 0 14px 34px -30px rgba($ink, .45); margin-bottom: 1rem;
+    @include nice-scrollbar(rgba($ink, .2));
+    &.table-responsive { overflow-x: auto; }
+    .table-clean { border: 0; border-radius: 0; box-shadow: none; }
+}
+.table-clean {
+    thead th { padding-top: .85rem; padding-bottom: .85rem; }
+    th:first-child, td:first-child { padding-left: 1.25rem; }
+    th:last-child, td:last-child { padding-right: 1.25rem; }
+    td { padding-top: .9rem; padding-bottom: .9rem; color: $ink-soft; }
+    td .fw-semibold, td strong { color: $ink; }
+    .col-actions { text-align: right; width: 1%; white-space: nowrap; }
+    .empty-row td { padding: 2.5rem 1rem; text-align: center; color: $ink-muted;
+        i { display: block; font-size: 1.8rem; color: $sage-deep; margin-bottom: .35rem; }
+    }
+}
+.cell-user { display: flex; align-items: center; gap: .75rem; min-width: 0;
+    .avatar { flex-shrink: 0; }
+    .name { font-weight: 650; color: $ink; line-height: 1.25; }
+    .sub { font-size: .8rem; color: $ink-muted; }
+}
+.ref { font-family: SFMono-Regular, Menlo, Consolas, monospace; font-size: .8rem; font-weight: 600; color: $ink; background: $paper-deep; border-radius: 6px; padding: .15rem .45rem; white-space: nowrap; }
+
+// Filter / search bar above a table
+.table-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1rem;
+    form { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+    .search { position: relative;
+        i { position: absolute; left: .8rem; top: 50%; transform: translateY(-50%); color: $ink-muted; pointer-events: none; }
+        .form-control { padding-left: 2.2rem; min-width: 240px; }
+    }
+    .form-control, .form-select { border-radius: 12px; width: auto; height: 38px; }
+    .form-select { min-width: 150px; padding-right: 2.25rem; }
+    .btn { height: 38px; }
+    @include media-breakpoint-down(sm) { .search, .search .form-control, .form-select { width: 100%; min-width: 0; } }
+}

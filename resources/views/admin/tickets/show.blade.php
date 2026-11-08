@@ -32,7 +32,7 @@
                 <div>{{ $b->patient->name }} with {{ $b->practitioner->displayName() }}</div>
                 <div class="text-muted">{{ $b->starts_at->format('j M Y, H:i') }} UTC · {{ $b->feeLabel() }}</div>
                 <div class="mt-2"><x-status :status="$b->status" /> @if ($b->refund_due)<span class="status tone-danger">Refund due</span>@endif</div>
-                @if (Route::has('admin.bookings.show'))<a href="{{ route('admin.bookings.show', $b) }}" class="btn btn-sm btn-paper mt-3">Open booking</a>@endif
+                @if (Route::has('admin.bookings.show'))<a href="{{ route('admin.bookings.show', $b) }}" class="btn btn-sm btn-paper mt-3"><i class="ri-eye-line"></i> Open booking</a>@endif
             </div>
         @endif
     </div>

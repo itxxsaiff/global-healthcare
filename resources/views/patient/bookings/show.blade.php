@@ -62,7 +62,7 @@
             <div class="card-soft p-4 mb-4">
                 <h2 class="h5">How did it go?</h2>
                 <p class="text-muted small">Your review helps other patients choose with confidence.</p>
-                <a href="{{ route('patient.reviews.create', $booking) }}" class="btn btn-primary">Leave a review</a>
+                <a href="{{ route('patient.reviews.create', $booking) }}" class="btn btn-primary"><i class="ri-star-line"></i> Leave a review</a>
             </div>
         @endif
 
@@ -84,7 +84,7 @@
                 <form method="POST" action="{{ route('patient.bookings.cancel', $booking) }}" onsubmit="return confirm('Cancel this booking?')">
                     @csrf
                     <textarea name="reason" rows="2" class="form-control mb-2" placeholder="Reason (optional)"></textarea>
-                    <button class="btn btn-outline-danger">Cancel booking</button>
+                    <button class="btn btn-outline-danger"><i class="ri-close-circle-line"></i> Cancel booking</button>
                 </form>
             </details>
         @endif

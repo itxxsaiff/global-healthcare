@@ -11,7 +11,7 @@
         <input name="meta_description" value="{{ $page->meta_description }}" maxlength="170" class="form-control form-control-sm mb-2" placeholder="Search description">
         <textarea name="body" rows="12" class="form-control font-monospace small">{{ $page->body }}</textarea>
         <div class="form-hint">HTML: &lt;h2&gt;, &lt;p&gt;, &lt;ul&gt;&lt;li&gt;, &lt;strong&gt;, &lt;a&gt;.</div>
-        <button class="btn btn-primary btn-sm mt-2">Save {{ $page->title }}</button>
+        <button class="btn btn-primary btn-sm mt-2"><i class="ri-save-3-line"></i> Save {{ $page->title }}</button>
     </form>
 @endforeach
 @endsection

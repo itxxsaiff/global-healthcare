@@ -51,7 +51,7 @@
                     <form method="POST" action="{{ route('practitioner.bookings.reject', $booking) }}" class="mt-2">
                         @csrf
                         <textarea name="reason" rows="2" class="form-control mb-2" placeholder="Optional note for the patient, e.g. suggest another day"></textarea>
-                        <button class="btn btn-outline-danger btn-sm">Decline request</button>
+                        <button class="btn btn-outline-danger btn-sm"><i class="ri-close-line"></i> Decline request</button>
                     </form>
                 </details>
             </div>
@@ -64,7 +64,7 @@
                 <form method="POST" action="{{ route('practitioner.bookings.meeting', $booking) }}">
                     @csrf
                     <textarea name="meeting_details" rows="2" class="form-control mb-2" placeholder="Meeting link or instructions">{{ $booking->meeting_details }}</textarea>
-                    <button class="btn btn-paper btn-sm">Save details</button>
+                    <button class="btn btn-paper btn-sm"><i class="ri-save-3-line"></i> Save details</button>
                 </form>
                 <hr>
                 <div class="d-flex flex-wrap gap-2">
@@ -76,7 +76,7 @@
                         <form method="POST" action="{{ route('practitioner.bookings.cancel', $booking) }}" class="mt-2">
                             @csrf
                             <textarea name="reason" rows="2" class="form-control mb-2" required placeholder="Reason (shared with the patient)"></textarea>
-                            <button class="btn btn-outline-danger btn-sm">Cancel{{ $booking->latestPayment?->status === \App\Enums\PaymentStatus::Paid ? ' and refund patient' : '' }}</button>
+                            <button class="btn btn-outline-danger btn-sm"><i class="ri-close-circle-line"></i> Cancel{{ $booking->latestPayment?->status === \App\Enums\PaymentStatus::Paid ? ' and refund patient' : '' }}</button>
                         </form>
                     </details>
                 </div>

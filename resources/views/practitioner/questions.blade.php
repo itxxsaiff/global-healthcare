@@ -17,8 +17,8 @@
         <h2 class="h5 mb-2" style="font-family: inherit">{{ $q->title }}</h2>
         <p class="text-soft mb-3" style="white-space: pre-line">{{ $q->body }}</p>
         <div class="d-flex gap-2">
-            <a href="{{ route('questions.show', $q) }}" target="_blank" class="btn btn-sm btn-paper">View public page</a>
-            @if ($tab === 'open' && $profile->is_public)<button class="btn btn-sm btn-primary" @click="open = !open">Write an answer</button>@endif
+            <a href="{{ route('questions.show', $q) }}" target="_blank" class="btn btn-sm btn-paper"><i class="ri-external-link-line"></i> View public page</a>
+            @if ($tab === 'open' && $profile->is_public)<button class="btn btn-sm btn-primary" @click="open = !open"><i class="ri-quill-pen-line"></i> Write an answer</button>@endif
         </div>
         @if ($tab === 'open' && $profile->is_public)
             <form method="POST" action="{{ route('practitioner.answers.store', $q) }}" class="mt-3" x-show="open" x-cloak>

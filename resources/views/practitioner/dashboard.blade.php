@@ -51,7 +51,7 @@
                             <x-icon :name="$item['done'] ? 'check-circle' : 'circle-dot'" class="{{ $item['done'] ? 'text-forest' : 'text-muted' }}" />
                             <span class="flex-grow-1 {{ $item['done'] ? 'text-muted text-decoration-line-through' : 'fw-semibold' }}">{{ $item['label'] }}</span>
                             @if (! $item['done'] && $status->isEditable() && Route::has('practitioner.onboarding.show'))
-                                <a href="{{ route('practitioner.onboarding.show', ['step' => $item['step']]) }}" class="btn btn-sm btn-paper">Do this</a>
+                                <a href="{{ route('practitioner.onboarding.show', ['step' => $item['step']]) }}" class="btn btn-sm btn-paper"><i class="ri-arrow-right-line"></i> Do this</a>
                             @endif
                         </li>
                     @endforeach
@@ -79,7 +79,7 @@
                         <div class="lr-title">{{ $b->patient->name }}</div>
                         <div class="lr-sub">{{ $b->startsAtFor($profile->timezone)->format('D j M, g:i A') }} · reply by {{ $b->respond_by?->setTimezone($profile->timezone)->format('D g:i A') }}</div>
                     </div>
-                    @if (Route::has('practitioner.bookings.show'))<a href="{{ route('practitioner.bookings.show', $b) }}" class="btn btn-sm btn-primary">Review</a>@endif
+                    @if (Route::has('practitioner.bookings.show'))<a href="{{ route('practitioner.bookings.show', $b) }}" class="btn btn-sm btn-primary"><i class="ri-eye-line"></i> Review</a>@endif
                 </div>
             @empty
                 <x-empty icon="inbox" title="No new requests" text="New booking requests appear here. You'll also get an email for each one." class="border-0 py-4" />

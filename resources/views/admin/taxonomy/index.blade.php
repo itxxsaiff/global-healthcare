@@ -33,7 +33,7 @@
                 @foreach ($specialties as $s)<option value="{{ $s->id }}">{{ $s->name }}</option>@endforeach
             </select>
             <div class="form-check mb-2"><input class="form-check-input" type="checkbox" name="is_featured" value="1" id="feat"><label class="form-check-label small" for="feat">Feature on home page</label></div>
-            <button class="btn btn-sm btn-primary">Add symptom</button>
+            <button class="btn btn-sm btn-primary"><i class="ri-add-line"></i> Add symptom</button>
             <x-field-error name="name" />
         </form>
         <div class="card-soft p-4">

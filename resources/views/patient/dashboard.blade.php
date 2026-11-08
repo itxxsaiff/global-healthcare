@@ -11,7 +11,7 @@
 @foreach ($needsPayment as $b)
     <div class="alert alert-warning d-flex flex-wrap gap-3 align-items-center justify-content-between">
         <div><strong>{{ $b->practitioner->displayName() }} accepted your request.</strong> Please pay {{ $b->feeLabel() }} by {{ $b->payment_due_at->setTimezone($user->timezone)->format('D j M, g:i A') }} to confirm.</div>
-        @if (Route::has('patient.bookings.show'))<a href="{{ route('patient.bookings.show', $b) }}" class="btn btn-clay btn-sm">Pay now</a>@endif
+        @if (Route::has('patient.bookings.show'))<a href="{{ route('patient.bookings.show', $b) }}" class="btn btn-clay btn-sm"><i class="ri-secure-payment-line"></i> Pay now</a>@endif
     </div>
 @endforeach
 
@@ -52,7 +52,7 @@
                 @foreach ($toReview as $b)
                     <div class="d-flex justify-content-between align-items-center py-2 border-top">
                         <span>{{ $b->practitioner->displayName() }}</span>
-                        @if (Route::has('patient.reviews.create'))<a href="{{ route('patient.reviews.create', $b) }}" class="btn btn-sm btn-paper">Leave a review</a>@endif
+                        @if (Route::has('patient.reviews.create'))<a href="{{ route('patient.reviews.create', $b) }}" class="btn btn-sm btn-paper"><i class="ri-star-line"></i> Leave a review</a>@endif
                     </div>
                 @endforeach
             </div>

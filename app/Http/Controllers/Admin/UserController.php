@@ -21,6 +21,7 @@ class UserController extends Controller
             'users' => User::query()
                 ->when($request->query('role'), fn ($query, $r) => $query->where('role', $r))
                 ->when($q !== '', fn ($query) => $query->where(fn ($w) => $w->where('name', 'like', "%{$q}%")->orWhere('email', 'like', "%{$q}%")))
+                ->with('practitionerProfile:id,user_id,slug,headshot_path')
                 ->latest()->paginate(30)->withQueryString(),
             'q' => $q,
         ]);

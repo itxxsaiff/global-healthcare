@@ -13,8 +13,8 @@
             <input name="title" value="{{ $q->title }}" class="form-control fw-semibold mb-2">
             <p class="text-soft" style="white-space: pre-line">{{ $q->body }}</p>
             <div class="d-flex gap-2">
-                <button name="status" value="approved" class="btn btn-sm btn-primary">{{ $q->status === \App\Enums\ModerationStatus::Approved ? 'Save title' : 'Publish' }}</button>
-                @if ($q->status !== \App\Enums\ModerationStatus::Rejected)<button name="status" value="rejected" class="btn btn-sm btn-paper">Reject</button>@endif
+                <button name="status" value="approved" class="btn btn-sm btn-primary"><i class="ri-{{ $q->status === \App\Enums\ModerationStatus::Approved ? 'save-3-line' : 'check-line' }}"></i> {{ $q->status === \App\Enums\ModerationStatus::Approved ? 'Save title' : 'Publish' }}</button>
+                @if ($q->status !== \App\Enums\ModerationStatus::Rejected)<button name="status" value="rejected" class="btn btn-sm btn-outline-danger"><i class="ri-close-line"></i> Reject</button>@endif
             </div>
         </form>
         @if ($q->answers->isNotEmpty())
@@ -25,7 +25,7 @@
                         <div><strong>{{ $a->practitioner->displayName() }}</strong>: {{ \Illuminate\Support\Str::limit(strip_tags($a->body), 160) }}</div>
                         <form method="POST" action="{{ route('admin.answers.update', $a) }}">@csrf @method('PATCH')
                             <input type="hidden" name="status" value="{{ $a->status === \App\Enums\ModerationStatus::Approved ? 'rejected' : 'approved' }}">
-                            <button class="btn btn-sm btn-link p-0">{{ $a->status === \App\Enums\ModerationStatus::Approved ? 'Hide' : 'Restore' }}</button>
+                            @if ($a->status === \App\Enums\ModerationStatus::Approved)<x-act icon="eye-off-line" label="Hide answer" tone="danger" type="submit" />@else<x-act icon="eye-line" label="Restore answer" tone="success" type="submit" />@endif
                         </form>
                     </div>
                 @endforeach

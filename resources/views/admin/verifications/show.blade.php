@@ -82,18 +82,18 @@
                     <label class="form-label small" for="reason">Or request changes</label>
                     <textarea id="reason" name="reason" rows="3" class="form-control @error('reason') is-invalid @enderror mb-2" placeholder="e.g. The licence certificate is blurry. Please upload a clearer scan.">{{ old('reason') }}</textarea>
                     <x-field-error name="reason" />
-                    <button class="btn btn-paper w-100">Send back with this note</button>
+                    <button class="btn btn-paper w-100"><i class="ri-arrow-go-back-line"></i> Send back with this note</button>
                 </form>
             @elseif ($status === \App\Enums\VerificationStatus::Approved)
                 <p class="small text-muted">Verified {{ $profile->verified_at?->format('j M Y') }}.</p>
                 <form method="POST" action="{{ route('admin.verifications.suspend', $profile) }}">
                     @csrf
                     <textarea name="reason" rows="2" class="form-control mb-2" placeholder="Reason for suspension (internal)" required></textarea>
-                    <button class="btn btn-outline-danger w-100">Suspend profile</button>
+                    <button class="btn btn-outline-danger w-100"><i class="ri-forbid-line"></i> Suspend profile</button>
                 </form>
             @elseif ($status === \App\Enums\VerificationStatus::Suspended)
                 <p class="small">Suspended: {{ $profile->rejection_reason }}</p>
-                <form method="POST" action="{{ route('admin.verifications.reinstate', $profile) }}">@csrf<button class="btn btn-primary w-100">Reinstate</button></form>
+                <form method="POST" action="{{ route('admin.verifications.reinstate', $profile) }}">@csrf<button class="btn btn-primary w-100"><i class="ri-checkbox-circle-line"></i> Reinstate</button></form>
             @else
                 <p class="small text-muted mb-0">No action available while the profile is "{{ $status->label() }}".</p>
             @endif

@@ -32,7 +32,7 @@
                 <p class="small text-muted">Refund it in the payment gateway's merchant portal, then record it here. This reverses the commission ledger.</p>
                 <form method="POST" action="{{ route('admin.bookings.refunded', $booking) }}">@csrf
                     <input name="note" class="form-control form-control-sm mb-2" placeholder="Gateway refund reference">
-                    <button class="btn btn-sm btn-primary w-100">Mark as refunded</button>
+                    <button class="btn btn-sm btn-primary w-100"><i class="ri-refund-2-line"></i> Mark as refunded</button>
                 </form>
             </div>
         @endif
@@ -41,7 +41,7 @@
                 <h2 class="h6">Cancel on behalf of the platform</h2>
                 <form method="POST" action="{{ route('admin.bookings.cancel', $booking) }}">@csrf
                     <textarea name="reason" rows="2" class="form-control form-control-sm mb-2" required placeholder="Reason (sent to both sides)"></textarea>
-                    <button class="btn btn-sm btn-outline-danger w-100">Cancel booking</button>
+                    <button class="btn btn-sm btn-outline-danger w-100"><i class="ri-close-circle-line"></i> Cancel booking</button>
                 </form>
             </div>
         @endif

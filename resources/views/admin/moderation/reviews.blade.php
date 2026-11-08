@@ -14,10 +14,10 @@
         <p class="mb-3">{{ $r->body ?: '(no written feedback)' }}</p>
         <div class="d-flex gap-2">
             @if ($r->status !== \App\Enums\ModerationStatus::Approved)
-                <form method="POST" action="{{ route('admin.reviews.update', $r) }}">@csrf @method('PATCH')<input type="hidden" name="status" value="approved"><button class="btn btn-sm btn-primary">Approve</button></form>
+                <form method="POST" action="{{ route('admin.reviews.update', $r) }}">@csrf @method('PATCH')<input type="hidden" name="status" value="approved"><button class="btn btn-sm btn-primary"><i class="ri-check-line"></i> Approve</button></form>
             @endif
             @if ($r->status !== \App\Enums\ModerationStatus::Rejected)
-                <form method="POST" action="{{ route('admin.reviews.update', $r) }}">@csrf @method('PATCH')<input type="hidden" name="status" value="rejected"><button class="btn btn-sm btn-paper">Reject</button></form>
+                <form method="POST" action="{{ route('admin.reviews.update', $r) }}">@csrf @method('PATCH')<input type="hidden" name="status" value="rejected"><button class="btn btn-sm btn-outline-danger"><i class="ri-close-line"></i> Reject</button></form>
             @endif
         </div>
     </div>

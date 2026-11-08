@@ -4,7 +4,7 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-end mb-4">
     <h1 class="dash-title mb-0">Notifications</h1>
-    <form method="POST" action="{{ route('notifications.read') }}">@csrf<button class="btn btn-paper btn-sm">Mark all as read</button></form>
+    <form method="POST" action="{{ route('notifications.read') }}">@csrf<button class="btn btn-paper btn-sm"><i class="ri-check-double-line"></i> Mark all as read</button></form>
 </div>
 @forelse ($notifications as $n)
     <a href="{{ route('notifications.open', $n->id) }}" class="card-soft card-hover p-3 mb-2 d-flex gap-3 align-items-center text-reset text-decoration-none {{ $n->read_at ? 'opacity-75' : '' }}">

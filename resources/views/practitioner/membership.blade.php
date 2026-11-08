@@ -63,7 +63,7 @@
 
 @if ($profile->memberships->count() > 1)
     <h2 class="h5 mt-5 mb-3">History</h2>
-    <div class="table-responsive">
+    <div class="table-card table-responsive">
         <table class="table table-clean">
             <thead><tr><th>Plan</th><th>Status</th><th>From</th><th>Until</th></tr></thead>
             <tbody>

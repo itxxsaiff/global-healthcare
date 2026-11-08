@@ -43,15 +43,16 @@
             @else
                 <div class="table-responsive">
                     <table class="table table-clean mb-0">
-                        <thead><tr><th>Ref</th><th>Patient</th><th>Practitioner</th><th>When (UTC)</th><th>Status</th></tr></thead>
+                        <thead><tr><th>Ref</th><th>Patient</th><th>Practitioner</th><th>When (UTC)</th><th>Status</th><th class="col-actions"></th></tr></thead>
                         <tbody>
                         @foreach ($recentBookings as $b)
                             <tr>
-                                <td class="font-monospace small text-nowrap">{{ $b->reference }}</td>
-                                <td class="text-nowrap">{{ $b->patient->name }}</td>
-                                <td class="text-nowrap">{{ $b->practitioner->user->name }}</td>
+                                <td><span class="ref">{{ $b->reference }}</span></td>
+                                <td class="text-nowrap"><div class="cell-user"><x-avatar :name="$b->patient->name" size="xs" round /><span class="name">{{ $b->patient->name }}</span></div></td>
+                                <td class="text-nowrap"><div class="cell-user"><x-avatar :profile="$b->practitioner" size="xs" round /><span class="name">{{ $b->practitioner->user->name }}</span></div></td>
                                 <td class="small text-nowrap">{{ $b->starts_at->format('j M, H:i') }}</td>
                                 <td><x-status :status="$b->status" /></td>
+                                <td class="col-actions">@if (Route::has('admin.bookings.show'))<x-act icon="eye-line" label="View booking" :href="route('admin.bookings.show', $b)" />@endif</td>
                             </tr>
                         @endforeach
                         </tbody>

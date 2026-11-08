@@ -16,7 +16,7 @@
             <div class="small text-muted">{{ $q->specialty?->name }} · asked {{ $q->created_at->diffForHumans() }} · {{ $q->answers_count }} {{ \Illuminate\Support\Str::plural('answer', $q->answers_count) }}</div>
         </div>
         <x-status :status="$q->status" />
-        @if ($q->status === \App\Enums\ModerationStatus::Approved)<a href="{{ route('questions.show', $q) }}" class="btn btn-sm btn-paper">View</a>@endif
+        @if ($q->status === \App\Enums\ModerationStatus::Approved)<a href="{{ route('questions.show', $q) }}" class="btn-act act-view" title="View on site" aria-label="View on site" data-bs-toggle="tooltip"><i class="ri-eye-line"></i></a>@endif
     </div>
 @empty
     <x-empty icon="help-circle" title="You haven't asked anything yet" text="Ask a general health question and verified specialists will answer publicly, without your name.">

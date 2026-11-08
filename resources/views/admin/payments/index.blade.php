@@ -12,21 +12,22 @@
         @foreach ($failedEvents as $e)<div>{{ $e->created_at->format('j M H:i') }} · {{ $e->gateway }} · {{ $e->type }} · {{ $e->error }}</div>@endforeach
     </div>
 @endif
-<div class="table-responsive">
+<div class="table-card table-responsive">
     <table class="table table-clean">
-        <thead><tr><th>Date</th><th>Payer</th><th>For</th><th>Gateway</th><th>Amount</th><th>Status</th></tr></thead>
+        <thead><tr><th>Date</th><th>Payer</th><th>For</th><th>Gateway</th><th>Amount</th><th>Status</th><th class="col-actions">Actions</th></tr></thead>
         <tbody>
         @forelse ($payments as $p)
             <tr>
                 <td class="small text-nowrap">{{ $p->created_at->format('j M Y, H:i') }}</td>
-                <td>{{ $p->user->name }}</td>
+                <td><div class="cell-user"><x-avatar :name="$p->user->name" size="xs" round /><span class="name">{{ $p->user->name }}</span></div></td>
                 <td class="small">{{ $p->payable instanceof \App\Models\Booking ? 'Booking '.$p->payable->reference : 'Membership' }}</td>
-                <td class="small font-monospace">{{ $p->gateway }}</td>
-                <td>{{ $p->amountLabel() }}</td>
+                <td><span class="ref">{{ $p->gateway }}</span></td>
+                <td class="fw-semibold text-ink text-nowrap">{{ $p->amountLabel() }}</td>
                 <td><span class="status tone-{{ $p->status->tone() }}">{{ ucfirst($p->status->value) }}</span></td>
+                <td class="col-actions"><div class="actions">@if ($p->payable instanceof \App\Models\Booking)<x-act icon="eye-line" label="View booking" :href="route('admin.bookings.show', $p->payable)" />@else<span class="text-muted small">—</span>@endif</div></td>
             </tr>
         @empty
-            <tr><td colspan="6" class="text-center text-muted py-4">No payments yet.</td></tr>
+            <tr class="empty-row"><td colspan="7"><i class="ri-bank-card-line"></i>No payments yet.</td></tr>
         @endforelse
         </tbody>
     </table>

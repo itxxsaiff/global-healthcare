@@ -32,7 +32,7 @@
                 <input type="hidden" name="decision" value="reject">
                 <textarea name="reason" rows="3" class="form-control mb-2 @error('reason') is-invalid @enderror" placeholder="What should the author change?"></textarea>
                 <x-field-error name="reason" />
-                <button class="btn btn-paper w-100">Send back</button>
+                <button class="btn btn-paper w-100"><i class="ri-arrow-go-back-line"></i> Send back</button>
             </form>
         </div>
     </div>

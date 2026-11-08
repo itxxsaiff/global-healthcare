@@ -29,5 +29,7 @@
 <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
 
+{{-- Remix Icon (action icons in panels). Pinned version + integrity hash. --}}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" integrity="sha384-L/vw44MdBs/7hovWr2rBVSRKqdti4Vw077yuSGQ2PO3tQARRLiLuMh8xhVmVrR0I" crossorigin="anonymous">
 @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 @stack('head')
