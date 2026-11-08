@@ -42,6 +42,7 @@
                     </tbody>
                 </table>
             </div>
+            <div class="mt-3">{{ $owed->links() }}</div>
         </div>
     </div>
     <div class="col-xl-5">
@@ -50,7 +51,7 @@
             <h2 class="h5 mb-3">Record a payout</h2>
             <select name="practitioner_profile_id" class="form-select mb-2" required>
                 <option value="">Practitioner…</option>
-                @foreach ($owed->unique('practitioner_profile_id') as $o)<option value="{{ $o->practitioner_profile_id }}">{{ $o->name }}</option>@endforeach
+                @foreach ($payees as $o)<option value="{{ $o->practitioner_profile_id }}">{{ $o->name }}</option>@endforeach
             </select>
             <div class="row g-2 mb-2">
                 <div class="col-4"><select name="currency" class="form-select"><option>PKR</option><option>USD</option></select></div>
@@ -75,4 +76,5 @@
         </tbody>
     </table>
 </div>
+{{ $recent->links() }}
 @endsection

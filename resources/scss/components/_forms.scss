@@ -45,7 +45,7 @@
 
 // Quill editor, restyled to the palette
 .editor-shell {
-    border: 1px solid $line-strong; border-radius: $radius; background: #fff; overflow: hidden;
+    border: 1px solid $line-strong; border-radius: $radius; background: #fff; overflow: clip;
     .ql-toolbar.ql-snow { border: 0; border-bottom: 1px solid $line; background: $paper; font-family: $font-sans; }
     .ql-container.ql-snow { border: 0; font-family: $font-sans; font-size: 1.05rem; }
     .ql-editor { min-height: 420px; line-height: 1.75; padding: 1.25rem 1.5rem; color: $ink;
@@ -54,6 +54,13 @@
         &.ql-blank::before { color: $ink-muted; font-style: normal; left: 1.5rem; }
     }
     .ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button.ql-active .ql-stroke { stroke: $forest; }
+    .ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-fill { fill: $forest; }
+    .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button.ql-active, .ql-snow .ql-picker-label:hover, .ql-snow .ql-picker-label.ql-active { color: $forest; }
+    .ql-toolbar.ql-snow { position: sticky; top: 72px; z-index: 5; padding: .6rem .75rem; }
+    .ql-toolbar.ql-snow .ql-formats { margin-right: .75rem; }
+    .ql-editor { ul, ol { padding-left: 1.25rem; } li { margin-bottom: .25rem; } }
+    &:focus-within { border-color: $forest; box-shadow: 0 0 0 .25rem rgba($forest, .12); }
+    &.editor-compact .ql-editor { min-height: 300px; max-height: 560px; overflow-y: auto; @include nice-scrollbar(rgba($forest, .25)); }
 }
 
 .star-input {

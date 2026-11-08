@@ -28,19 +28,22 @@ class WalletController extends Controller
             ->groupBy('currency');
 
         // Practitioners with an outstanding balance.
-        $owed = LedgerEntry::query()
+        $owedQuery = LedgerEntry::query()
             ->join('practitioner_profiles', 'practitioner_profiles.id', '=', 'ledger_entries.practitioner_profile_id')
             ->join('users', 'users.id', '=', 'practitioner_profiles.user_id')
             ->whereIn('ledger_entries.type', [LedgerType::PractitionerPayable, LedgerType::Payout])
             ->groupBy('ledger_entries.practitioner_profile_id', 'ledger_entries.currency', 'users.name')
             ->selectRaw('ledger_entries.practitioner_profile_id, ledger_entries.currency, users.name, SUM(ledger_entries.amount_minor) balance')
             ->havingRaw('SUM(ledger_entries.amount_minor) <> 0')
-            ->orderByDesc('balance')->get();
+            ->orderByDesc('balance');
 
         return view('admin.wallet.index', [
-            'from' => $from, 'to' => $to, 'totals' => $totals, 'owed' => $owed,
-            'recent' => LedgerEntry::query()->with(['practitioner.user:id,name', 'booking:id,reference'])->latest('id')->limit(30)->get(),
-            'payouts' => Payout::query()->with(['practitioner.user:id,name', 'creator:id,name'])->latest('paid_at')->limit(15)->get(),
+            'from' => $from, 'to' => $to, 'totals' => $totals,
+            'owed' => (clone $owedQuery)->paginate(10, ['*'], 'owed_page')->withQueryString(),
+            // Everyone with a balance, for the "Record a payout" dropdown.
+            'payees' => (clone $owedQuery)->get()->unique('practitioner_profile_id'),
+            'recent' => LedgerEntry::query()->with(['practitioner.user:id,name', 'booking:id,reference'])->latest('id')
+                ->paginate(25, ['*'], 'ledger_page')->withQueryString(),
         ]);
     }
 
