@@ -41,8 +41,8 @@ return [
 
     // Contact
     'platform_whatsapp' => env('PLATFORM_WHATSAPP', '+923000000000'),
-    'support_email' => env('SUPPORT_EMAIL', 'support@example.com'),
-    'admin_alert_email' => env('ADMIN_ALERT_EMAIL', 'admin@example.com'),
+    'support_email' => env('SUPPORT_EMAIL', 'support@allbari.com'),
+    'admin_alert_email' => env('ADMIN_ALERT_EMAIL', 'admin@allbari.com'),
 
     // Forum / blog
     'questions_per_page' => 12,

@@ -1,6 +1,6 @@
 {
-  "name": "Global Healthcare: verified online doctors",
-  "short_name": "Global Healthcare",
+  "name": "Allbari: verified online doctors",
+  "short_name": "Allbari",
   "description": "Find and book verified doctors, psychologists and therapists online.",
   "start_url": "/?source=pwa",
   "scope": "/",

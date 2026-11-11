@@ -28,7 +28,7 @@ Every value below is **configurable** (`config/platform.php`, the admin Settings
 | 21 | Re-verification after edits | not specified | Changing name, licence number or documents sends the profile back to "pending"; other edits go live immediately | n/a |
 | 22 | Pricing market | "GeoIP switcher" | Decided by the practitioner's verified practice country, not the visitor's IP (IP isn't reliable for billing) | n/a |
 | 23 | Sub-specialties & symptom list | examples only | A starting list of 67 sub-specialties and 34 symptoms, editable by admin | Admin → Specialties & symptoms |
-| 24 | Brand name | not given | Working name "Global Healthcare" | `.env` → `APP_NAME` |
+| 24 | Brand name | Allbari, domain allbari.com (2026-11-11) | Was working name "Global Healthcare" | `.env` → `APP_NAME` |
 | 25 | Admin login | "Admin login" | Same login page; admin accounts are created only by command, and 2FA is required in production | `php artisan app:create-admin` |
 
 Still needs the client (can't be decided by us):

@@ -1,6 +1,6 @@
-# Global Healthcare — Architecture & Delivery Plan
+# Allbari — Architecture & Delivery Plan
 
-> Working name: **Global Healthcare** (set in `.env` → `APP_NAME`; change any time).
+> Brand: **Allbari** (allbari.com), set in `.env` → `APP_NAME`.
 > Source of truth for features: [`docs/client-requirements.docx`](client-requirements.docx).
 > Stack decision (agreed with client): Laravel instead of WordPress + Elementor.
 

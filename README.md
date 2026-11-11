@@ -1,4 +1,4 @@
-# Global Healthcare
+# Allbari
 
 An international telehealth directory and booking platform. Patients find **verified** doctors, psychologists, dietitians and therapists for **non-emergency online consultations**. Practitioners list for free (20% commission) or on a flat subscription (0% commission).
 
@@ -52,8 +52,8 @@ Emails go to `storage/logs/laravel.log` locally (`MAIL_MAILER=log`).
 
 | Role | Email |
 |---|---|
-| Admin | `admin@globalhealthcare.test` |
-| Patient | `patient@globalhealthcare.test` |
+| Admin | `admin@allbari.test` |
+| Patient | `patient@allbari.test` |
 | Practitioner (Plan 1, PKR) | `sana.mirza@doctor.test` |
 | Practitioner (Pro, PKR) | `hamza.qureshi@doctor.test` |
 | Practitioner (International) | `layla.haddad@doctor.test` |

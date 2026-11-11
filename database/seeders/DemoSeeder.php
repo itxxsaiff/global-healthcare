@@ -35,8 +35,8 @@ class DemoSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = $this->user('Site Admin', 'admin@globalhealthcare.test', Role::Admin);
-        $patient = $this->user('Ayesha Khan', 'patient@globalhealthcare.test', Role::Patient, 'Asia/Karachi');
+        $admin = $this->user('Site Admin', 'admin@allbari.test', Role::Admin);
+        $patient = $this->user('Ayesha Khan', 'patient@allbari.test', Role::Patient, 'Asia/Karachi');
         $patient->patientProfile()->firstOrCreate([], ['gender' => 'female', 'date_of_birth' => '1994-03-12', 'country_id' => Country::where('iso2', 'PK')->value('id')]);
 
         $extraPatients = collect(['Bilal Ahmed', 'Sara Malik', 'Omar Farooq', 'Hina Raza', 'Daniel Brooks', 'Fatima Al Nuaimi'])
@@ -219,7 +219,7 @@ class DemoSeeder extends Seeder
 
     private function forum(): void
     {
-        $patient = User::where('email', 'patient@globalhealthcare.test')->first();
+        $patient = User::where('email', 'patient@allbari.test')->first();
 
         $questions = [
             ['dermatologists', 'acne', 'Acne keeps coming back on my jawline after I stop treatment', 'I\'m 26 and have had acne on my jawline and chin for about two years. It clears up with the cream my GP gave me but comes back within weeks of stopping. Is this hormonal? Should I get any tests done?', 'female', 26, 'sana-mirza'],
