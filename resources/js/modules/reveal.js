@@ -36,7 +36,7 @@ if (scope && !reduced && 'IntersectionObserver' in window) {
     document.documentElement.classList.add('has-reveal');
 
     const mark = (el) => {
-        if (el.classList.contains('reveal')) return;
+        if (el.classList.contains('reveal') || el.closest('[data-no-reveal], .position-fixed, .modal, .offcanvas, [x-cloak]')) return;
         if (el.closest('.hero-dark') && !el.hasAttribute('data-reveal')) return;
         // Never nest reveals: a parent that animates already carries its children.
         if (el.parentElement?.closest('.reveal') || el.querySelector('.reveal')) {

@@ -1,5 +1,5 @@
 <div id="install-banner" class="position-fixed start-0 end-0 bottom-0 p-3 d-md-none" style="z-index: 1050" hidden>
-    <div class="card-soft shadow p-3 d-flex gap-3 align-items-center">
+    <div class="card-soft shadow p-3 d-flex gap-3 align-items-center" data-no-reveal>
         <img src="/icons/icon-192.png" width="44" height="44" alt="" class="rounded-3">
         <div class="flex-grow-1 small">
             <strong class="d-block">Get the {{ config('app.name') }} app</strong>
