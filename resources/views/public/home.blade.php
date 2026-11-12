@@ -11,31 +11,31 @@
     <div class="container position-relative" style="z-index:2">
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
-                <h1>Trusted doctors, <br class="d-none d-xl-block"><span class="accent">one video call</span> away.</h1>
-                <p class="hero-lead">Online consultations with licence-checked specialists from Pakistan to the UK. Choose by symptom, gender and language, then book a time that suits you.</p>
-                <div class="d-flex flex-wrap gap-3">
+                <h1 data-reveal="up">Trusted doctors, <br class="d-none d-xl-block"><span class="accent">one video call</span> away.</h1>
+                <p class="hero-lead" data-reveal="up" data-reveal-delay="120">Online consultations with licence-checked specialists from Pakistan to the UK. Choose by symptom, gender and language, then book a time that suits you.</p>
+                <div class="d-flex flex-wrap gap-3" data-reveal="up" data-reveal-delay="240">
                     <a href="{{ route('directory') }}" class="btn btn-mint btn-lg">Find a doctor <x-icon name="arrow-right" class="icon-arrow" /></a>
                     <a href="{{ route('register.practitioner') }}" class="btn btn-ghost-light btn-lg">Join as practitioner</a>
                 </div>
-                <div class="hero-stats">
-                    <div><x-icon name="users" /><span><strong>{{ $doctorCount }}+</strong><small>Verified practitioners</small></span></div>
-                    <div><x-icon name="globe" /><span><strong>{{ $countryCount }}</strong><small>Countries served</small></span></div>
-                    <div><x-icon name="shield-check" /><span><strong>100%</strong><small>Licence-checked</small></span></div>
+                <div class="hero-stats" data-reveal="up" data-reveal-delay="360">
+                    <div><x-icon name="users" /><span><strong data-count="{{ $doctorCount }}" data-suffix="+">{{ $doctorCount }}+</strong><small>Verified practitioners</small></span></div>
+                    <div><x-icon name="globe" /><span><strong data-count="{{ $countryCount }}">{{ $countryCount }}</strong><small>Countries served</small></span></div>
+                    <div><x-icon name="shield-check" /><span><strong data-count="100" data-suffix="%">100%</strong><small>Licence-checked</small></span></div>
                 </div>
             </div>
 
             <div class="col-lg-6 d-none d-lg-block">
                 <div class="hero-visual" aria-hidden="true">
-                    <div class="globe"></div>
+                    <div class="globe" data-reveal="fade" data-reveal-delay="100"></div>
                     <div class="orbit"></div>
                     <div class="halo"></div>
                     <span class="pin p1" style="left: 120px; top: 70px"><x-icon name="map-pin" /></span>
                     <span class="pin p2" style="left: 250px; top: 20px"><x-icon name="map-pin" /></span>
                     <span class="pin p3" style="left: 60px; top: 200px"><x-icon name="map-pin" /></span>
 
-                    <div class="hero-photo"><img src="/images/hero-doctor.webp" alt="" width="720" height="860" fetchpriority="high"></div>
+                    <div class="hero-photo" data-reveal="zoom" data-reveal-delay="200"><img src="/images/hero-doctor.webp" alt="" width="720" height="860" fetchpriority="high"></div>
 
-                    <div class="float-card fc-live">
+                    <div class="float-card fc-live" data-reveal="left" data-reveal-delay="650">
                         <span class="live-tag">Live consultation</span>
                         <img src="/images/call-patient.webp" alt="" width="360" height="250" loading="lazy">
                         <div class="controls">
@@ -52,7 +52,7 @@
 {{-- ───────────── Search ───────────── --}}
 <section class="hero-search">
     <div class="container">
-        <form action="{{ route('directory') }}" method="GET" class="search-bar" role="search">
+        <form action="{{ route('directory') }}" method="GET" class="search-bar" role="search" data-reveal="up" data-reveal-delay="420">
             <div class="row g-2 align-items-stretch">
                 <div class="col-lg-4 position-relative" x-data="searchSuggest('{{ route('search.suggest') }}')" @click.outside="open = false">
                     <div class="field">

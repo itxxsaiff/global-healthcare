@@ -10,6 +10,7 @@ import './modules/search-suggest';
 import './modules/timezone';
 import './modules/file-limit';
 import './modules/pwa';
+import './modules/reveal';
 
 window.bootstrap = { Collapse, Dropdown, Modal, Offcanvas, Toast, Tooltip };
 window.Alpine = Alpine;

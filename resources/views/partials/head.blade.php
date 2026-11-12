@@ -31,5 +31,12 @@
 
 {{-- Remix Icon (action icons in panels). Pinned version + integrity hash. --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" integrity="sha384-L/vw44MdBs/7hovWr2rBVSRKqdti4Vw077yuSGQ2PO3tQARRLiLuMh8xhVmVrR0I" crossorigin="anonymous">
+{{-- Hide hero reveal targets before first paint; un-hide if the app script never runs. --}}
+<script>
+    if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('has-reveal');
+        setTimeout(function () { if (!window.__reveal) document.documentElement.classList.remove('has-reveal'); }, 2500);
+    }
+</script>
 @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 @stack('head')

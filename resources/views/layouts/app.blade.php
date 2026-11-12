@@ -3,7 +3,7 @@
 <head>
     @include('partials.head')
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100" data-reveal-scope>
     @include('partials.header')
 
     <main id="main" class="flex-grow-1">
