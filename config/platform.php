@@ -19,6 +19,11 @@ return [
         'sexologists', 'speech-occupational-therapists',
     ],
 
+    // Email verification: a 6-digit code instead of a link.
+    'email_code_minutes' => 10,           // code expires after
+    'email_code_attempts' => 5,           // wrong tries before a new code is needed
+    'email_code_resend_seconds' => 60,    // wait between "send a new code"
+
     // Booking windows
     'request_response_hours' => (int) env('BOOKING_RESPONSE_HOURS', 24),
     'payment_window_hours' => (int) env('BOOKING_PAYMENT_HOURS', 12),

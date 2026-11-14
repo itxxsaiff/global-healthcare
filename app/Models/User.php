@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Role;
 use App\Enums\UserStatus;
+use App\Services\Auth\EmailCodeService;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -33,6 +34,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'role' => Role::class,
             'status' => UserStatus::class,
         ];
+    }
+
+    /**
+     * Called by Laravel on registration, email change and "resend": we email a
+     * 6-digit code instead of a verification link.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        app(EmailCodeService::class)->send($this);
     }
 
     public function patientProfile(): HasOne

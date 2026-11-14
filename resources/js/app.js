@@ -11,6 +11,7 @@ import './modules/intro-video';
 import './modules/timezone';
 import './modules/file-limit';
 import './modules/password-field';
+import './modules/otp-input';
 import './modules/pwa';
 import './modules/reveal';
 

@@ -5,7 +5,7 @@
     @if (session($key))
         <div class="alert alert-{{ $class }} d-flex gap-2 align-items-start" role="alert">
             <x-icon :name="$icon" class="mt-1" />
-            <div>{{ session($key) === 'verification-link-sent' ? 'A fresh verification link has been sent to your email address.' : session($key) }}</div>
+            <div>{{ session($key) === 'verification-link-sent' ? 'A new verification code has been sent to your email address.' : session($key) }}</div>
         </div>
     @endif
 @endforeach

@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Auth\EmailCodeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Public\ArticleController;
 use App\Http\Controllers\Public\BookingController;
@@ -10,6 +13,7 @@ use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\PageController;
 use App\Http\Controllers\Public\PractitionerController;
 use App\Http\Controllers\Public\QuestionController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,23 +62,29 @@ Route::middleware('guest')->group(function () {
 |--------------------------------------------------------------------------
 */
 
+// Email verification by 6-digit code (the notice page itself is Fortify's /email/verify).
+Route::middleware('auth')->controller(EmailCodeController::class)->group(function () {
+    Route::post('/email/verify-code', 'verify')->middleware('throttle:10,1')->name('verification.code');
+    Route::post('/email/resend-code', 'resend')->middleware('throttle:6,10')->name('verification.code.resend');
+});
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/account', [AccountController::class, 'edit'])->name('account.edit');
-    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/notifications/{id}', [\App\Http\Controllers\NotificationController::class, 'open'])->name('notifications.open');
-    Route::post('/notifications/read', [\App\Http\Controllers\NotificationController::class, 'readAll'])->name('notifications.read');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{id}', [NotificationController::class, 'open'])->name('notifications.open');
+    Route::post('/notifications/read', [NotificationController::class, 'readAll'])->name('notifications.read');
 
-    Route::middleware('role:patient,practitioner')->controller(\App\Http\Controllers\TicketController::class)->prefix('support')->name('tickets.')->group(function () {
+    Route::middleware('role:patient,practitioner')->controller(TicketController::class)->prefix('support')->name('tickets.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/new', 'create')->name('create');
         Route::post('/', 'store')->middleware('throttle:tickets')->name('store');
         Route::get('/{ticket:reference}', 'show')->name('show');
         Route::post('/{ticket:reference}/reply', 'reply')->middleware('throttle:tickets')->name('reply');
     });
-    Route::get('/support/attachments/{message}', [\App\Http\Controllers\TicketController::class, 'attachment'])->name('tickets.attachment');
+    Route::get('/support/attachments/{message}', [TicketController::class, 'attachment'])->name('tickets.attachment');
 
-    Route::get('/documents/{document}', [\App\Http\Controllers\DocumentController::class, 'show'])
+    Route::get('/documents/{document}', [DocumentController::class, 'show'])
         ->middleware('throttle:60,1')->name('documents.show');
 });
 

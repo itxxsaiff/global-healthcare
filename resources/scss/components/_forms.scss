@@ -98,3 +98,11 @@
     &.is-off { color: $clay; }
     i { vertical-align: -2px; }
 }
+
+// 6-digit email code
+.otp-input {
+    letter-spacing: .45em;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    &::placeholder { color: rgba(0, 0, 0, .18); letter-spacing: .45em; }
+}
