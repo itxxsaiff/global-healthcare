@@ -54,6 +54,7 @@ Route::post('/tickets/{ticket:reference}/reply', [TicketController::class, 'repl
 Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
 Route::get('/bookings/{booking:reference}', [BookingController::class, 'show'])->name('bookings.show');
 Route::post('/bookings/{booking:reference}/refunded', [BookingController::class, 'refunded'])->name('bookings.refunded');
+Route::post('/bookings/{booking:reference}/manual-payment', [BookingController::class, 'manualPayment'])->name('bookings.manual-payment');
 Route::post('/bookings/{booking:reference}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
 
 Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');

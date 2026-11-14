@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\BookingFlow;
 use App\Enums\BookingStatus;
 use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\Booking;
+use App\Models\Payment;
 use App\Services\Booking\BookingService;
 use App\Services\Commission\CommissionService;
 use Illuminate\Http\RedirectResponse;
@@ -56,6 +58,45 @@ class BookingController extends Controller
         AuditLog::record('booking.refunded', $booking, ['note' => $data['note'] ?? null]);
 
         return back()->with('success', 'Refund recorded and the commission ledger reversed.');
+    }
+
+    /**
+     * Patient paid outside the website (bank transfer, JazzCash, cash): record it so the booking
+     * is confirmed and the Starter-plan commission is recorded exactly as for an online payment.
+     */
+    public function manualPayment(Request $request, Booking $booking, BookingService $service): RedirectResponse
+    {
+        abort_unless($booking->flow === BookingFlow::PlatformPayment
+            && in_array($booking->status, [BookingStatus::AwaitingPayment, BookingStatus::PaymentExpired], true), 422, 'This booking is not waiting for payment.');
+
+        $data = $request->validate([
+            'method' => ['required', 'string', 'max:40'],
+            'reference' => ['nullable', 'string', 'max:120'],
+            'confirm_amount' => ['accepted'],
+        ], ['confirm_amount.accepted' => 'Please confirm the full fee was received.']);
+
+        DB::transaction(function () use ($booking, $data, $request, $service) {
+            $payment = new Payment([
+                'user_id' => $booking->patient_id,
+                'gateway' => 'manual',
+                'amount_minor' => $booking->fee_minor,
+                'currency' => $booking->currency,
+                'status' => PaymentStatus::Paid,
+                'paid_at' => now(),
+                'meta' => ['method' => $data['method'], 'reference' => $data['reference'] ?? null, 'recorded_by' => $request->user()->id],
+            ]);
+            $payment->payable()->associate($booking);
+            $payment->save();
+
+            $service->paymentReceived($booking, $payment);
+            AuditLog::record('booking.manual_payment', $booking, ['payment' => $payment->uuid, 'method' => $data['method'], 'reference' => $data['reference'] ?? null]);
+        });
+
+        $booking->refresh();
+
+        return back()->with($booking->status === BookingStatus::Confirmed ? 'success' : 'warning', $booking->status === BookingStatus::Confirmed
+            ? 'Payment recorded. The booking is confirmed and the commission has been recorded.'
+            : 'Payment recorded, but the slot was taken in the meantime, so the booking is flagged for a refund.');
     }
 
     public function cancel(Request $request, Booking $booking, BookingService $service): RedirectResponse

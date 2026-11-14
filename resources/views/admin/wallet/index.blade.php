@@ -1,12 +1,12 @@
 @extends('layouts.dashboard')
 @section('title', 'Commission wallet')
 @section('crumb', 'Commission wallet')
-@php $label = fn ($t) => ['commission_earned' => 'Commission earned', 'practitioner_payable' => 'Owed to practitioners', 'payout' => 'Paid out', 'refund_reversal' => 'Refunded'][$t] ?? $t; @endphp
+@php $rate = (int) ($commissionRate ?? 2000) / 100; @endphp
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
     <div>
         <h1 class="dash-title">Commission wallet</h1>
-        <p class="text-muted mb-0">Plan 1 bookings: the platform's 20% and what each practitioner is owed.</p>
+        <p class="text-muted mb-0">Starter-plan bookings paid through the platform: the platform keeps {{ $rate + 0 }}% and the practitioner is owed {{ 100 - $rate }}%. Totals are after refunds.</p>
     </div>
     <form class="table-toolbar mb-0">
         <input type="date" name="from" value="{{ $from->toDateString() }}" class="form-control form-control-sm">
@@ -15,13 +15,18 @@
         <button class="btn btn-sm btn-primary"><i class="ri-calendar-check-line"></i> Apply</button>
     </form>
 </div>
-@forelse ($totals as $currency => $rows)
-    <div class="row g-3 mb-4">
-        @foreach ($rows as $row)
-            @php $ico = ['commission_earned' => ['trending-up', 'teal'], 'practitioner_payable' => ['users', 'amber'], 'payout' => ['banknote', 'sky'], 'refund_reversal' => ['refresh', 'coral']][$row->type->value] ?? ['wallet', 'teal']; @endphp
-            <div class="col-6 col-xl-3"><x-stat :icon="$ico[0]" :tone="$ico[1]" :label="$label($row->type->value).' · '.$currency" :value="\App\Support\Money::format(abs((int) $row->total), $currency)" /></div>
-        @endforeach
+@forelse ($summary as $currency => $sum)
+    <div class="row g-3 mb-2">
+        <div class="col-6 col-xl-3"><x-stat icon="credit-card" tone="sky" :label="'Consultation fees collected · '.$currency" :value="\App\Support\Money::format($sum['fees'], $currency)" note="paid through the platform" /></div>
+        <div class="col-6 col-xl-3"><x-stat icon="trending-up" tone="teal" :label="'Platform commission · '.$currency" :value="\App\Support\Money::format($sum['commission'], $currency)" note="the platform's share" /></div>
+        <div class="col-6 col-xl-3"><x-stat icon="users" tone="amber" :label="'Practitioners\' share · '.$currency" :value="\App\Support\Money::format($sum['share'], $currency)" note="earned by practitioners" /></div>
+        <div class="col-6 col-xl-3"><x-stat icon="banknote" tone="leaf" :label="'Paid out · '.$currency" :value="\App\Support\Money::format($sum['paid_out'], $currency)" note="transferred to practitioners" /></div>
     </div>
+    @if ($sum['refunded'] > 0)
+        <p class="small text-muted mb-4"><i class="ri-refund-2-line"></i> {{ \App\Support\Money::format($sum['refunded'], $currency) }} was refunded to patients in this period and is already taken off the figures above.</p>
+    @else
+        <div class="mb-4"></div>
+    @endif
 @empty
     <div class="alert alert-light border">No ledger activity in this period yet.</div>
 @endforelse
@@ -71,7 +76,7 @@
         <thead><tr><th>When</th><th>Practitioner</th><th>Type</th><th>Note</th><th class="text-end">Amount</th></tr></thead>
         <tbody>
         @foreach ($recent as $e)
-            <tr><td class="small text-nowrap">{{ $e->created_at->format('j M, H:i') }}</td><td><span class="fw-semibold">{{ $e->practitioner->user->name }}</span></td><td class="small">{{ $label($e->type->value) }}</td><td class="small text-muted">{{ $e->note }}</td><td class="text-end {{ $e->amount_minor < 0 ? 'text-danger' : '' }}">{{ $e->amountLabel() }}</td></tr>
+            <tr><td class="small text-nowrap">{{ $e->created_at->format('j M, H:i') }}</td><td><span class="fw-semibold">{{ $e->practitioner->user->name }}</span></td><td class="small">{{ $e->type->label() }}</td><td class="small text-muted">{{ $e->note }}</td><td class="text-end {{ $e->amount_minor < 0 ? 'text-danger' : '' }}">{{ $e->amountLabel() }}</td></tr>
         @endforeach
         </tbody>
     </table>

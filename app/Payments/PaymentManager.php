@@ -27,6 +27,12 @@ class PaymentManager extends Manager
         return $this->driver(config("platform.gateways.{$market}", 'fake'));
     }
 
+    /** False while the market still points at the test gateway on the live site (gateway not connected yet). */
+    public function isAvailable(string $key): bool
+    {
+        return ! ($key === 'fake' && $this->container->isProduction());
+    }
+
     protected function createFakeDriver(): PaymentGateway
     {
         abort_if($this->container->isProduction(), 500, 'The fake payment gateway is disabled in production.');

@@ -13,11 +13,13 @@ final class Money
             return '—';
         }
 
-        $major = $minor / 100;
+        // Sign goes before the currency: "-Rs 2,400", not "Rs -2,400".
+        $sign = $minor < 0 ? '-' : '';
+        $major = abs($minor) / 100;
         $decimals = fmod($major, 1.0) === 0.0 ? 0 : 2;
         $number = number_format($major, $decimals);
 
-        return match (strtoupper($currency)) {
+        return $sign.match (strtoupper($currency)) {
             'USD' => '$'.$number,
             'PKR' => $withCode ? 'Rs '.$number : $number,
             default => $withCode ? strtoupper($currency).' '.$number : $number,

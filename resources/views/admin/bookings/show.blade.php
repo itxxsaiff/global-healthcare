@@ -19,7 +19,7 @@
         <div class="card-soft p-4">
             <h2 class="h6">Payments</h2>
             @forelse ($booking->payments as $p)
-                <div class="d-flex justify-content-between small py-2 border-bottom"><span class="font-monospace">{{ $p->gateway }} · {{ $p->gateway_reference ?? $p->uuid }}</span><span>{{ $p->amountLabel() }} · <span class="status tone-{{ $p->status->tone() }}">{{ ucfirst($p->status->value) }}</span></span></div>
+                <div class="d-flex justify-content-between small py-2 border-bottom"><span class="font-monospace">{{ $p->gateway === 'manual' ? 'manual · '.($p->meta['method'] ?? '').(($p->meta['reference'] ?? null) ? ' · '.$p->meta['reference'] : '') : $p->gateway.' · '.($p->gateway_reference ?? $p->uuid) }}</span><span>{{ $p->amountLabel() }} · <span class="status tone-{{ $p->status->tone() }}">{{ ucfirst($p->status->value) }}</span></span></div>
             @empty
                 <p class="small text-muted mb-0">No payments.</p>
             @endforelse
@@ -33,6 +33,30 @@
                 <form method="POST" action="{{ route('admin.bookings.refunded', $booking) }}">@csrf
                     <input name="note" class="form-control form-control-sm mb-2" placeholder="Gateway refund reference">
                     <button class="btn btn-sm btn-primary w-100"><i class="ri-refund-2-line"></i> Mark as refunded</button>
+                </form>
+            </div>
+        @endif
+        @if ($booking->flow === \App\Enums\BookingFlow::PlatformPayment && in_array($booking->status, [\App\Enums\BookingStatus::AwaitingPayment, \App\Enums\BookingStatus::PaymentExpired], true))
+            <div class="card-soft p-4 mb-3">
+                <h2 class="h6 mb-1">Record a manual payment</h2>
+                <p class="small text-muted">Patient paid outside the website (bank transfer, JazzCash, Easypaisa)? Record it here: the booking is confirmed and the commission split is recorded automatically.</p>
+                <div class="small rounded-3 bg-sage p-2 px-3 mb-2">
+                    <div class="d-flex justify-content-between"><span>Fee</span><strong class="text-ink">{{ $booking->feeLabel() }}</strong></div>
+                    <div class="d-flex justify-content-between text-muted"><span>Platform ({{ $booking->commission_bps / 100 }}%)</span><span>{{ \App\Support\Money::format($booking->commission_minor, $booking->currency) }}</span></div>
+                    <div class="d-flex justify-content-between text-muted"><span>Doctor ({{ 100 - $booking->commission_bps / 100 }}%)</span><span>{{ \App\Support\Money::format($booking->practitioner_earning_minor, $booking->currency) }}</span></div>
+                </div>
+                <form method="POST" action="{{ route('admin.bookings.manual-payment', $booking) }}">@csrf
+                    <select name="method" class="form-select form-select-sm mb-2" required>
+                        <option value="">Paid by…</option>
+                        @foreach (['Bank transfer', 'JazzCash', 'Easypaisa', 'Cash', 'Other'] as $m)<option @selected(old('method') === $m)>{{ $m }}</option>@endforeach
+                    </select>
+                    <input name="reference" value="{{ old('reference') }}" class="form-control form-control-sm mb-2" placeholder="Transaction ID (optional)">
+                    <div class="form-check small mb-2">
+                        <input class="form-check-input" type="checkbox" name="confirm_amount" id="confirm_amount" value="1" required>
+                        <label class="form-check-label" for="confirm_amount">I confirm the full {{ $booking->feeLabel() }} was received.</label>
+                    </div>
+                    <x-field-error name="confirm_amount" />
+                    <button class="btn btn-sm btn-primary w-100"><i class="ri-hand-coin-line"></i> Mark as paid</button>
                 </form>
             </div>
         @endif

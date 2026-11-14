@@ -15,7 +15,8 @@ use Illuminate\Support\Collection;
  *  commission_earned   +platform share of a paid Plan 1 booking
  *  practitioner_payable +what we owe the practitioner (fee − commission)
  *  payout               −money transferred to the practitioner
- *  refund_reversal      −reverses both sides when a paid booking is refunded
+ *  commission_reversal  −commission given back when a paid booking is refunded
+ *  payable_reversal     −practitioner share reversed when a paid booking is refunded
  */
 class CommissionService
 {
@@ -42,22 +43,36 @@ class CommissionService
         }
     }
 
+    /**
+     * A refunded booking gives back both sides: the platform's commission and the
+     * practitioner's share, as two rows that mirror the original two exactly.
+     */
     public function reverseForRefund(Booking $booking): void
     {
-        $paid = LedgerEntry::query()->where('booking_id', $booking->id)
-            ->whereIn('type', [LedgerType::CommissionEarned, LedgerType::PractitionerPayable])->sum('amount_minor');
+        $original = LedgerEntry::query()->where('booking_id', $booking->id)
+            ->whereIn('type', [LedgerType::CommissionEarned, LedgerType::PractitionerPayable])
+            ->pluck('amount_minor', 'type');
 
-        if ($paid > 0) {
+        $pairs = [
+            LedgerType::CommissionReversal->value => [$original[LedgerType::CommissionEarned->value] ?? null, 'Refund · commission returned'],
+            LedgerType::PayableReversal->value => [$original[LedgerType::PractitionerPayable->value] ?? null, 'Refund · practitioner share reversed'],
+        ];
+
+        foreach ($pairs as $type => [$amount, $note]) {
+            if ($amount === null) {
+                continue; // nothing was recorded for this booking (e.g. paid after it closed)
+            }
             try {
                 LedgerEntry::query()->create([
                     'practitioner_profile_id' => $booking->practitioner_profile_id,
                     'booking_id' => $booking->id,
-                    'type' => LedgerType::RefundReversal,
-                    'amount_minor' => -$booking->fee_minor,
+                    'type' => $type,
+                    'amount_minor' => -abs((int) $amount),
                     'currency' => $booking->currency,
-                    'note' => 'Refund · '.$booking->reference,
+                    'note' => $note.' · '.$booking->reference,
                 ]);
             } catch (UniqueConstraintViolationException) {
+                // Already reversed: idempotent.
             }
         }
     }
@@ -74,22 +89,40 @@ class CommissionService
         ]);
     }
 
-    /** What the platform still owes the practitioner, per currency. */
+    /** What the platform still owes the practitioner, per currency (share − refunds − payouts). */
     public function balanceFor(PractitionerProfile $profile): Collection
     {
-        $payable = LedgerEntry::query()->where('practitioner_profile_id', $profile->id)
-            ->where('type', LedgerType::PractitionerPayable)->groupBy('currency')
-            ->selectRaw('currency, SUM(amount_minor) s')->pluck('s', 'currency');
-        $paidOut = LedgerEntry::query()->where('practitioner_profile_id', $profile->id)
-            ->where('type', LedgerType::Payout)->groupBy('currency')
-            ->selectRaw('currency, SUM(amount_minor) s')->pluck('s', 'currency');
-        $refunds = LedgerEntry::query()->where('ledger_entries.practitioner_profile_id', $profile->id)
-            ->where('ledger_entries.type', LedgerType::RefundReversal)->join('bookings', 'bookings.id', '=', 'ledger_entries.booking_id')
-            ->groupBy('ledger_entries.currency')
-            ->selectRaw('ledger_entries.currency, SUM(bookings.practitioner_earning_minor) s')->pluck('s', 'currency');
+        return LedgerEntry::query()->where('practitioner_profile_id', $profile->id)
+            ->whereIn('type', [...LedgerType::practitionerShare(), LedgerType::Payout])
+            ->groupBy('currency')->selectRaw('currency, SUM(amount_minor) s')
+            ->pluck('s', 'currency')->map(fn ($v) => (int) $v);
+    }
 
-        return $payable->keys()->merge($paidOut->keys())->unique()->mapWithKeys(fn ($c) => [
-            $c => (int) ($payable[$c] ?? 0) + (int) ($paidOut[$c] ?? 0) - (int) ($refunds[$c] ?? 0),
-        ]);
+    /**
+     * Wallet summary per currency, net of refunds.
+     *
+     * @return Collection<string, array{fees: int, commission: int, share: int, refunded: int, paid_out: int}>
+     */
+    public function summary(?\DateTimeInterface $from = null, ?\DateTimeInterface $to = null, ?PractitionerProfile $profile = null): Collection
+    {
+        $rows = LedgerEntry::query()
+            ->when($from, fn ($q) => $q->where('created_at', '>=', $from))
+            ->when($to, fn ($q) => $q->where('created_at', '<=', $to))
+            ->when($profile, fn ($q) => $q->where('practitioner_profile_id', $profile->id))
+            ->groupBy('type', 'currency')->selectRaw('type, currency, SUM(amount_minor) total')->get();
+
+        return $rows->groupBy('currency')->map(function (Collection $byType) {
+            $t = fn (LedgerType $type) => (int) ($byType->first(fn ($r) => $r->type === $type)?->total ?? 0);
+            $commission = $t(LedgerType::CommissionEarned) + $t(LedgerType::CommissionReversal);
+            $share = $t(LedgerType::PractitionerPayable) + $t(LedgerType::PayableReversal);
+
+            return [
+                'fees' => $commission + $share,
+                'commission' => $commission,
+                'share' => $share,
+                'refunded' => -($t(LedgerType::CommissionReversal) + $t(LedgerType::PayableReversal)),
+                'paid_out' => -$t(LedgerType::Payout),
+            ];
+        });
     }
 }

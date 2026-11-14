@@ -27,7 +27,7 @@ class DashboardController extends Controller
                 'awaitingResponse' => Booking::query()->where('status', BookingStatus::Requested)->count(),
             ],
             'commission' => LedgerEntry::query()
-                ->where('type', LedgerType::CommissionEarned)->where('created_at', '>=', $monthStart)
+                ->whereIn('type', LedgerType::commission())->where('created_at', '>=', $monthStart) // net of refunds
                 ->selectRaw('currency, SUM(amount_minor) total')->groupBy('currency')->pluck('total', 'currency'),
             'queue' => PractitionerProfile::query()
                 ->where('verification_status', VerificationStatus::Pending)

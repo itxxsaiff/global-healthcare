@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Patient;
 use App\Enums\BookingStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Setting;
+use App\Payments\PaymentManager;
 use App\Payments\PaymentService;
 use App\Services\Booking\BookingService;
 use Illuminate\Http\RedirectResponse;
@@ -39,6 +41,10 @@ class BookingController extends Controller
         abort_unless($booking->needsPayment() && $booking->payment_due_at?->isFuture(), 422, 'This booking does not need payment.');
 
         $gateway = config('platform.gateways.'.($booking->currency === 'PKR' ? 'pk' : 'intl'));
+        if (! app(PaymentManager::class)->isAvailable($gateway)) {
+            return back()->with('info', 'Online payment is being set up. Our team will contact you to arrange payment, or message us on WhatsApp at '
+                .Setting::get('platform_whatsapp').' and mention booking '.$booking->reference.'.');
+        }
         $checkout = $payments->start($booking, $request->user(), $gateway, $booking->fee_minor, $booking->currency, $booking->payment_due_at);
 
         return $checkout->redirectUrl

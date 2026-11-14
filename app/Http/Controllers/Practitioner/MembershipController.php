@@ -30,6 +30,9 @@ class MembershipController extends Controller
     public function choose(Request $request, Plan $plan)
     {
         $profile = $request->user()->practitionerProfile;
+        if ($plan->price_minor > 0 && ! app(PaymentManager::class)->isAvailable((string) config("platform.gateways.{$profile->market->value}"))) {
+            return back()->with('info', 'Online payment for paid plans is being set up. Please contact support and we will activate the '.$plan->name.' plan for you.');
+        }
         $checkout = $this->memberships->choose($profile, $plan);
 
         if (! $checkout) {

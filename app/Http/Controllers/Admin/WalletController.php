@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\LedgerEntry;
 use App\Models\Payout;
+use App\Models\Plan;
 use App\Models\PractitionerProfile;
 use App\Services\Commission\CommissionService;
 use App\Support\Money;
@@ -18,27 +19,25 @@ use Illuminate\View\View;
 /** The "Admin Wallet": commission earned and what each Plan 1 practitioner is owed. */
 class WalletController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request, CommissionService $commission): View
     {
         $from = $request->date('from') ?? now()->startOfMonth();
         $to = ($request->date('to') ?? now())->endOfDay();
 
-        $totals = LedgerEntry::query()->whereBetween('created_at', [$from, $to])
-            ->selectRaw('type, currency, SUM(amount_minor) total')->groupBy('type', 'currency')->get()
-            ->groupBy('currency');
-
-        // Practitioners with an outstanding balance.
+        // Practitioners with an outstanding balance (their share, minus refunds and payouts).
         $owedQuery = LedgerEntry::query()
             ->join('practitioner_profiles', 'practitioner_profiles.id', '=', 'ledger_entries.practitioner_profile_id')
             ->join('users', 'users.id', '=', 'practitioner_profiles.user_id')
-            ->whereIn('ledger_entries.type', [LedgerType::PractitionerPayable, LedgerType::Payout])
+            ->whereIn('ledger_entries.type', [...LedgerType::practitionerShare(), LedgerType::Payout])
             ->groupBy('ledger_entries.practitioner_profile_id', 'ledger_entries.currency', 'users.name')
             ->selectRaw('ledger_entries.practitioner_profile_id, ledger_entries.currency, users.name, SUM(ledger_entries.amount_minor) balance')
             ->havingRaw('SUM(ledger_entries.amount_minor) <> 0')
             ->orderByDesc('balance');
 
         return view('admin.wallet.index', [
-            'from' => $from, 'to' => $to, 'totals' => $totals,
+            'from' => $from, 'to' => $to,
+            'summary' => $commission->summary($from, $to),
+            'commissionRate' => Plan::query()->where('code', 'pk_free')->value('commission_bps'),
             'owed' => (clone $owedQuery)->paginate(10, ['*'], 'owed_page')->withQueryString(),
             // Everyone with a balance, for the "Record a payout" dropdown.
             'payees' => (clone $owedQuery)->get()->unique('practitioner_profile_id'),

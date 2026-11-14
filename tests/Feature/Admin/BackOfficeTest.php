@@ -6,7 +6,9 @@ use App\Enums\LedgerType;
 use App\Enums\TicketStatus;
 use App\Models\Booking;
 use App\Models\LedgerEntry;
+use App\Models\Plan;
 use App\Models\PractitionerProfile;
+use App\Models\Setting;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\TicketUpdate;
@@ -14,7 +16,9 @@ use App\Payments\DTOs\GatewayEvent;
 use App\Payments\PaymentService;
 use App\Services\Booking\BookingService;
 use App\Services\Booking\SlotService;
+use App\Services\Commission\CommissionService;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class BackOfficeTest extends TestCase
@@ -89,7 +93,14 @@ class BackOfficeTest extends TestCase
 
         $this->assertFalse($booking->fresh()->refund_due);
         $this->assertSame('refunded', $booking->payments()->first()->status->value);
-        $this->assertSame(-500000, (int) LedgerEntry::where('type', LedgerType::RefundReversal)->sum('amount_minor'));
+        // Both sides given back exactly: Rs 1,000 commission and Rs 4,000 practitioner share.
+        $this->assertSame(-100000, (int) LedgerEntry::where('type', LedgerType::CommissionReversal)->sum('amount_minor'));
+        $this->assertSame(-400000, (int) LedgerEntry::where('type', LedgerType::PayableReversal)->sum('amount_minor'));
+        $this->assertSame(0, (int) app(CommissionService::class)->balanceFor($booking->practitioner)['PKR']);
+
+        // Recording the refund twice never double-reverses.
+        app(CommissionService::class)->reverseForRefund($booking);
+        $this->assertSame(2, LedgerEntry::where('booking_id', $booking->id)->whereIn('type', [LedgerType::CommissionReversal, LedgerType::PayableReversal])->count());
     }
 
     public function test_payouts_cannot_exceed_balance(): void
@@ -100,7 +111,7 @@ class BackOfficeTest extends TestCase
         $this->actingAs($this->admin)->post(route('admin.wallet.payouts.store'), $payload + ['amount' => 5000])->assertStatus(422);
         $this->actingAs($this->admin)->post(route('admin.wallet.payouts.store'), $payload + ['amount' => 4000])->assertRedirect();
 
-        $this->assertSame(0, (int) app(\App\Services\Commission\CommissionService::class)->balanceFor($booking->practitioner)['PKR']);
+        $this->assertSame(0, (int) app(CommissionService::class)->balanceFor($booking->practitioner)['PKR']);
     }
 
     public function test_suspending_a_practitioner_hides_them(): void
@@ -114,7 +125,7 @@ class BackOfficeTest extends TestCase
     public function test_plan_price_change_does_not_touch_existing_bookings(): void
     {
         $booking = $this->paidBooking();
-        $plan = \App\Models\Plan::where('code', 'pk_free')->first();
+        $plan = Plan::where('code', 'pk_free')->first();
 
         $this->actingAs($this->admin)->put(route('admin.plans.update', $plan), ['name' => 'Starter', 'price' => 0, 'commission_percent' => 15, 'is_active' => 1]);
 
@@ -125,7 +136,7 @@ class BackOfficeTest extends TestCase
     public function test_notification_links_cannot_redirect_off_site(): void
     {
         $user = User::factory()->create();
-        $user->notifications()->create(['id' => (string) \Illuminate\Support\Str::uuid(), 'type' => 'x', 'data' => ['title' => 't', 'url' => 'https://evil.example/phish']]);
+        $user->notifications()->create(['id' => (string) Str::uuid(), 'type' => 'x', 'data' => ['title' => 't', 'url' => 'https://evil.example/phish']]);
 
         $this->actingAs($user)->get(route('notifications.open', $user->notifications()->first()->id))->assertRedirect(route('dashboard'));
     }
@@ -138,7 +149,7 @@ class BackOfficeTest extends TestCase
             'membership_grace_days' => 5, 'document_max_kb' => 5120,
         ])->assertRedirect();
 
-        $this->assertSame(12, \App\Models\Setting::get('request_response_hours'));
-        $this->assertSame('+923001112222', \App\Models\Setting::get('platform_whatsapp'));
+        $this->assertSame(12, Setting::get('request_response_hours'));
+        $this->assertSame('+923001112222', Setting::get('platform_whatsapp'));
     }
 }

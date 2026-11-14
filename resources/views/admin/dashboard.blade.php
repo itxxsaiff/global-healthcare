@@ -14,7 +14,7 @@
     <div class="col-6 col-xxl-3"><x-stat icon="stethoscope" tone="teal" label="Live practitioners" :value="$stats['public']" :note="$stats['pending'].' awaiting verification'" /></div>
     <div class="col-6 col-xxl-3"><x-stat icon="users" tone="sky" label="Patients" :value="number_format($stats['patients'])" note="registered accounts" /></div>
     <div class="col-6 col-xxl-3"><x-stat icon="calendar" tone="amber" label="Bookings this month" :value="$stats['bookingsMonth']" :note="$stats['awaitingResponse'].' awaiting practitioner reply'" /></div>
-    <div class="col-6 col-xxl-3"><x-stat icon="wallet" tone="coral" label="Commission this month" :value="\App\Support\Money::format((int) ($commission['PKR'] ?? 0), 'PKR')" :note="'from Plan 1 bookings'.(isset($commission['USD']) ? ' · '.\App\Support\Money::format((int) $commission['USD'], 'USD') : '')" /></div>
+    <div class="col-6 col-xxl-3"><x-stat icon="wallet" tone="coral" label="Commission this month" :value="\App\Support\Money::format((int) ($commission['PKR'] ?? 0), 'PKR')" :note="'Starter plan, after refunds'.(isset($commission['USD']) ? ' · '.\App\Support\Money::format((int) $commission['USD'], 'USD') : '')" /></div>
 </div>
 
 <div class="row g-4">
