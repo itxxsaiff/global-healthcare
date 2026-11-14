@@ -29,7 +29,7 @@ class PractitionerProfile extends Model
         'slug', 'title', 'gender', 'country_id', 'city_id', 'timezone', 'market',
         'primary_specialty_id', 'headline', 'qualifications', 'license_number', 'licensing_body',
         'years_experience', 'fee_minor', 'fee_currency', 'session_minutes', 'bio',
-        'linkedin_url', 'intro_video_url', 'whatsapp_number', 'other_languages', 'headshot_path',
+        'linkedin_url', 'intro_video_url', 'intro_video_path', 'intro_video_seconds', 'whatsapp_number', 'other_languages', 'headshot_path',
     ];
 
     protected function casts(): array
@@ -202,15 +202,61 @@ class PractitionerProfile extends Model
 
     public function videoEmbedUrl(): ?string
     {
-        $url = $this->intro_video_url;
+        return $this->introVideo()['embed'] ?? null;
+    }
+
+    /**
+     * The optional intro video, ready for the profile page (a click-to-play facade, so
+     * nothing heavy loads until the visitor asks for it).
+     *
+     * @return array{type: 'youtube'|'vimeo'|'file', src: string, embed: string|null, thumb: string|null, seconds: int|null, length: string|null}|null
+     */
+    public function introVideo(): ?array
+    {
+        if ($this->intro_video_path) {
+            return [
+                'type' => 'file',
+                'src' => Storage::disk('public')->url($this->intro_video_path),
+                'embed' => null,
+                'thumb' => $this->headshotUrl(),
+                'seconds' => $this->intro_video_seconds,
+                'length' => $this->intro_video_seconds ? intdiv($this->intro_video_seconds, 60).':'.str_pad((string) ($this->intro_video_seconds % 60), 2, '0', STR_PAD_LEFT) : null,
+            ];
+        }
+
+        $parsed = self::parseVideoUrl($this->intro_video_url);
+        if (! $parsed) {
+            return null;
+        }
+
+        return [
+            'type' => $parsed['provider'],
+            'src' => $this->intro_video_url,
+            'embed' => $parsed['provider'] === 'youtube'
+                ? 'https://www.youtube-nocookie.com/embed/'.$parsed['id']
+                : 'https://player.vimeo.com/video/'.$parsed['id'],
+            'thumb' => $parsed['provider'] === 'youtube' ? 'https://i.ytimg.com/vi/'.$parsed['id'].'/hqdefault.jpg' : $this->headshotUrl(),
+            'seconds' => null,
+            'length' => null,
+        ];
+    }
+
+    public function hasIntroVideo(): bool
+    {
+        return $this->introVideo() !== null;
+    }
+
+    /** @return array{provider: 'youtube'|'vimeo', id: string}|null */
+    public static function parseVideoUrl(?string $url): ?array
+    {
         if (! $url) {
             return null;
         }
-        if (preg_match('~(?:youtube\.com/(?:watch\?v=|embed/|shorts/)|youtu\.be/)([\w-]{11})~', $url, $m)) {
-            return 'https://www.youtube-nocookie.com/embed/'.$m[1];
+        if (preg_match('~^https://(?:(?:www|m)\.)?(?:youtube\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/|live/)|youtu\.be/)([\w-]{11})~i', $url, $m)) {
+            return ['provider' => 'youtube', 'id' => $m[1]];
         }
-        if (preg_match('~vimeo\.com/(?:video/)?(\d+)~', $url, $m)) {
-            return 'https://player.vimeo.com/video/'.$m[1];
+        if (preg_match('~^https://(?:www\.|player\.)?vimeo\.com/(?:video/)?(\d+)~i', $url, $m)) {
+            return ['provider' => 'vimeo', 'id' => $m[1]];
         }
 
         return null;

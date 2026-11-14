@@ -34,7 +34,7 @@ class OnboardingController extends Controller
     public const STEPS = [
         'details' => 'Professional details',
         'focus' => 'Specialties & languages',
-        'about' => 'Bio & photo',
+        'about' => 'Bio, photo & video',
         'documents' => 'Documents',
         'review' => 'Review & submit',
     ];

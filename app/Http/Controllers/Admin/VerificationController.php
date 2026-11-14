@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\VerificationStatus;
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
 use App\Models\PractitionerProfile;
+use App\Services\Media\VideoService;
 use App\Services\Verification\ProfileChecklist;
 use App\Services\Verification\VerificationService;
 use Illuminate\Http\RedirectResponse;
@@ -34,7 +35,7 @@ class VerificationController extends Controller
     {
         $profile->load(['user', 'primarySpecialty', 'subSpecialties', 'conditions', 'languages', 'tags', 'documents', 'country', 'city', 'memberships.plan']);
 
-        $history = \App\Models\AuditLog::query()
+        $history = AuditLog::query()
             ->where('subject_type', 'practitioner')->where('subject_id', $profile->id)
             ->with('actor:id,name')->latest('id')->limit(15)->get();
 
@@ -73,5 +74,15 @@ class VerificationController extends Controller
         $this->verification->reinstate($profile);
 
         return back()->with('success', 'Profile reinstated.');
+    }
+
+    /** Take down an intro video (e.g. off-topic or unprofessional). The doctor can add a new one. */
+    public function removeVideo(PractitionerProfile $profile, VideoService $videos): RedirectResponse
+    {
+        $videos->delete($profile->intro_video_path);
+        $profile->forceFill(['intro_video_url' => null, 'intro_video_path' => null, 'intro_video_seconds' => null])->save();
+        AuditLog::record('practitioner.video_removed', $profile);
+
+        return back()->with('success', 'Intro video removed from the profile.');
     }
 }

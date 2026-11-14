@@ -7,6 +7,7 @@ import Alpine from 'alpinejs';
 import './modules/header';
 import './modules/word-counter';
 import './modules/search-suggest';
+import './modules/intro-video';
 import './modules/timezone';
 import './modules/file-limit';
 import './modules/pwa';

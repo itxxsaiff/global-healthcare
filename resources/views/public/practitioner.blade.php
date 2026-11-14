@@ -58,16 +58,10 @@
                 </section>
             @endif
 
-            @if ($embed = $profile->videoEmbedUrl())
-                <section class="mb-5" x-data="{ play: false }">
+            @if ($video = $profile->introVideo())
+                <section class="mb-5">
                     <h2 class="h4 mb-3">A short introduction</h2>
-                    <div class="ratio ratio-16x9 rounded-4 overflow-hidden border bg-forest">
-                        <template x-if="play"><iframe :src="'{{ $embed }}?autoplay=1'" title="Introduction video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></template>
-                        <button x-show="!play" @click="play = true" class="btn w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white border-0" style="background: #062F2B">
-                            <span class="d-grid rounded-circle mb-2" style="width:72px;height:72px;place-items:center;background:#F5F9F8;color:#062F2B"><x-icon name="play" size="lg" /></span>
-                            Play introduction
-                        </button>
-                    </div>
+                    <x-intro-video :video="$video" :name="$profile->displayName()" />
                 </section>
             @endif
 

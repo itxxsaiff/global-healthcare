@@ -38,6 +38,8 @@ return [
     'document_max_kb' => 3072,
     'article_image_max_upload_kb' => 2048,  // stored output is compressed to ≤ 200 KB WebP
     'article_image_target_kb' => 200,
+    'intro_video_max_mb' => 50,          // direct upload; a YouTube/Vimeo link has no size limit
+    'intro_video_max_seconds' => 120,     // 2 minutes keeps intros short and files small
 
     // Contact
     'platform_whatsapp' => env('PLATFORM_WHATSAPP', '+923000000000'),

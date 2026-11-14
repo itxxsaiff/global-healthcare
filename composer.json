@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.3",
         "intervention/image": "^4.4",
+        "james-heinrich/getid3": "^1.9",
         "laravel/fortify": "^1.41",
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",

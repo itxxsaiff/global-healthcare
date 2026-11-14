@@ -30,7 +30,6 @@ class DetailsRequest extends FormRequest
             'fee' => ['required', 'numeric', 'min:1', 'max:1000000'],
             'session_minutes' => ['required', Rule::in([20, 30, 45, 60])],
             'linkedin_url' => ['nullable', 'url:https', 'max:255', 'regex:~^https://([a-z]+\.)?linkedin\.com/~i'],
-            'intro_video_url' => ['nullable', 'url:https', 'max:255', 'regex:~^https://(www\.)?(youtube\.com|youtu\.be|vimeo\.com)/~i'],
             'whatsapp_number' => ['nullable', 'string', 'max:30', 'regex:/^\+?[0-9\s()-]{7,30}$/'],
         ];
     }
@@ -39,7 +38,6 @@ class DetailsRequest extends FormRequest
     {
         return [
             'linkedin_url.regex' => 'Please paste a linkedin.com profile link.',
-            'intro_video_url.regex' => 'Only YouTube or Vimeo links can be embedded.',
             'primary_specialty_id.required' => 'Please choose your main specialty.',
         ];
     }

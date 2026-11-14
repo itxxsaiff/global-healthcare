@@ -57,7 +57,17 @@
                 <dt class="col-sm-4 text-muted">Custom tags</dt><dd class="col-sm-8">{{ $profile->tags->map(fn ($t) => $t->name.' ('.$t->status->value.')')->implode(', ') ?: '—' }}</dd>
                 <dt class="col-sm-4 text-muted">Links</dt><dd class="col-sm-8">
                     @if ($profile->linkedin_url)<a href="{{ $profile->linkedin_url }}" target="_blank" rel="noopener nofollow">LinkedIn</a>@endif
-                    @if ($profile->intro_video_url) · <a href="{{ $profile->intro_video_url }}" target="_blank" rel="noopener nofollow">Video</a>@endif
+                </dd>
+                <dt class="col-sm-4 text-muted">Intro video</dt><dd class="col-sm-8">
+                    @if ($video = $profile->introVideo())
+                        <a href="{{ $video['src'] }}" target="_blank" rel="noopener nofollow"><i class="ri-play-circle-line"></i> {{ $video['type'] === 'file' ? 'Uploaded video'.($video['length'] ? ' ('.$video['length'].')' : '') : ($video['type'] === 'youtube' ? 'YouTube' : 'Vimeo').' link' }}</a>
+                        <form method="POST" action="{{ route('admin.verifications.video.destroy', $profile) }}" class="d-inline ms-2" onsubmit="return confirm('Remove this intro video from the public profile?')">
+                            @csrf @method('DELETE')
+                            <button class="btn btn-link btn-sm text-danger p-0 align-baseline"><i class="ri-delete-bin-line"></i> Remove</button>
+                        </form>
+                    @else
+                        —
+                    @endif
                 </dd>
             </dl>
         </div>

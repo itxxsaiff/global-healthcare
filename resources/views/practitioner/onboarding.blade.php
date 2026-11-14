@@ -137,18 +137,13 @@
         </div>
 
         <div class="col-12"><hr class="my-2"></div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <label class="form-label" for="linkedin_url">LinkedIn <span class="text-muted fw-normal">(optional)</span></label>
             <input id="linkedin_url" name="linkedin_url" value="{{ old('linkedin_url', $profile->linkedin_url) }}" class="form-control @error('linkedin_url') is-invalid @enderror" placeholder="https://linkedin.com/in/…">
             <div class="form-hint">Shown on paid plans only.</div>
             <x-field-error name="linkedin_url" />
         </div>
-        <div class="col-md-4">
-            <label class="form-label" for="intro_video_url">Intro video <span class="text-muted fw-normal">(optional)</span></label>
-            <input id="intro_video_url" name="intro_video_url" value="{{ old('intro_video_url', $profile->intro_video_url) }}" class="form-control @error('intro_video_url') is-invalid @enderror" placeholder="YouTube or Vimeo link">
-            <x-field-error name="intro_video_url" />
-        </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <label class="form-label" for="whatsapp_number">WhatsApp <span class="text-muted fw-normal">(optional)</span></label>
             <input id="whatsapp_number" name="whatsapp_number" value="{{ old('whatsapp_number', $profile->whatsapp_number) }}" class="form-control @error('whatsapp_number') is-invalid @enderror" placeholder="+92 300 1234567">
             <div class="form-hint">Shown to patients on paid plans only.</div>
@@ -265,6 +260,8 @@
         <button class="btn btn-primary">Save and continue <x-icon name="arrow-right" /></button>
     </div>
 </form>
+
+@include('practitioner.partials.intro-video')
 @break
 
 {{-- ───────── Step 4: documents ───────── --}}
