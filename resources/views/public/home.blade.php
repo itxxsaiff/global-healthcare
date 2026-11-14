@@ -87,9 +87,10 @@
                     <div class="field">
                         <x-icon name="user" />
                         <select name="gender" class="form-select" aria-label="Practitioner gender">
-                            <option value="">Male or female</option>
+                            <option value="">Any gender</option>
                             <option value="female">Female practitioner</option>
                             <option value="male">Male practitioner</option>
+                            <option value="transgender">Transgender practitioner</option>
                         </select>
                     </div>
                 </div>

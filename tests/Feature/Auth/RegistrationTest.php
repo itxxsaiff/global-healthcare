@@ -105,4 +105,20 @@ class RegistrationTest extends TestCase
             ->assertSee('At least 8 characters, with letters and numbers.')
             ->assertSee('minlength="8"', false);
     }
+
+    public function test_patients_and_practitioners_can_choose_transgender(): void
+    {
+        $this->get(route('register.patient'))->assertSee('Transgender');
+        $this->get(route('register.practitioner'))->assertSee('Transgender');
+
+        $this->post('/register', $this->payload([
+            'role' => 'patient', 'gender' => 'transgender', 'date_of_birth' => '1995-05-01', 'telehealth_consent' => '1',
+        ]))->assertRedirect()->assertSessionHasNoErrors();
+        $this->assertSame('transgender', User::where('email', 'ayesha@example.com')->first()->patientProfile->gender->value);
+
+        $this->post('/logout');
+        $this->post('/register', $this->payload(['role' => 'practitioner', 'gender' => 'transgender', 'email' => 'dr.trans@example.com']))
+            ->assertRedirect()->assertSessionHasNoErrors();
+        $this->assertSame('transgender', User::where('email', 'dr.trans@example.com')->first()->practitionerProfile->gender->value);
+    }
 }

@@ -150,8 +150,8 @@
 
                 <div class="filter-group">
                     <span class="filter-title">Practitioner gender</span>
-                    <div class="segmented w-100">
-                        @foreach (['' => 'Any', 'female' => 'Female', 'male' => 'Male'] as $val => $label)
+                    <div class="segmented segmented-2 w-100">
+                        @foreach (['' => 'Any', 'female' => 'Female', 'male' => 'Male', 'transgender' => 'Transgender'] as $val => $label)
                             <input type="radio" name="gender" id="fg-{{ $val ?: 'any' }}" value="{{ $val }}" @checked(($filters['gender'] ?? '') === $val)>
                             <label for="fg-{{ $val ?: 'any' }}" class="flex-fill text-center">{{ $label }}</label>
                         @endforeach
@@ -253,7 +253,7 @@
                     $label = mb_strtolower($spec->practitioner_label);
                     $faqs = [
                         ["How does an online consultation with a {$label} work?", "Choose a {$label} and a time that suits you. Times are shown in your own time zone. Send a request; once the {$label} accepts (and payment is complete where needed), you'll receive joining details for a video or audio call."],
-                        ["Can I choose a female or male {$label}?", "Yes. Use the gender filter to see only female or only male practitioners. You can also filter by the language you'd like to speak."],
+                        ["Can I choose a female, male or transgender {$label}?", "Yes. Use the gender filter to see only female, male or transgender practitioners. You can also filter by the language you'd like to speak."],
                         ["Are the {$label}s verified?", "Every practitioner uploads their ID, degree and licence, and our team checks them before the profile goes live."],
                         ["Is this suitable for emergencies?", "No. Online consultations are for non-emergency care. In an emergency, contact your local emergency number or go to the nearest hospital."],
                     ];

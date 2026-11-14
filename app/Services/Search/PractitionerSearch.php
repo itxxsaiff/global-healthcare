@@ -2,7 +2,9 @@
 
 namespace App\Services\Search;
 
+use App\Models\City;
 use App\Models\Condition;
+use App\Models\Country;
 use App\Models\PractitionerProfile;
 use App\Models\Specialty;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -135,10 +137,10 @@ class PractitionerSearch
             ? Condition::query()->active()->where('slug', $input['condition'])->first() : null);
 
         $country = $fixed['country'] ?? (filled($input['country'] ?? null)
-            ? \App\Models\Country::query()->where('iso2', strtoupper((string) $input['country']))->first() : null);
+            ? Country::query()->where('iso2', strtoupper((string) $input['country']))->first() : null);
 
         $city = $fixed['city'] ?? (filled($input['city'] ?? null)
-            ? \App\Models\City::query()->where('slug', $input['city'])->when($country, fn ($q) => $q->where('country_id', $country->id))->first() : null);
+            ? City::query()->where('slug', $input['city'])->when($country, fn ($q) => $q->where('country_id', $country->id))->first() : null);
 
         $currency = strtoupper((string) ($input['currency'] ?? ''));
         if (! in_array($currency, ['PKR', 'USD'], true)) {
@@ -152,7 +154,7 @@ class PractitionerSearch
             'specialty' => $specialty,
             'sub' => $sub,
             'condition' => $condition,
-            'gender' => in_array($input['gender'] ?? null, ['male', 'female'], true) ? $input['gender'] : null,
+            'gender' => in_array($input['gender'] ?? null, ['male', 'female', 'transgender'], true) ? $input['gender'] : null,
             'languages' => array_values(array_filter((array) ($input['languages'] ?? []), fn ($c) => is_string($c) && preg_match('/^[a-z]{2,3}$/', $c))),
             'tags' => array_values(array_filter((array) ($input['tags'] ?? []), fn ($t) => is_string($t) && preg_match('/^[a-z0-9-]+$/', $t))),
             'country' => $country,

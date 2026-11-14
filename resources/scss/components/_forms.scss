@@ -6,7 +6,7 @@
 
 // Segmented control (radio buttons styled as a pill group)
 .segmented {
-    display: inline-flex; padding: 4px; background: $paper-deep; border: 1px solid $line; border-radius: .75rem; gap: 2px;
+    display: inline-flex; flex-wrap: wrap; padding: 4px; background: $paper-deep; border: 1px solid $line; border-radius: .75rem; gap: 2px;
     input { position: absolute; opacity: 0; pointer-events: none; }
     label {
         padding: .45rem .95rem; border-radius: .55rem; font-weight: 600; font-size: .9rem; color: $ink-soft; cursor: pointer; user-select: none;
@@ -15,6 +15,8 @@
     input:checked + label { background: #fff; color: $ink; box-shadow: $shadow-sm; }
     input:focus-visible + label { outline: 2px solid $forest; outline-offset: 1px; }
 }
+// Two equal columns (e.g. the four gender filters in the directory sidebar)
+.segmented.segmented-2 { display: grid; grid-template-columns: 1fr 1fr; label { text-align: center; } }
 
 // Selectable cards (role chooser, plans)
 .choice-card {
