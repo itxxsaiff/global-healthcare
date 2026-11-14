@@ -12,12 +12,14 @@
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">New password</label>
-            <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" required autocomplete="new-password">
+            <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" required minlength="8" autocomplete="new-password">
             <x-field-error name="password" />
+            <div class="form-hint" data-password-hint>At least 8 characters, with letters and numbers.</div>
         </div>
         <div class="mb-4">
             <label for="password_confirmation" class="form-label">Confirm new password</label>
-            <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" required autocomplete="new-password">
+            <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" required minlength="8" autocomplete="new-password" data-confirms="password">
+            <div class="form-hint" data-confirm-hint hidden></div>
         </div>
         <button class="btn btn-primary btn-lg w-100">Save new password</button>
     </form>

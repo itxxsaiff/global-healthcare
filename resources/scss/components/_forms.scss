@@ -72,3 +72,29 @@
     label:hover, label:hover ~ label, input:checked ~ label { color: $honey; }
     input:focus-visible + label { outline: 2px solid $forest; border-radius: 4px; }
 }
+
+// Password fields: show/hide eye (resources/js/modules/password-field.js)
+.password-field {
+    position: relative;
+    .form-control { padding-right: 3rem; }
+    .toggle-password {
+        position: absolute; top: 50%; right: .4rem; transform: translateY(-50%); z-index: 5;
+        width: 2.25rem; height: 2.25rem; display: grid; place-items: center;
+        border: 0; border-radius: .6rem; background: transparent; color: $ink-muted; font-size: 1.15rem; line-height: 1;
+        transition: color .15s ease, background .15s ease;
+        &:hover { color: $forest; background: rgba($forest, .08); }
+        &:focus-visible { outline: 2px solid $forest; outline-offset: 1px; color: $forest; }
+        &[aria-pressed="true"] { color: $forest; }
+    }
+    &.is-lg .toggle-password { right: .55rem; font-size: 1.25rem; }
+    // Bootstrap's invalid icon would sit under the eye; the red border + message are enough.
+    .form-control.is-invalid { background-image: none; padding-right: 3rem; }
+    // Edge/IE draw their own reveal button; ours replaces it.
+    input::-ms-reveal, input::-ms-clear { display: none; }
+}
+.form-hint[data-password-hint], .form-hint[data-confirm-hint] {
+    transition: color .15s ease;
+    &.is-ok { color: $forest; font-weight: 500; }
+    &.is-off { color: $clay; }
+    i { vertical-align: -2px; }
+}

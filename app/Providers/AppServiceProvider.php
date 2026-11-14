@@ -2,8 +2,21 @@
 
 namespace App\Providers;
 
+use App\Models\Answer;
+use App\Models\Article;
 use App\Models\Booking;
+use App\Models\Country;
 use App\Models\Membership;
+use App\Models\Payment;
+use App\Models\Payout;
+use App\Models\PractitionerDocument;
+use App\Models\PractitionerProfile;
+use App\Models\Question;
+use App\Models\Review;
+use App\Models\Tag;
+use App\Models\Ticket;
+use App\Models\User;
+use App\View\Composers\DashboardBadges;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -13,6 +26,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,17 +41,17 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'booking' => Booking::class,
             'membership' => Membership::class,
-            'user' => \App\Models\User::class,
-            'practitioner' => \App\Models\PractitionerProfile::class,
-            'document' => \App\Models\PractitionerDocument::class,
-            'review' => \App\Models\Review::class,
-            'question' => \App\Models\Question::class,
-            'answer' => \App\Models\Answer::class,
-            'article' => \App\Models\Article::class,
-            'ticket' => \App\Models\Ticket::class,
-            'payout' => \App\Models\Payout::class,
-            'payment' => \App\Models\Payment::class,
-            'tag' => \App\Models\Tag::class,
+            'user' => User::class,
+            'practitioner' => PractitionerProfile::class,
+            'document' => PractitionerDocument::class,
+            'review' => Review::class,
+            'question' => Question::class,
+            'answer' => Answer::class,
+            'article' => Article::class,
+            'ticket' => Ticket::class,
+            'payout' => Payout::class,
+            'payment' => Payment::class,
+            'tag' => Tag::class,
         ]);
 
         // Catch N+1 queries and silently discarded attributes during development.
@@ -45,14 +59,18 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrapFive();
 
-        // Healthcare accounts: stronger passwords in production, incl. a breached-password check.
-        \Illuminate\Validation\Rules\Password::defaults(fn () => $this->app->isProduction()
-            ? \Illuminate\Validation\Rules\Password::min(10)->letters()->numbers()->uncompromised()
-            : \Illuminate\Validation\Rules\Password::min(8));
+        // Passwords (register, reset, change): at least 8 characters with letters and numbers,
+        // the same everywhere so the on-screen hint is always true. Production also rejects
+        // passwords known from data breaches.
+        Password::defaults(function () {
+            $rule = Password::min(8)->letters()->numbers();
 
-        View::composer('layouts.dashboard', \App\View\Composers\DashboardBadges::class);
+            return $this->app->isProduction() ? $rule->uncompromised() : $rule;
+        });
+
+        View::composer('layouts.dashboard', DashboardBadges::class);
         View::composer('auth._shared-fields', fn ($view) => $view->with(
-            'countries', \App\Models\Country::query()->ordered()->get(['id', 'name', 'iso2'])
+            'countries', Country::query()->ordered()->get(['id', 'name', 'iso2'])
         ));
 
         if ($this->app->isProduction()) {

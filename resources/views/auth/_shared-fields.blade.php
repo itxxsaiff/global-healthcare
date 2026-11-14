@@ -13,12 +13,14 @@
 <div class="row g-3 mb-3">
     <div class="col-sm-6">
         <label for="password" class="form-label">Password</label>
-        <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" required autocomplete="new-password">
+        <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" required minlength="8" autocomplete="new-password">
         <x-field-error name="password" />
+        <div class="form-hint" data-password-hint>At least 8 characters, with letters and numbers.</div>
     </div>
     <div class="col-sm-6">
         <label for="password_confirmation" class="form-label">Confirm password</label>
-        <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" required autocomplete="new-password">
+        <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" required minlength="8" autocomplete="new-password" data-confirms="password">
+        <div class="form-hint" data-confirm-hint hidden></div>
     </div>
 </div>
 <div class="mb-3">

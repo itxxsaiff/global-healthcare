@@ -43,17 +43,19 @@
                 <div class="mb-3">
                     <label class="form-label" for="current_password">Current password</label>
                     <input id="current_password" type="password" name="current_password" class="form-control @error('current_password', 'updatePassword') is-invalid @enderror" autocomplete="current-password">
-                    @error('current_password', 'updatePassword')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    @error('current_password', 'updatePassword')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
                 <div class="row g-3 mb-4">
                     <div class="col-sm-6">
                         <label class="form-label" for="password">New password</label>
-                        <input id="password" type="password" name="password" class="form-control @error('password', 'updatePassword') is-invalid @enderror" autocomplete="new-password">
-                        @error('password', 'updatePassword')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        <input id="password" type="password" name="password" class="form-control @error('password', 'updatePassword') is-invalid @enderror" minlength="8" autocomplete="new-password">
+                        @error('password', 'updatePassword')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        <div class="form-hint" data-password-hint>At least 8 characters, with letters and numbers.</div>
                     </div>
                     <div class="col-sm-6">
                         <label class="form-label" for="password_confirmation">Confirm new password</label>
-                        <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" autocomplete="new-password">
+                        <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" minlength="8" autocomplete="new-password" data-confirms="password">
+                        <div class="form-hint" data-confirm-hint hidden></div>
                     </div>
                 </div>
                 <button class="btn btn-primary">Update password</button>

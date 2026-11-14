@@ -71,4 +71,38 @@ class RegistrationTest extends TestCase
         $this->post('/register', $this->payload(['role' => 'patient', 'date_of_birth' => '1995-05-01', 'terms' => null]))
             ->assertSessionHasErrors(['terms', 'telehealth_consent']);
     }
+
+    public function test_eight_character_passwords_are_accepted_for_patients_and_practitioners(): void
+    {
+        $this->post('/register', $this->payload([
+            'email' => 'pat8@example.com', 'password' => 'abcd1234', 'password_confirmation' => 'abcd1234',
+            'role' => 'patient', 'date_of_birth' => '1995-05-01', 'telehealth_consent' => '1',
+        ]))->assertSessionHasNoErrors();
+        $this->assertTrue(User::where('email', 'pat8@example.com')->exists());
+
+        auth()->logout();
+
+        $this->post('/register', $this->payload([
+            'email' => 'doc8@example.com', 'password' => 'abcd1234', 'password_confirmation' => 'abcd1234', 'role' => 'practitioner',
+        ]))->assertSessionHasNoErrors();
+        $this->assertTrue(User::where('email', 'doc8@example.com')->exists());
+    }
+
+    public function test_short_or_weak_passwords_are_rejected(): void
+    {
+        foreach (['abc1234', 'abcdefgh', '12345678'] as $weak) {
+            $this->post('/register', $this->payload([
+                'password' => $weak, 'password_confirmation' => $weak,
+                'role' => 'patient', 'date_of_birth' => '1995-05-01', 'telehealth_consent' => '1',
+            ]))->assertSessionHasErrors('password');
+        }
+        $this->assertFalse(User::where('email', 'ayesha@example.com')->exists());
+    }
+
+    public function test_register_page_explains_the_password_rule(): void
+    {
+        $this->get(route('register.patient'))->assertOk()
+            ->assertSee('At least 8 characters, with letters and numbers.')
+            ->assertSee('minlength="8"', false);
+    }
 }
